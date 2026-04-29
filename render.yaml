@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: ad-web
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+      - key: DATA_DIR
+        value: /var/data
+      - key: PUPPETEER_SKIP_DOWNLOAD
+        value: "true"
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_PUBLISHABLE_KEY
+        sync: false
+      - key: ADMIN_API_TOKEN
+        sync: false
+    disks:
+      - name: ad-web-data
+        mountPath: /var/data
+        sizeGB: 1

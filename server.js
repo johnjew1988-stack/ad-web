@@ -11,7 +11,9 @@ const stripePublishableKey = process.env.STRIPE_PUBLISHABLE_KEY || "";
 const adminApiToken = process.env.ADMIN_API_TOKEN || "";
 const stripeClient = stripeSecretKey ? new Stripe(stripeSecretKey) : null;
 
-const dataDir = path.join(__dirname, "data");
+const dataDir = process.env.DATA_DIR
+  ? path.resolve(process.env.DATA_DIR)
+  : path.join(__dirname, "data");
 const dbPath = path.join(dataDir, "adtech_users.db");
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const seededProducts = [
