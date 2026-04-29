@@ -1,0 +1,16 @@
+{
+  "name": "ad-web-backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AD Tech static site with SQLite registration backend",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "puppeteer": "^24.42.0",
+    "sqlite3": "^5.1.7",
+    "stripe": "^18.4.0"
+  }
+}

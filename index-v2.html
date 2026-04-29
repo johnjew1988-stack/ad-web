@@ -1,0 +1,585 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AD Tech Community • Version 2</title>
+    <meta
+      name="description"
+      content="A modern alternate landing page for the AD Tech community."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #f3fbfc;
+        --paper: #ffffff;
+        --ink: #0b2230;
+        --muted: #4c6777;
+        --line: rgba(11, 34, 48, 0.12);
+        --brand-a: #1fc9b3;
+        --brand-b: #1a6fb1;
+        --brand-c: #0a3354;
+        --max: 1140px;
+        --radius-xl: 28px;
+        --radius-lg: 20px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "Space Grotesk", sans-serif;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at 5% 10%, rgba(31, 201, 179, 0.24), transparent 34%),
+          radial-gradient(circle at 95% 10%, rgba(26, 111, 177, 0.24), transparent 30%),
+          radial-gradient(circle at 80% 90%, rgba(31, 201, 179, 0.12), transparent 28%),
+          var(--bg);
+        line-height: 1.7;
+      }
+
+      .frame {
+        position: relative;
+        overflow-x: clip;
+      }
+
+      .container {
+        width: min(100% - 2rem, var(--max));
+        margin-inline: auto;
+      }
+
+      .shape {
+        position: absolute;
+        border-radius: 999px;
+        filter: blur(40px);
+        pointer-events: none;
+        z-index: -1;
+      }
+
+      .shape.one {
+        width: 260px;
+        height: 260px;
+        top: 80px;
+        left: -80px;
+        background: rgba(31, 201, 179, 0.35);
+      }
+
+      .shape.two {
+        width: 300px;
+        height: 300px;
+        right: -110px;
+        top: 200px;
+        background: rgba(26, 111, 177, 0.3);
+      }
+
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(11, 34, 48, 0.08);
+        background: rgba(243, 251, 252, 0.74);
+      }
+
+      .topbar-inner {
+        min-height: 78px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .brand img {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        object-fit: cover;
+        box-shadow: 0 0 0 2px rgba(31, 201, 179, 0.24), 0 10px 24px rgba(31, 201, 179, 0.26);
+      }
+
+      .brand span {
+        font-family: "Outfit", sans-serif;
+        font-weight: 700;
+        letter-spacing: 0.01em;
+      }
+
+      nav {
+        display: flex;
+        align-items: center;
+        gap: 1.25rem;
+      }
+
+      nav a {
+        color: var(--muted);
+        text-decoration: none;
+        font-weight: 600;
+        transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1), color 220ms ease;
+      }
+
+      nav a:hover {
+        color: var(--brand-c);
+        transform: translateY(-1px);
+      }
+
+      .btn {
+        border: 1px solid transparent;
+        border-radius: 14px;
+        padding: 0.74rem 1rem;
+        font-weight: 700;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 220ms ease, opacity 220ms ease;
+      }
+
+      .btn.main {
+        color: #fff;
+        background: linear-gradient(120deg, var(--brand-a), var(--brand-b));
+        box-shadow: 0 18px 30px rgba(26, 111, 177, 0.22), 0 8px 20px rgba(31, 201, 179, 0.2);
+      }
+
+      .btn.subtle {
+        color: var(--brand-c);
+        border-color: rgba(11, 34, 48, 0.16);
+        background: rgba(255, 255, 255, 0.82);
+      }
+
+      .btn:hover {
+        transform: translateY(-2px);
+      }
+
+      .btn:active {
+        transform: translateY(0);
+      }
+
+      .menu-btn {
+        display: none;
+        border-radius: 12px;
+        border: 1px solid var(--line);
+        background: #fff;
+        color: var(--ink);
+        padding: 0.45rem 0.65rem;
+      }
+
+      .hero {
+        padding: 4.8rem 0 2.6rem;
+      }
+
+      .hero-grid {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 1.4rem;
+      }
+
+      .hero-copy {
+        background: linear-gradient(140deg, rgba(255, 255, 255, 0.95), rgba(242, 252, 252, 0.95));
+        border: 1px solid var(--line);
+        border-radius: var(--radius-xl);
+        padding: clamp(1.2rem, 2vw, 2rem);
+        box-shadow: 0 24px 44px rgba(11, 34, 48, 0.08);
+      }
+
+      .eyebrow {
+        font-size: 0.82rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--brand-b);
+      }
+
+      h1,
+      h2,
+      h3 {
+        font-family: "Outfit", sans-serif;
+      }
+
+      h1 {
+        margin: 0.55rem 0 0.75rem;
+        font-size: clamp(2rem, 4.4vw, 3.8rem);
+        line-height: 1.05;
+        letter-spacing: -0.03em;
+      }
+
+      .highlight {
+        background: linear-gradient(90deg, #0f3e65, #1a6fb1 45%, #1fc9b3);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+
+      .hero-copy p {
+        margin: 0;
+        color: var(--muted);
+      }
+
+      .hero-actions {
+        margin-top: 1.25rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+      }
+
+      .hero-media {
+        background: var(--paper);
+        border-radius: var(--radius-xl);
+        border: 1px solid var(--line);
+        overflow: hidden;
+        box-shadow: 0 24px 44px rgba(11, 34, 48, 0.08);
+      }
+
+      .hero-media img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        min-height: 320px;
+        object-fit: cover;
+      }
+
+      .section {
+        padding: 2rem 0;
+      }
+
+      .section h2 {
+        margin: 0 0 1rem;
+        font-size: clamp(1.5rem, 2.9vw, 2.3rem);
+        letter-spacing: -0.02em;
+      }
+
+      .grid-3 {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1rem;
+      }
+
+      .card {
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--line);
+        padding: 1.1rem;
+        background: rgba(255, 255, 255, 0.86);
+        box-shadow: 0 18px 30px rgba(11, 34, 48, 0.06);
+        transition: transform 250ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 250ms ease;
+      }
+
+      .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 24px 40px rgba(11, 34, 48, 0.11);
+      }
+
+      .card h3 {
+        margin: 0;
+        font-size: 1.06rem;
+      }
+
+      .card p {
+        margin: 0.5rem 0 0;
+        color: var(--muted);
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 0.8rem;
+      }
+
+      .stat {
+        text-align: center;
+        border: 1px solid var(--line);
+        background: #fff;
+        border-radius: 16px;
+        padding: 0.95rem;
+      }
+
+      .stat strong {
+        display: block;
+        font-family: "Outfit", sans-serif;
+        font-size: clamp(1.45rem, 2.9vw, 2.1rem);
+        line-height: 1;
+        color: var(--brand-c);
+      }
+
+      .stat span {
+        font-size: 0.92rem;
+        color: var(--muted);
+      }
+
+      .cta {
+        padding: 2.2rem 0 4.2rem;
+      }
+
+      .cta-box {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        gap: 1rem;
+        border-radius: var(--radius-xl);
+        padding: 1.2rem;
+        border: 1px solid rgba(26, 111, 177, 0.2);
+        background: linear-gradient(125deg, rgba(31, 201, 179, 0.16), rgba(26, 111, 177, 0.1));
+      }
+
+      .cta h3 {
+        margin: 0;
+        font-size: clamp(1.25rem, 2.4vw, 1.8rem);
+      }
+
+      .cta p {
+        margin: 0.4rem 0 0;
+        color: var(--muted);
+      }
+
+      footer {
+        border-top: 1px solid var(--line);
+        padding: 1.1rem 0 1.8rem;
+        color: var(--muted);
+      }
+
+      .reveal {
+        opacity: 0;
+        transform: translateY(14px);
+        transition: opacity 620ms ease, transform 620ms cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      .reveal.on {
+        opacity: 1;
+        transform: none;
+      }
+
+      a:focus-visible,
+      button:focus-visible {
+        outline: 2px solid var(--brand-b);
+        outline-offset: 3px;
+      }
+
+      @media (max-width: 950px) {
+        .hero-grid,
+        .cta-box {
+          grid-template-columns: 1fr;
+        }
+
+        .grid-3 {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .stats {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 720px) {
+        nav {
+          position: fixed;
+          left: 1rem;
+          right: 1rem;
+          top: 76px;
+          border: 1px solid var(--line);
+          background: rgba(255, 255, 255, 0.96);
+          border-radius: 14px;
+          padding: 0.75rem;
+          flex-direction: column;
+          align-items: stretch;
+          transform: translateY(-6px) scale(0.98);
+          opacity: 0;
+          pointer-events: none;
+          transition: transform 220ms ease, opacity 220ms ease;
+        }
+
+        nav.open {
+          transform: none;
+          opacity: 1;
+          pointer-events: auto;
+        }
+
+        .menu-btn {
+          display: inline-flex;
+        }
+
+        .grid-3,
+        .stats {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="frame">
+      <div class="shape one"></div>
+      <div class="shape two"></div>
+
+      <header class="topbar">
+        <div class="container topbar-inner">
+          <a href="#home" class="brand" aria-label="AD Tech home">
+            <img src="brand asset/my-project-page-1.png" alt="AD Tech logo" />
+            <span>AD Tech</span>
+          </a>
+
+          <button class="menu-btn" id="menuBtn" aria-label="Toggle menu" aria-expanded="false">Menu</button>
+
+          <nav id="menu" aria-label="Main navigation">
+            <a href="#about">About</a>
+            <a href="#programs">Programs</a>
+            <a href="#community">Community</a>
+            <a href="#join" class="btn main">Join Now</a>
+          </nav>
+        </div>
+      </header>
+
+      <main id="home">
+        <section class="hero">
+          <div class="container hero-grid">
+            <article class="hero-copy reveal">
+              <div class="eyebrow">Creative Builders Community</div>
+              <h1>
+                Where ideas become products at
+                <span class="highlight">AD Tech</span>
+              </h1>
+              <p>
+                Join a practical, welcoming community of builders learning modern tech together through
+                weekly sessions, mentor support, and real project collaboration.
+              </p>
+              <div class="hero-actions">
+                <a href="#join" class="btn main">Become a Member</a>
+                <a href="#programs" class="btn subtle">View Programs</a>
+              </div>
+            </article>
+
+            <aside class="hero-media reveal">
+              <img src="brand asset/my-project-page-1.png" alt="AD Tech visual" />
+            </aside>
+          </div>
+        </section>
+
+        <section class="section" id="about">
+          <div class="container">
+            <h2 class="reveal">Why members choose AD Tech</h2>
+            <div class="grid-3">
+              <article class="card reveal">
+                <h3>Hands-on Projects</h3>
+                <p>Turn concepts into working apps, sites, and automation tools as a team.</p>
+              </article>
+              <article class="card reveal">
+                <h3>Mentor Guidance</h3>
+                <p>Get sharp feedback and practical support from experienced builders.</p>
+              </article>
+              <article class="card reveal">
+                <h3>Career Momentum</h3>
+                <p>Build portfolio proof and confidence for internships, roles, and freelancing.</p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="community">
+          <div class="container">
+            <h2 class="reveal">Community Snapshot</h2>
+            <div class="stats">
+              <div class="stat reveal">
+                <strong>1.2K+</strong>
+                <span>Members</span>
+              </div>
+              <div class="stat reveal">
+                <strong>45+</strong>
+                <span>Workshops</span>
+              </div>
+              <div class="stat reveal">
+                <strong>120+</strong>
+                <span>Projects</span>
+              </div>
+              <div class="stat reveal">
+                <strong>18</strong>
+                <span>Mentors</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="programs">
+          <div class="container">
+            <h2 class="reveal">Programs You Can Join</h2>
+            <div class="grid-3">
+              <article class="card reveal">
+                <h3>Build Sprints</h3>
+                <p>Ship mini-products with accountability in focused team cycles.</p>
+              </article>
+              <article class="card reveal">
+                <h3>Skill Tracks</h3>
+                <p>Follow curated tracks across frontend, mobile, AI tools, and design.</p>
+              </article>
+              <article class="card reveal">
+                <h3>Open Labs</h3>
+                <p>Experiment, demo, and learn from peers in monthly innovation labs.</p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="cta" id="join">
+          <div class="container cta-box reveal">
+            <div>
+              <h3>Ready to build with AD Tech?</h3>
+              <p>Start your journey with a community designed for action and growth.</p>
+            </div>
+            <a class="btn main" href="#home">Get Started</a>
+          </div>
+        </section>
+      </main>
+
+      <footer>
+        <div class="container">© <span id="year"></span> AD Tech Community</div>
+      </footer>
+    </div>
+
+    <script>
+      const year = document.getElementById("year");
+      year.textContent = new Date().getFullYear();
+
+      const menuBtn = document.getElementById("menuBtn");
+      const menu = document.getElementById("menu");
+
+      menuBtn.addEventListener("click", () => {
+        const open = menu.classList.toggle("open");
+        menuBtn.setAttribute("aria-expanded", String(open));
+      });
+
+      menu.querySelectorAll("a").forEach((a) => {
+        a.addEventListener("click", () => {
+          menu.classList.remove("open");
+          menuBtn.setAttribute("aria-expanded", "false");
+        });
+      });
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("on");
+            }
+          });
+        },
+        { threshold: 0.15 }
+      );
+
+      document.querySelectorAll(".reveal").forEach((item) => observer.observe(item));
+    </script>
+  </body>
+</html>

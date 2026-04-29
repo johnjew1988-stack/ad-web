@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sample Invoice</title>
+  <style>
+    :root {
+      --primary: #0e5a61;
+      --ink: #1f2937;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+      --bg: #f8fafc;
+      --paper: #ffffff;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--ink);
+      background: linear-gradient(135deg, #eef6f7 0%, var(--bg) 100%);
+      padding: 24px;
+    }
+
+    .invoice {
+      max-width: 900px;
+      margin: 0 auto;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 12px 32px rgba(14, 90, 97, 0.12);
+    }
+
+    .topbar {
+      background: var(--primary);
+      color: #fff;
+      padding: 28px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand h1 {
+      margin: 0;
+      letter-spacing: 1px;
+      font-size: 28px;
+    }
+
+    .brand-logo {
+      display: block;
+      width: 158px;
+      max-width: 100%;
+      height: auto;
+      margin-bottom: 8px;
+      object-fit: contain;
+    }
+
+    .brand-title {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+    }
+
+    .brand p {
+      margin: 8px 0 0;
+      opacity: 0.9;
+      font-size: 14px;
+    }
+
+    .meta {
+      text-align: right;
+      min-width: 250px;
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    .section {
+      padding: 24px 28px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+    }
+
+    .card h3 {
+      margin: 0 0 10px;
+      color: var(--muted);
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .card p {
+      margin: 4px 0;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 12px 10px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+
+    th {
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-weight: 700;
+    }
+
+    td.num, th.num { text-align: right; }
+
+    .summary {
+      max-width: 340px;
+      margin-left: auto;
+      margin-top: 16px;
+      font-size: 14px;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px dashed var(--line);
+    }
+
+    .summary-row.total {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--primary);
+      border-bottom: 0;
+      padding-top: 12px;
+    }
+
+    .notes {
+      font-size: 14px;
+      line-height: 1.7;
+      color: #374151;
+    }
+
+    .actions {
+      padding: 20px 28px 28px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 8px;
+      padding: 10px 16px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .print-btn {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .print-btn:hover { opacity: 0.92; }
+
+    .secondary {
+      background: #f3f4f6;
+      color: #111827;
+    }
+
+    .secondary:hover { background: #e5e7eb; }
+
+    @media (max-width: 640px) {
+      .meta {
+        text-align: left;
+      }
+    }
+
+    @media print {
+      body {
+        background: #fff;
+        padding: 0;
+      }
+      .invoice {
+        border-radius: 0;
+        border: 0;
+        box-shadow: none;
+      }
+      .actions { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="invoice">
+    <header class="topbar">
+      <div class="brand">
+        <img class="brand-logo" src="brand%20asset/my-project-page-1.png" alt="AD.Tech logo" />
+        <h1 class="brand-title">INVOICE</h1>
+        <p>AD.Tech</p>
+      </div>
+      <div class="meta">
+        <div><strong>Invoice #:</strong> <span id="invoiceNumber">INV-2026-041</span></div>
+        <div><strong>Issue Date:</strong> <span id="issueDate">2026-04-29</span></div>
+        <div><strong>Due Date:</strong> <span id="dueDate">2026-05-13</span></div>
+        <div><strong>Status:</strong> <span id="invoiceStatus">PAID</span></div>
+      </div>
+    </header>
+
+    <section class="section grid">
+      <div class="card">
+        <h3>From</h3>
+        <p><strong>AD.Tech</strong></p>
+        <p>7B, #14-02 BAY POINT, PERSIARAN DANGA PERDANA,</p>
+        <p>COUNTRY GARDEN DANGA BAY</p>
+        <p>JOHOR BAHRU, JOHOR 80200</p>
+        <p>Malaysia</p>
+        <p>johnjew1988@gmail.com</p>
+        <p>+60162608552</p>
+      </div>
+      <div class="card">
+        <h3>Bill To</h3>
+        <p><strong id="billToName">Globex Corporation</strong></p>
+        <p id="billToAttention">Attn: Jane Miller</p>
+        <p id="billToAddress1">90 Harbor Avenue</p>
+        <p id="billToAddress2">Seattle, WA 98101</p>
+        <p id="billToEmail">jane.miller@globex.com</p>
+      </div>
+      <div class="card">
+        <h3>Payment Terms</h3>
+        <p id="paymentTerms">Net 14 days</p>
+        <p>Bank transfer preferred</p>
+        <p><strong>Account:</strong> 3301241</p>
+        <p><strong>Routing:</strong> 120000355</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <table>
+        <thead>
+          <tr>
+            <th>Description</th>
+            <th class="num">Qty</th>
+            <th class="num">Unit Price</th>
+            <th class="num">Line Total</th>
+          </tr>
+        </thead>
+        <tbody id="invoiceItemsBody">
+          <tr>
+            <td>Website redesign - UX audit and wireframes</td>
+            <td class="num">12</td>
+            <td class="num">$85.00</td>
+            <td class="num">$1,020.00</td>
+          </tr>
+          <tr>
+            <td>Frontend implementation - landing page and pricing page</td>
+            <td class="num">24</td>
+            <td class="num">$95.00</td>
+            <td class="num">$2,280.00</td>
+          </tr>
+          <tr>
+            <td>QA and launch support</td>
+            <td class="num">8</td>
+            <td class="num">$80.00</td>
+            <td class="num">$640.00</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="summary">
+        <div class="summary-row"><span>Subtotal</span><strong id="subtotalAmount">$3,940.00</strong></div>
+        <div class="summary-row"><span>Tax (8%)</span><strong id="taxAmount">$315.20</strong></div>
+        <div class="summary-row"><span>Discount</span><strong id="discountAmount">-$200.00</strong></div>
+        <div class="summary-row total"><span>Total Due</span><span id="totalAmount">$4,055.20</span></div>
+      </div>
+    </section>
+
+    <section class="section notes">
+      <strong>Notes</strong>
+      <p id="invoiceNotes">Thank you for your business. Please include invoice number INV-2026-041 when submitting payment. Late payments may be subject to a 1.5% monthly finance charge.</p>
+    </section>
+
+    <div class="actions">
+      <button class="secondary" onclick="window.location.reload()">Reset</button>
+      <button class="print-btn" onclick="window.print()">Print / Save PDF</button>
+    </div>
+  </main>
+
+  <script>
+    (() => {
+      const params = new URLSearchParams(window.location.search);
+
+      const setText = (id, value) => {
+        if (typeof value !== "string" || !value.trim()) {
+          return;
+        }
+        const node = document.getElementById(id);
+        if (node) {
+          node.textContent = value;
+        }
+      };
+
+      const parseNumber = (value) => {
+        const num = Number.parseFloat(value);
+        return Number.isFinite(num) ? num : null;
+      };
+
+      const toFileSafe = (value) => {
+        return String(value || "")
+          .trim()
+          .replace(/[^a-zA-Z0-9_-]+/g, "-")
+          .replace(/-+/g, "-")
+          .replace(/^-|-$/g, "");
+      };
+
+      const currencyCode = (params.get("currency") || "USD").toUpperCase();
+      const formatMoney = (amount) => {
+        return new Intl.NumberFormat("en-US", {
+          style: "currency",
+          currency: currencyCode
+        }).format(amount || 0);
+      };
+
+      setText("invoiceNumber", params.get("invoiceNumber") || "");
+      setText("issueDate", params.get("issueDate") || "");
+      setText("dueDate", params.get("dueDate") || "");
+      setText("invoiceStatus", (params.get("status") || "").toUpperCase());
+
+      const invoiceNumber = params.get("invoiceNumber") || "invoice";
+      const issueDate = params.get("issueDate") || new Date().toISOString().slice(0, 10);
+      const status = (params.get("status") || "paid").toLowerCase();
+      const safeInvoice = toFileSafe(invoiceNumber) || "invoice";
+      const safeDate = toFileSafe(issueDate) || new Date().toISOString().slice(0, 10);
+      const safeStatus = toFileSafe(status) || "paid";
+      document.title = `invoice-${safeInvoice}-${safeStatus}-${safeDate}`;
+
+      setText("billToName", params.get("customerName") || "");
+      setText("billToEmail", params.get("customerEmail") || "");
+      setText("paymentTerms", params.get("paymentTerms") || "");
+      setText("invoiceNotes", params.get("notes") || "");
+
+      const itemsRaw = params.get("items");
+      const itemsNode = document.getElementById("invoiceItemsBody");
+      let computedSubtotal = 0;
+
+      if (itemsRaw && itemsNode) {
+        try {
+          const parsed = JSON.parse(itemsRaw);
+          if (Array.isArray(parsed) && parsed.length) {
+            itemsNode.innerHTML = "";
+
+            parsed.forEach((item) => {
+              const qty = Number.parseInt(item.quantity, 10) || 0;
+              const unitPrice = parseNumber(item.unitPrice) ?? 0;
+              const lineTotal = parseNumber(item.lineTotal) ?? qty * unitPrice;
+              computedSubtotal += lineTotal;
+
+              const row = document.createElement("tr");
+              row.innerHTML = `
+                <td>${item.name || item.id || "Item"}</td>
+                <td class="num">${qty}</td>
+                <td class="num">${formatMoney(unitPrice)}</td>
+                <td class="num">${formatMoney(lineTotal)}</td>
+              `;
+              itemsNode.appendChild(row);
+            });
+          }
+        } catch (_error) {
+          // Keep default rows when URL items are invalid.
+        }
+      }
+
+      const subtotal = parseNumber(params.get("subtotal")) ?? computedSubtotal;
+      const tax = parseNumber(params.get("tax")) ?? 0;
+      const discount = parseNumber(params.get("discount")) ?? 0;
+      const total = parseNumber(params.get("total")) ?? subtotal + tax - discount;
+
+      setText("subtotalAmount", formatMoney(subtotal));
+      setText("taxAmount", formatMoney(tax));
+      setText("discountAmount", `-${formatMoney(discount)}`);
+      setText("totalAmount", formatMoney(total));
+
+      if (params.get("autoprint") === "1") {
+        window.addEventListener("load", () => {
+          window.print();
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

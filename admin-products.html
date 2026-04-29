@@ -1,0 +1,674 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AD Tech Product Pricing Admin</title>
+    <style>
+      :root {
+        --bg: #07131b;
+        --panel: rgba(10, 25, 36, 0.9);
+        --panel-soft: rgba(12, 31, 44, 0.68);
+        --text: #effcff;
+        --muted: #95b8c7;
+        --line: rgba(104, 228, 209, 0.18);
+        --brand: #1bc6b0;
+        --brand-deep: #0c5f95;
+        --danger: #ffb2b8;
+        --success: #9ef3db;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Space Grotesk", system-ui, sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(circle at top left, rgba(27, 198, 176, 0.18), transparent 34%),
+          radial-gradient(circle at top right, rgba(12, 95, 149, 0.24), transparent 30%),
+          linear-gradient(180deg, #041018, var(--bg));
+      }
+
+      .shell {
+        width: min(1100px, calc(100% - 2rem));
+        margin: 0 auto;
+        padding: 2rem 0 3rem;
+      }
+
+      .hero,
+      .product-card {
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        background: var(--panel);
+        box-shadow: 0 24px 48px rgba(0, 0, 0, 0.24);
+      }
+
+      .hero {
+        padding: 1.4rem;
+        margin-bottom: 1.2rem;
+      }
+
+      h1,
+      h2,
+      p {
+        margin: 0;
+      }
+
+      .hero p,
+      .field label,
+      .helper,
+      .status {
+        color: var(--muted);
+      }
+
+      .toolbar {
+        margin-top: 1rem;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto auto;
+        gap: 0.75rem;
+        align-items: end;
+      }
+
+      .field {
+        display: grid;
+        gap: 0.35rem;
+      }
+
+      .field input,
+      .field textarea {
+        width: 100%;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: var(--panel-soft);
+        color: var(--text);
+        font: inherit;
+        padding: 0.8rem 0.9rem;
+      }
+
+      .field textarea {
+        min-height: 108px;
+        resize: vertical;
+      }
+
+      .btn {
+        border: 1px solid transparent;
+        border-radius: 14px;
+        padding: 0.82rem 1rem;
+        font: inherit;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .btn.main {
+        color: #fff;
+        background: linear-gradient(135deg, var(--brand), var(--brand-deep));
+      }
+
+      .btn.alt {
+        color: var(--text);
+        background: rgba(255, 255, 255, 0.04);
+        border-color: var(--line);
+      }
+
+      .product-grid {
+        display: grid;
+        gap: 1rem;
+      }
+
+      .product-card {
+        padding: 1.1rem;
+      }
+
+      .product-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        align-items: center;
+        margin-bottom: 1rem;
+      }
+
+      .product-meta {
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      .product-form {
+        display: grid;
+        gap: 0.9rem;
+      }
+
+      .product-row {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.8rem;
+      }
+
+      .checkbox {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      .card-actions {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
+      .status.error {
+        color: var(--danger);
+      }
+
+      .status.success {
+        color: var(--success);
+      }
+
+      .price-quick-grid {
+        display: grid;
+        gap: 0.7rem;
+      }
+
+      .price-quick-header {
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: rgba(10, 25, 36, 0.72);
+        padding: 0.65rem 0.85rem;
+        display: grid;
+        grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.7fr) auto auto;
+        gap: 0.7rem;
+        color: var(--muted);
+        font-size: 0.82rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+
+      .price-quick-row {
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: var(--panel-soft);
+        padding: 0.85rem;
+        display: grid;
+        grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.7fr) auto auto;
+        gap: 0.7rem;
+        align-items: center;
+      }
+
+      .price-quick-meta {
+        display: grid;
+        gap: 0.18rem;
+      }
+
+      .price-quick-meta strong {
+        font-size: 0.97rem;
+      }
+
+      .price-quick-meta span {
+        color: var(--muted);
+        font-size: 0.84rem;
+      }
+
+      .price-inline {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        color: var(--muted);
+      }
+
+      .price-inline input {
+        width: 140px;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: rgba(8, 20, 29, 0.62);
+        color: var(--text);
+        font: inherit;
+        padding: 0.55rem 0.62rem;
+      }
+
+      @media (max-width: 820px) {
+        .toolbar,
+        .product-row {
+          grid-template-columns: 1fr;
+        }
+
+        .price-quick-row {
+          grid-template-columns: 1fr;
+        }
+
+        .price-quick-header {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <section class="hero">
+        <h1>Product Pricing Admin</h1>
+        <p>Change AD Tech package pricing, names, categories, visibility, and order directly in SQLite.</p>
+        <div class="toolbar">
+          <label class="field" for="adminToken">
+            <span>Admin token</span>
+            <input id="adminToken" type="password" placeholder="Required only if ADMIN_API_TOKEN is set" />
+          </label>
+          <button id="loadBtn" class="btn alt" type="button">Reload Products</button>
+          <a class="btn alt" href="admin-finance.html">Finance Admin</a>
+          <a class="btn main" href="index.html">Back to Storefront</a>
+        </div>
+        <p id="pageStatus" class="status" aria-live="polite"></p>
+      </section>
+
+      <section class="hero">
+        <h2>Product List with Pricing</h2>
+        <p>Review all products and amend price directly from this list.</p>
+        <div class="price-quick-header" aria-hidden="true">
+          <span>Product</span>
+          <span>Price</span>
+          <span>Action</span>
+          <span>Status</span>
+        </div>
+        <div id="priceQuickList" class="price-quick-grid"></div>
+      </section>
+
+      <section class="hero">
+        <h2>Add Product</h2>
+        <p>Create a new package and publish it into the storefront catalog with its starting price.</p>
+        <form id="createProductForm" class="product-form">
+          <div class="product-row">
+            <label class="field">
+              <span>Product ID</span>
+              <input id="createId" type="text" placeholder="example-package" required />
+            </label>
+            <label class="field">
+              <span>Price (USD)</span>
+              <input id="createPrice" type="number" min="1" step="1" required />
+            </label>
+            <label class="field">
+              <span>Sort order</span>
+              <input id="createSortOrder" type="number" step="1" value="0" required />
+            </label>
+          </div>
+          <label class="field">
+            <span>Name</span>
+            <input id="createName" type="text" required />
+          </label>
+          <label class="field">
+            <span>Category</span>
+            <input id="createCategory" type="text" placeholder="ERP" required />
+          </label>
+          <label class="field">
+            <span>Description</span>
+            <textarea id="createDescription" required></textarea>
+          </label>
+          <div class="card-actions">
+            <label class="checkbox">
+              <input id="createActive" type="checkbox" checked />
+              Active
+            </label>
+            <div class="card-actions">
+              <p id="createStatus" class="status" aria-live="polite"></p>
+              <button class="btn main" type="submit">Create Product</button>
+            </div>
+          </div>
+        </form>
+      </section>
+
+      <section id="productGrid" class="product-grid"></section>
+    </div>
+
+    <template id="productTemplate">
+      <article class="product-card">
+        <div class="product-head">
+          <div>
+            <h2 data-role="heading"></h2>
+            <p class="product-meta" data-role="meta"></p>
+          </div>
+          <label class="checkbox">
+            <input data-field="active" type="checkbox" />
+            Active
+          </label>
+        </div>
+
+        <form class="product-form">
+          <label class="field">
+            <span>Name</span>
+            <input data-field="name" type="text" required />
+          </label>
+
+          <label class="field">
+            <span>Description</span>
+            <textarea data-field="description" required></textarea>
+          </label>
+
+          <label class="field">
+            <span>Category</span>
+            <input data-field="category" type="text" required />
+          </label>
+
+          <div class="product-row">
+            <label class="field">
+              <span>Price (USD)</span>
+              <input data-field="price" type="number" min="1" step="1" required />
+            </label>
+            <label class="field">
+              <span>Sort order</span>
+              <input data-field="sortOrder" type="number" step="1" required />
+            </label>
+            <label class="field">
+              <span>Currency</span>
+              <input data-field="currency" type="text" disabled />
+            </label>
+          </div>
+
+          <div class="card-actions">
+            <p class="status" data-role="status" aria-live="polite"></p>
+            <div class="card-actions">
+              <button class="btn alt" data-role="delete" type="button">Delete Product</button>
+              <button class="btn main" type="submit">Save Product</button>
+            </div>
+          </div>
+        </form>
+      </article>
+    </template>
+
+    <template id="priceRowTemplate">
+      <div class="price-quick-row">
+        <div class="price-quick-meta">
+          <strong data-role="name"></strong>
+          <span data-role="category"></span>
+        </div>
+        <label class="price-inline">
+          <span>USD</span>
+          <input data-role="price" type="number" min="1" step="1" required />
+        </label>
+        <button class="btn main" data-role="savePrice" type="button">Amend Price</button>
+        <p class="status" data-role="status" aria-live="polite"></p>
+      </div>
+    </template>
+
+    <script>
+      const pageStatus = document.getElementById("pageStatus");
+      const productGrid = document.getElementById("productGrid");
+      const productTemplate = document.getElementById("productTemplate");
+      const priceQuickList = document.getElementById("priceQuickList");
+      const priceRowTemplate = document.getElementById("priceRowTemplate");
+      const adminTokenInput = document.getElementById("adminToken");
+      const loadBtn = document.getElementById("loadBtn");
+      const createProductForm = document.getElementById("createProductForm");
+      const createStatus = document.getElementById("createStatus");
+
+      const setPageStatus = (message, tone = "") => {
+        pageStatus.textContent = message;
+        pageStatus.className = tone ? `status ${tone}` : "status";
+      };
+
+      const setCardStatus = (node, message, tone = "") => {
+        node.textContent = message;
+        node.className = tone ? `status ${tone}` : "status";
+      };
+
+      const getHeaders = () => {
+        const headers = {
+          "Content-Type": "application/json"
+        };
+
+        if (adminTokenInput.value.trim()) {
+          headers["x-admin-token"] = adminTokenInput.value.trim();
+        }
+
+        return headers;
+      };
+
+      const fetchProducts = async () => {
+        const response = await fetch("/api/admin/products", {
+          headers: getHeaders()
+        });
+        const payload = await response.json().catch(() => ({}));
+
+        if (!response.ok || !Array.isArray(payload.products)) {
+          throw new Error(payload.error || "Could not load products.");
+        }
+
+        return payload.products;
+      };
+
+      const renderQuickPriceEditor = (products) => {
+        priceQuickList.innerHTML = "";
+
+        products.forEach((product) => {
+          const fragment = priceRowTemplate.content.cloneNode(true);
+          const row = fragment.querySelector(".price-quick-row");
+          const nameNode = fragment.querySelector('[data-role="name"]');
+          const categoryNode = fragment.querySelector('[data-role="category"]');
+          const priceInput = fragment.querySelector('[data-role="price"]');
+          const savePriceBtn = fragment.querySelector('[data-role="savePrice"]');
+          const status = fragment.querySelector('[data-role="status"]');
+
+          row.dataset.productId = product.id;
+          nameNode.textContent = product.name;
+          categoryNode.textContent = `${product.category || "General"} • ${product.id}`;
+          priceInput.value = product.price;
+
+          savePriceBtn.addEventListener("click", async () => {
+            setCardStatus(status, "Saving...");
+            savePriceBtn.disabled = true;
+
+            try {
+              const priceValue = Number.parseInt(priceInput.value, 10);
+
+              if (!Number.isInteger(priceValue) || priceValue < 1) {
+                throw new Error("Price must be a positive whole number.");
+              }
+
+              const response = await fetch(`/api/admin/products/${product.id}`, {
+                method: "PUT",
+                headers: getHeaders(),
+                body: JSON.stringify({
+                  name: product.name,
+                  description: product.description,
+                  category: product.category || "General",
+                  price: priceValue,
+                  sortOrder: product.sortOrder,
+                  active: Boolean(product.active)
+                })
+              });
+              const payload = await response.json().catch(() => ({}));
+
+              if (!response.ok || !payload.product) {
+                throw new Error(payload.error || "Could not save price.");
+              }
+
+              product.price = payload.product.price;
+              priceInput.value = payload.product.price;
+
+              const fullFormPriceInput = productGrid.querySelector(
+                `[data-product-id="${product.id}"] [data-field="price"]`
+              );
+
+              if (fullFormPriceInput) {
+                fullFormPriceInput.value = payload.product.price;
+              }
+
+              setCardStatus(status, "Saved.", "success");
+              setPageStatus("Product pricing updated.", "success");
+            } catch (error) {
+              setCardStatus(status, error.message || "Could not save price.", "error");
+            } finally {
+              savePriceBtn.disabled = false;
+            }
+          });
+
+          priceQuickList.appendChild(fragment);
+        });
+      };
+
+      const renderProducts = (products) => {
+        productGrid.innerHTML = "";
+
+        products.forEach((product) => {
+          const fragment = productTemplate.content.cloneNode(true);
+          const article = fragment.querySelector(".product-card");
+          const form = fragment.querySelector(".product-form");
+          const heading = fragment.querySelector('[data-role="heading"]');
+          const meta = fragment.querySelector('[data-role="meta"]');
+          const status = fragment.querySelector('[data-role="status"]');
+          const nameInput = fragment.querySelector('[data-field="name"]');
+          const descriptionInput = fragment.querySelector('[data-field="description"]');
+          const categoryInput = fragment.querySelector('[data-field="category"]');
+          const priceInput = fragment.querySelector('[data-field="price"]');
+          const sortOrderInput = fragment.querySelector('[data-field="sortOrder"]');
+          const currencyInput = fragment.querySelector('[data-field="currency"]');
+          const activeInput = fragment.querySelector('[data-field="active"]');
+          const deleteBtn = fragment.querySelector('[data-role="delete"]');
+
+          article.dataset.productId = product.id;
+          heading.textContent = product.name;
+          meta.textContent = `Product ID: ${product.id}`;
+          nameInput.value = product.name;
+          descriptionInput.value = product.description;
+          categoryInput.value = product.category || "General";
+          priceInput.value = product.price;
+          sortOrderInput.value = product.sortOrder;
+          currencyInput.value = product.currency;
+          activeInput.checked = Boolean(product.active);
+
+          form.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            setCardStatus(status, "Saving...");
+
+            const saveBtn = form.querySelector('button[type="submit"]');
+            saveBtn.disabled = true;
+
+            try {
+              const response = await fetch(`/api/admin/products/${product.id}`, {
+                method: "PUT",
+                headers: getHeaders(),
+                body: JSON.stringify({
+                  name: nameInput.value,
+                  description: descriptionInput.value,
+                  category: categoryInput.value,
+                  price: priceInput.value,
+                  sortOrder: sortOrderInput.value,
+                  active: activeInput.checked
+                })
+              });
+              const payload = await response.json().catch(() => ({}));
+
+              if (!response.ok || !payload.product) {
+                throw new Error(payload.error || "Could not save product.");
+              }
+
+              heading.textContent = payload.product.name;
+              setCardStatus(status, "Saved to database.", "success");
+              setPageStatus("Product catalog updated.", "success");
+            } catch (error) {
+              setCardStatus(status, error.message || "Could not save product.", "error");
+            } finally {
+              saveBtn.disabled = false;
+            }
+          });
+
+          deleteBtn.addEventListener("click", async () => {
+            const confirmed = window.confirm(`Delete ${product.name}?`);
+
+            if (!confirmed) {
+              return;
+            }
+
+            setCardStatus(status, "Deleting...");
+            deleteBtn.disabled = true;
+
+            try {
+              const response = await fetch(`/api/admin/products/${product.id}`, {
+                method: "DELETE",
+                headers: getHeaders()
+              });
+              const payload = await response.json().catch(() => ({}));
+
+              if (!response.ok) {
+                throw new Error(payload.error || "Could not delete product.");
+              }
+
+              article.remove();
+              setPageStatus("Product deleted.", "success");
+            } catch (error) {
+              setCardStatus(status, error.message || "Could not delete product.", "error");
+              deleteBtn.disabled = false;
+            }
+          });
+
+          productGrid.appendChild(fragment);
+        });
+      };
+
+      const loadProducts = async () => {
+        setPageStatus("Loading products...");
+
+        try {
+          const products = await fetchProducts();
+          renderProducts(products);
+          renderQuickPriceEditor(products);
+          setPageStatus("Product catalog loaded.", "success");
+        } catch (error) {
+          productGrid.innerHTML = "";
+          priceQuickList.innerHTML = "";
+          setPageStatus(error.message || "Could not load products.", "error");
+        }
+      };
+
+      loadBtn.addEventListener("click", () => {
+        loadProducts();
+      });
+
+      createProductForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        setCardStatus(createStatus, "Creating...");
+
+        const submitBtn = createProductForm.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+
+        try {
+          const response = await fetch("/api/admin/products", {
+            method: "POST",
+            headers: getHeaders(),
+            body: JSON.stringify({
+              id: document.getElementById("createId").value,
+              name: document.getElementById("createName").value,
+              category: document.getElementById("createCategory").value,
+              description: document.getElementById("createDescription").value,
+              price: document.getElementById("createPrice").value,
+              sortOrder: document.getElementById("createSortOrder").value,
+              active: document.getElementById("createActive").checked
+            })
+          });
+          const payload = await response.json().catch(() => ({}));
+
+          if (!response.ok || !payload.product) {
+            throw new Error(payload.error || "Could not create product.");
+          }
+
+          createProductForm.reset();
+          document.getElementById("createActive").checked = true;
+          document.getElementById("createSortOrder").value = "0";
+          setCardStatus(createStatus, "Product created.", "success");
+          setPageStatus("Product catalog updated.", "success");
+          await loadProducts();
+        } catch (error) {
+          setCardStatus(createStatus, error.message || "Could not create product.", "error");
+        } finally {
+          submitBtn.disabled = false;
+        }
+      });
+
+      loadProducts();
+    </script>
+  </body>
+</html>

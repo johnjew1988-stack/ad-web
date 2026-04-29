@@ -1,0 +1,1160 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AD Tech Finance and Accounting Admin</title>
+    <style>
+      :root {
+        --bg: #07131b;
+        --panel: rgba(10, 25, 36, 0.9);
+        --panel-soft: rgba(12, 31, 44, 0.68);
+        --text: #effcff;
+        --muted: #95b8c7;
+        --line: rgba(104, 228, 209, 0.18);
+        --brand: #1bc6b0;
+        --brand-deep: #0c5f95;
+        --danger: #ffb2b8;
+        --success: #9ef3db;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Space Grotesk", system-ui, sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(circle at top left, rgba(27, 198, 176, 0.18), transparent 34%),
+          radial-gradient(circle at top right, rgba(12, 95, 149, 0.24), transparent 30%),
+          linear-gradient(180deg, #041018, var(--bg));
+      }
+
+      .shell {
+        width: min(1160px, calc(100% - 2rem));
+        margin: 0 auto;
+        padding: 2rem 0 3rem;
+      }
+
+      .panel,
+      .entry-card {
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        background: var(--panel);
+        box-shadow: 0 24px 48px rgba(0, 0, 0, 0.24);
+      }
+
+      .panel {
+        padding: 1.35rem;
+        margin-bottom: 1rem;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+
+      .muted,
+      .status,
+      .field label {
+        color: var(--muted);
+      }
+
+      .toolbar {
+        margin-top: 1rem;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) repeat(4, auto);
+        gap: 0.7rem;
+        align-items: end;
+      }
+
+      .export-actions {
+        margin-top: 0.8rem;
+        display: flex;
+        gap: 0.65rem;
+        flex-wrap: wrap;
+      }
+
+      .field {
+        display: grid;
+        gap: 0.34rem;
+      }
+
+      .field input,
+      .field select,
+      .field textarea {
+        width: 100%;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: var(--panel-soft);
+        color: var(--text);
+        font: inherit;
+        padding: 0.68rem 0.74rem;
+      }
+
+      .field textarea {
+        min-height: 92px;
+        resize: vertical;
+      }
+
+      .btn {
+        border: 1px solid transparent;
+        border-radius: 14px;
+        padding: 0.74rem 0.95rem;
+        font: inherit;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .btn.main {
+        color: #fff;
+        background: linear-gradient(135deg, var(--brand), var(--brand-deep));
+      }
+
+      .btn.alt {
+        color: var(--text);
+        background: rgba(255, 255, 255, 0.04);
+        border-color: var(--line);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .summary-grid {
+        margin-top: 0.9rem;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 0.7rem;
+      }
+
+      .summary-card {
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 0.85rem;
+        background: var(--panel-soft);
+      }
+
+      .summary-card strong {
+        display: block;
+        font-size: 1.05rem;
+        margin-top: 0.28rem;
+      }
+
+      .form-grid {
+        margin-top: 0.85rem;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.7rem;
+      }
+
+      .entry-list {
+        display: grid;
+        gap: 0.8rem;
+      }
+
+      .invoice-card {
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        background: var(--panel-soft);
+        padding: 0.9rem;
+      }
+
+      .invoice-filters {
+        display: flex;
+        gap: 0.6rem;
+        flex-wrap: wrap;
+        margin-bottom: 0.85rem;
+      }
+
+      .invoice-filters select {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--bg);
+        color: var(--text);
+        padding: 0.38rem 0.65rem;
+        font-size: 0.85rem;
+        cursor: pointer;
+      }
+
+      .btn-mark-paid {
+        border: none;
+        border-radius: 8px;
+        background: #2d7d46;
+        color: #fff;
+        padding: 0.32rem 0.72rem;
+        font-size: 0.82rem;
+        cursor: pointer;
+        margin-top: 0.55rem;
+      }
+
+      .btn-mark-paid:disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+      }
+
+      .invoice-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 0.8rem;
+        flex-wrap: wrap;
+        margin-bottom: 0.55rem;
+      }
+
+      .invoice-items {
+        margin: 0.45rem 0 0;
+        padding-left: 1.15rem;
+        color: var(--muted);
+      }
+
+      .invoice-items li {
+        margin: 0.24rem 0;
+      }
+
+      .entry-card {
+        padding: 0.95rem;
+      }
+
+      .entry-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 0.8rem;
+        flex-wrap: wrap;
+        margin-bottom: 0.75rem;
+      }
+
+      .entry-meta {
+        color: var(--muted);
+        font-size: 0.85rem;
+      }
+
+      .entry-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 0.7rem;
+      }
+
+      .entry-actions {
+        margin-top: 0.75rem;
+        display: flex;
+        justify-content: space-between;
+        gap: 0.7rem;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
+      .status.error {
+        color: var(--danger);
+      }
+
+      .status.success {
+        color: var(--success);
+      }
+
+      @media (max-width: 980px) {
+        .toolbar,
+        .summary-grid,
+        .form-grid,
+        .entry-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <section class="panel">
+        <h1>Finance and Accounting Admin</h1>
+        <p class="muted">Track income, expenses, and financing transactions with accounting summaries for admin users.</p>
+        <div class="toolbar">
+          <label class="field" for="adminToken">
+            <span>Admin token</span>
+            <input id="adminToken" type="password" placeholder="Required only if ADMIN_API_TOKEN is set" />
+          </label>
+          <label class="field" for="scopeFilter">
+            <span>Scope</span>
+            <select id="scopeFilter">
+              <option value="all">All</option>
+              <option value="accounting">Accounting</option>
+              <option value="financing">Financing</option>
+            </select>
+          </label>
+          <button id="loadBtn" class="btn alt" type="button">Reload</button>
+          <a class="btn alt" href="admin-products.html">Pricing Admin</a>
+          <a class="btn main" href="index.html">Back to Storefront</a>
+        </div>
+        <div class="export-actions">
+          <button id="exportLedgerBtn" class="btn alt" type="button">Export Ledger CSV</button>
+          <button id="exportPnlBtn" class="btn alt" type="button">Export Monthly P&L CSV</button>
+          <button id="exportSummaryPdfBtn" class="btn alt" type="button">Export Summary PDF</button>
+          <button id="exportPnlPdfBtn" class="btn alt" type="button">Export Monthly P&L PDF</button>
+        </div>
+        <p id="pageStatus" class="status" aria-live="polite"></p>
+        <div id="summaryGrid" class="summary-grid"></div>
+      </section>
+
+      <section class="panel">
+        <h2>Add Finance Entry</h2>
+        <p class="muted">Create a transaction in either accounting or financing scope.</p>
+        <form id="createEntryForm">
+          <div class="form-grid">
+            <label class="field">
+              <span>Scope</span>
+              <select id="createScope" required>
+                <option value="accounting">Accounting</option>
+                <option value="financing">Financing</option>
+              </select>
+            </label>
+            <label class="field">
+              <span>Type</span>
+              <select id="createType" required>
+                <option value="income">Income</option>
+                <option value="expense">Expense</option>
+              </select>
+            </label>
+            <label class="field">
+              <span>Amount (USD)</span>
+              <input id="createAmount" type="number" min="1" step="1" required />
+            </label>
+            <label class="field">
+              <span>Category</span>
+              <input id="createCategory" type="text" placeholder="Payroll" required />
+            </label>
+            <label class="field">
+              <span>Date</span>
+              <input id="createDate" type="date" required />
+            </label>
+            <label class="field">
+              <span>Reference</span>
+              <input id="createReference" type="text" placeholder="INV-1004" />
+            </label>
+          </div>
+          <label class="field" style="margin-top: 0.7rem">
+            <span>Description</span>
+            <textarea id="createDescription" placeholder="Optional details"></textarea>
+          </label>
+          <div class="entry-actions" style="margin-top: 0.8rem">
+            <p id="createStatus" class="status" aria-live="polite"></p>
+            <button class="btn main" type="submit">Create Entry</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="panel">
+        <h2>Entries</h2>
+        <p class="muted">Edit or delete finance and accounting entries.</p>
+        <div id="entryList" class="entry-list"></div>
+      </section>
+
+      <section class="panel">
+        <h2>Invoice Accounting Report</h2>
+        <p class="muted">Saved invoices from successful payments for accounting review and reconciliation.</p>
+        <div class="invoice-filters">
+          <select id="invoiceFilterStatus" aria-label="Filter by status">
+            <option value="">All Statuses</option>
+            <option value="paid">Paid</option>
+            <option value="pending">Pending</option>
+          </select>
+          <select id="invoiceFilterMethod" aria-label="Filter by payment term">
+            <option value="">All Payment Terms</option>
+            <option value="card">Card</option>
+            <option value="cash">Cash</option>
+            <option value="bank_transfer">Bank Transfer</option>
+          </select>
+        </div>
+        <div id="invoiceSummaryGrid" class="summary-grid"></div>
+        <div id="invoiceList" class="entry-list" style="margin-top: 0.8rem"></div>
+      </section>
+    </div>
+
+    <template id="entryTemplate">
+      <article class="entry-card">
+        <div class="entry-head">
+          <div>
+            <h3 data-role="title"></h3>
+            <p class="entry-meta" data-role="meta"></p>
+          </div>
+          <span class="entry-meta" data-role="id"></span>
+        </div>
+
+        <div class="entry-grid">
+          <label class="field">
+            <span>Scope</span>
+            <select data-field="scope">
+              <option value="accounting">Accounting</option>
+              <option value="financing">Financing</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Type</span>
+            <select data-field="entryType">
+              <option value="income">Income</option>
+              <option value="expense">Expense</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Category</span>
+            <input data-field="category" type="text" />
+          </label>
+          <label class="field">
+            <span>Amount (USD)</span>
+            <input data-field="amount" type="number" min="1" step="1" />
+          </label>
+          <label class="field">
+            <span>Date</span>
+            <input data-field="entryDate" type="date" />
+          </label>
+          <label class="field">
+            <span>Reference</span>
+            <input data-field="reference" type="text" />
+          </label>
+        </div>
+
+        <label class="field" style="margin-top: 0.7rem">
+          <span>Description</span>
+          <textarea data-field="description"></textarea>
+        </label>
+
+        <div class="entry-actions">
+          <p class="status" data-role="status" aria-live="polite"></p>
+          <div class="entry-actions" style="margin-top: 0">
+            <button class="btn alt" data-role="delete" type="button">Delete</button>
+            <button class="btn main" data-role="save" type="button">Save</button>
+          </div>
+        </div>
+      </article>
+    </template>
+
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+    <script>
+      const pageStatus = document.getElementById("pageStatus");
+      const summaryGrid = document.getElementById("summaryGrid");
+      const entryList = document.getElementById("entryList");
+      const invoiceSummaryGrid = document.getElementById("invoiceSummaryGrid");
+      const invoiceList = document.getElementById("invoiceList");
+      const invoiceFilterStatus = document.getElementById("invoiceFilterStatus");
+      const invoiceFilterMethod = document.getElementById("invoiceFilterMethod");
+      const entryTemplate = document.getElementById("entryTemplate");
+      const adminTokenInput = document.getElementById("adminToken");
+      const scopeFilter = document.getElementById("scopeFilter");
+      const loadBtn = document.getElementById("loadBtn");
+      const exportLedgerBtn = document.getElementById("exportLedgerBtn");
+      const exportPnlBtn = document.getElementById("exportPnlBtn");
+      const exportSummaryPdfBtn = document.getElementById("exportSummaryPdfBtn");
+      const exportPnlPdfBtn = document.getElementById("exportPnlPdfBtn");
+      const createEntryForm = document.getElementById("createEntryForm");
+      const createStatus = document.getElementById("createStatus");
+      const API_BASE_URL = window.location.protocol === "file:" ? "http://localhost:3000" : "";
+      const apiUrl = (path) => `${API_BASE_URL}${path}`;
+      const COMPANY_NAME = "AD Tech";
+      let loadedEntries = [];
+      let loadedSummary = {};
+      let loadedInvoices = [];
+      let loadedInvoiceSummary = {};
+
+      const formatCurrency = (value) =>
+        new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(value || 0);
+
+      const formatDateTime = (value) => {
+        if (!value) {
+          return "-";
+        }
+
+        const date = new Date(value);
+
+        if (Number.isNaN(date.getTime())) {
+          return value;
+        }
+
+        return date.toLocaleString("en-US");
+      };
+
+      const setStatus = (node, message, tone = "") => {
+        node.textContent = message;
+        node.className = tone ? `status ${tone}` : "status";
+      };
+
+      const getHeaders = () => {
+        const headers = {
+          "Content-Type": "application/json"
+        };
+
+        if (adminTokenInput.value.trim()) {
+          headers["x-admin-token"] = adminTokenInput.value.trim();
+        }
+
+        return headers;
+      };
+
+      const fetchJson = async (url, options = {}) => {
+        const normalizedUrl = typeof url === "string" && url.startsWith("/api/") ? apiUrl(url) : url;
+        const response = await fetch(normalizedUrl, options);
+        const payload = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+          throw new Error(payload.error || "Request failed.");
+        }
+
+        return payload;
+      };
+
+      const escapeCsv = (value) => {
+        const stringValue = String(value ?? "");
+
+        if (/[",\n]/.test(stringValue)) {
+          return `"${stringValue.replace(/"/g, '""')}"`;
+        }
+
+        return stringValue;
+      };
+
+      const downloadCsv = (fileName, headers, rows) => {
+        const csvLines = [headers.join(","), ...rows.map((row) => row.map((cell) => escapeCsv(cell)).join(","))];
+        const csvText = `${csvLines.join("\n")}\n`;
+        const blob = new Blob([csvText], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+
+        link.href = url;
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(url);
+      };
+
+      const getPdfInstance = () => {
+        const JsPdfCtor = window.jspdf?.jsPDF;
+
+        if (!JsPdfCtor) {
+          throw new Error("PDF export library failed to load.");
+        }
+
+        return new JsPdfCtor({ unit: "pt", format: "a4" });
+      };
+
+      const downloadPdfFromLines = async (fileName, title, lines, meta = {}) => {
+        const doc = getPdfInstance();
+        const marginX = 42;
+        let cursorY = 36;
+        const pageHeight = doc.internal.pageSize.getHeight();
+        const companyTextX = marginX;
+
+        doc.setFontSize(12);
+        doc.setTextColor(32, 45, 64);
+        doc.text(COMPANY_NAME, companyTextX, cursorY + 12);
+
+        doc.setFontSize(9);
+        doc.setTextColor(80, 91, 106);
+        doc.text("Finance & Accounting Reports", companyTextX, cursorY + 25);
+
+        cursorY = cursorY + 46;
+
+        doc.setFontSize(16);
+        doc.setTextColor(0, 0, 0);
+        doc.text(title, marginX, cursorY);
+        cursorY += 22;
+
+        doc.setFontSize(10);
+        doc.setTextColor(70, 70, 70);
+        const scopeText = `Scope: ${meta.scope || "all"}`;
+        doc.text(scopeText, marginX, cursorY);
+        doc.text(`Generated: ${new Date().toISOString()}`, marginX + 190, cursorY);
+        cursorY += 12;
+
+        doc.setDrawColor(214, 218, 224);
+        doc.line(marginX, cursorY, doc.internal.pageSize.getWidth() - marginX, cursorY);
+        cursorY += 15;
+
+        doc.setFontSize(11);
+        doc.setTextColor(0, 0, 0);
+        lines.forEach((line) => {
+          if (cursorY > pageHeight - 36) {
+            doc.addPage();
+            cursorY = 42;
+          }
+
+          doc.text(String(line), marginX, cursorY);
+          cursorY += 15;
+        });
+
+        doc.save(fileName);
+      };
+
+      const buildMonthlyPnlRows = (entries) => {
+        const monthMap = new Map();
+
+        entries.forEach((entry) => {
+          const monthKey = String(entry.entryDate || "").slice(0, 7);
+
+          if (!/^\d{4}-\d{2}$/.test(monthKey)) {
+            return;
+          }
+
+          if (!monthMap.has(monthKey)) {
+            monthMap.set(monthKey, {
+              month: monthKey,
+              income: 0,
+              expense: 0
+            });
+          }
+
+          const monthRecord = monthMap.get(monthKey);
+
+          if (entry.entryType === "income") {
+            monthRecord.income += entry.amount;
+          } else {
+            monthRecord.expense += entry.amount;
+          }
+        });
+
+        return [...monthMap.values()]
+          .sort((a, b) => a.month.localeCompare(b.month))
+          .map((row) => [row.month, row.income, row.expense, row.income - row.expense]);
+      };
+
+      const getActiveScope = () => scopeFilter.value || "all";
+
+      const renderSummary = (summary) => {
+        const cards = [
+          { label: "Total Income", value: formatCurrency(summary.totalIncome) },
+          { label: "Total Expense", value: formatCurrency(summary.totalExpense) },
+          { label: "Net Cashflow", value: formatCurrency(summary.netCashflow) },
+          { label: "Entries", value: String(summary.entriesCount || 0) },
+          { label: "Monthly Income", value: formatCurrency(summary.monthlyIncome) },
+          { label: "Monthly Expense", value: formatCurrency(summary.monthlyExpense) },
+          { label: "Accounting Net", value: formatCurrency(summary.accountingNet) },
+          { label: "Financing Net", value: formatCurrency(summary.financingNet) }
+        ];
+
+        summaryGrid.innerHTML = cards
+          .map(
+            (card) => `
+              <div class="summary-card">
+                <span class="muted">${card.label}</span>
+                <strong>${card.value}</strong>
+              </div>
+            `
+          )
+          .join("");
+      };
+
+      const renderInvoiceSummary = (summary) => {
+        const cards = [
+          { label: "Invoices", value: String(summary.invoicesCount || 0) },
+          { label: "Paid Invoices", value: String(summary.paidInvoicesCount || 0) },
+          { label: "Total Revenue", value: formatCurrency(summary.totalRevenue) },
+          { label: "Monthly Revenue", value: formatCurrency(summary.monthlyRevenue) },
+          { label: "Outstanding Revenue", value: formatCurrency(summary.outstandingRevenue) }
+        ];
+
+        invoiceSummaryGrid.innerHTML = cards
+          .map(
+            (card) => `
+              <div class="summary-card">
+                <span class="muted">${card.label}</span>
+                <strong>${card.value}</strong>
+              </div>
+            `
+          )
+          .join("");
+      };
+
+      const toDateOnly = (isoString) => {
+        if (!isoString) {
+          return "";
+        }
+        const date = new Date(isoString);
+        if (Number.isNaN(date.getTime())) {
+          return "";
+        }
+        return date.toISOString().slice(0, 10);
+      };
+
+      const openInvoiceTemplate = (invoice, options = {}) => {
+        if (!invoice) {
+          return;
+        }
+
+        const issueDate = toDateOnly(invoice.issuedAt) || toDateOnly(new Date().toISOString());
+        const issueDateObj = new Date(`${issueDate}T00:00:00Z`);
+        issueDateObj.setUTCDate(issueDateObj.getUTCDate() + 14);
+        const dueDate = issueDateObj.toISOString().slice(0, 10);
+
+        const params = new URLSearchParams({
+          invoiceNumber: invoice.invoiceNumber || "",
+          issueDate,
+          dueDate,
+          status: invoice.status || "paid",
+          customerName: invoice.customerName || "Customer",
+          customerEmail: invoice.customerEmail || "",
+          paymentTerms: "Net 14 days",
+          subtotal: String(Number(invoice.subtotalAmount || 0)),
+          tax: String(Number(invoice.taxAmount || 0)),
+          total: String(Number(invoice.totalAmount || 0)),
+          discount: "0",
+          currency: String(invoice.currency || "USD").toUpperCase(),
+          notes:
+            `Thank you for your business. Please include invoice number ${invoice.invoiceNumber || ""} when submitting payment.`,
+          items: JSON.stringify(Array.isArray(invoice.items) ? invoice.items : [])
+        });
+
+        if (options.autoPrint) {
+          params.set("autoprint", "1");
+        }
+
+        window.open(`/sample-invoice.html?${params.toString()}`, "_blank", "noopener");
+      };
+
+      const renderInvoices = (invoices) => {
+        invoiceList.innerHTML = "";
+
+        if (!invoices.length) {
+          invoiceList.innerHTML = '<p class="muted">No invoices found yet.</p>';
+          return;
+        }
+
+        invoices.forEach((invoice) => {
+          const card = document.createElement("article");
+          card.className = "invoice-card";
+
+          const head = document.createElement("div");
+          head.className = "invoice-head";
+
+          const headLeft = document.createElement("div");
+          const title = document.createElement("h3");
+          title.textContent = `${invoice.invoiceNumber} • ${formatCurrency(invoice.totalAmount)}`;
+          const meta = document.createElement("p");
+          meta.className = "entry-meta";
+          meta.textContent = `${invoice.customerName} (${invoice.customerEmail})`;
+          headLeft.appendChild(title);
+          headLeft.appendChild(meta);
+
+          const headRight = document.createElement("span");
+          headRight.className = "entry-meta";
+          headRight.textContent = `${(invoice.status || "unknown").toUpperCase()} • ${(invoice.paymentMethod || "card").replace("_", " ").toUpperCase()} • Issued ${formatDateTime(invoice.issuedAt)}`;
+
+          head.appendChild(headLeft);
+          head.appendChild(headRight);
+
+          const detail = document.createElement("p");
+          detail.className = "entry-meta";
+          detail.textContent = `Payment Intent: ${invoice.paymentIntentId || "-"} • Paid At: ${formatDateTime(invoice.paidAt)}`;
+
+          const itemsTitle = document.createElement("p");
+          itemsTitle.className = "muted";
+          itemsTitle.textContent = "Invoice items:";
+
+          const itemsList = document.createElement("ul");
+          itemsList.className = "invoice-items";
+          const items = Array.isArray(invoice.items) ? invoice.items : [];
+
+          if (!items.length) {
+            const emptyItem = document.createElement("li");
+            emptyItem.textContent = "No items attached.";
+            itemsList.appendChild(emptyItem);
+          } else {
+            items.forEach((item) => {
+              const itemNode = document.createElement("li");
+              const itemName = item.name || item.id || "Unnamed item";
+              const quantity = Number.parseInt(item.quantity, 10) || 0;
+              const unitPrice = Number.parseInt(item.unitPrice, 10) || 0;
+              const lineTotal = Number.parseInt(item.lineTotal, 10) || 0;
+              itemNode.textContent = `${itemName} • Qty ${quantity} • ${formatCurrency(unitPrice)} each • ${formatCurrency(lineTotal)}`;
+              itemsList.appendChild(itemNode);
+            });
+          }
+
+          card.appendChild(head);
+          card.appendChild(detail);
+          card.appendChild(itemsTitle);
+          card.appendChild(itemsList);
+
+          if (invoice.status === "pending") {
+            const markPaidBtn = document.createElement("button");
+            markPaidBtn.className = "btn-mark-paid";
+            markPaidBtn.textContent = "Mark as Paid";
+            markPaidBtn.addEventListener("click", async () => {
+              markPaidBtn.disabled = true;
+              markPaidBtn.textContent = "Updating...";
+              try {
+                const payload = await fetchJson(`/api/admin/accounting/invoices/${invoice.id}/paid`, {
+                  method: "PATCH",
+                  headers: getHeaders()
+                });
+                const updatedInvoice = payload.invoice || { ...invoice, status: "paid", paidAt: new Date().toISOString() };
+                openInvoiceTemplate(updatedInvoice, { autoPrint: true });
+                await loadInvoices();
+                setStatus(pageStatus, "Invoice marked as paid. Opened sample template for PDF generation.", "success");
+              } catch (err) {
+                markPaidBtn.disabled = false;
+                markPaidBtn.textContent = "Mark as Paid";
+                setStatus(pageStatus, err.message || "Could not mark invoice as paid.", "error");
+              }
+            });
+            card.appendChild(markPaidBtn);
+          }
+
+          invoiceList.appendChild(card);
+        });
+      };
+
+      const buildEntryPayload = (values) => ({
+        scope: values.scope,
+        entryType: values.entryType,
+        category: values.category,
+        amount: values.amount,
+        entryDate: values.entryDate,
+        reference: values.reference,
+        description: values.description
+      });
+
+      const renderEntries = (entries) => {
+        entryList.innerHTML = "";
+
+        if (!entries.length) {
+          entryList.innerHTML = '<p class="muted">No finance entries found for this scope.</p>';
+          return;
+        }
+
+        entries.forEach((entry) => {
+          const fragment = entryTemplate.content.cloneNode(true);
+          const card = fragment.querySelector(".entry-card");
+          const titleNode = fragment.querySelector('[data-role="title"]');
+          const metaNode = fragment.querySelector('[data-role="meta"]');
+          const idNode = fragment.querySelector('[data-role="id"]');
+          const statusNode = fragment.querySelector('[data-role="status"]');
+          const saveBtn = fragment.querySelector('[data-role="save"]');
+          const deleteBtn = fragment.querySelector('[data-role="delete"]');
+
+          const fieldNodes = {
+            scope: fragment.querySelector('[data-field="scope"]'),
+            entryType: fragment.querySelector('[data-field="entryType"]'),
+            category: fragment.querySelector('[data-field="category"]'),
+            amount: fragment.querySelector('[data-field="amount"]'),
+            entryDate: fragment.querySelector('[data-field="entryDate"]'),
+            reference: fragment.querySelector('[data-field="reference"]'),
+            description: fragment.querySelector('[data-field="description"]')
+          };
+
+          card.dataset.entryId = String(entry.id);
+          titleNode.textContent = `${entry.entryType.toUpperCase()} • ${formatCurrency(entry.amount)}`;
+          metaNode.textContent = `${entry.scope} • ${entry.category}`;
+          idNode.textContent = `Entry #${entry.id}`;
+
+          fieldNodes.scope.value = entry.scope;
+          fieldNodes.entryType.value = entry.entryType;
+          fieldNodes.category.value = entry.category;
+          fieldNodes.amount.value = entry.amount;
+          fieldNodes.entryDate.value = entry.entryDate;
+          fieldNodes.reference.value = entry.reference || "";
+          fieldNodes.description.value = entry.description || "";
+
+          saveBtn.addEventListener("click", async () => {
+            setStatus(statusNode, "Saving...");
+            saveBtn.disabled = true;
+
+            try {
+              const payload = buildEntryPayload({
+                scope: fieldNodes.scope.value,
+                entryType: fieldNodes.entryType.value,
+                category: fieldNodes.category.value,
+                amount: fieldNodes.amount.value,
+                entryDate: fieldNodes.entryDate.value,
+                reference: fieldNodes.reference.value,
+                description: fieldNodes.description.value
+              });
+
+              await fetchJson(`/api/admin/finance/entries/${entry.id}`, {
+                method: "PUT",
+                headers: getHeaders(),
+                body: JSON.stringify(payload)
+              });
+
+              setStatus(statusNode, "Saved.", "success");
+              setStatus(pageStatus, "Finance entry updated.", "success");
+              await loadFinanceData();
+            } catch (error) {
+              setStatus(statusNode, error.message || "Could not save entry.", "error");
+            } finally {
+              saveBtn.disabled = false;
+            }
+          });
+
+          deleteBtn.addEventListener("click", async () => {
+            const confirmed = window.confirm("Delete this finance entry?");
+
+            if (!confirmed) {
+              return;
+            }
+
+            setStatus(statusNode, "Deleting...");
+            deleteBtn.disabled = true;
+
+            try {
+              await fetchJson(`/api/admin/finance/entries/${entry.id}`, {
+                method: "DELETE",
+                headers: getHeaders()
+              });
+
+              setStatus(pageStatus, "Finance entry deleted.", "success");
+              await loadFinanceData();
+            } catch (error) {
+              setStatus(statusNode, error.message || "Could not delete entry.", "error");
+              deleteBtn.disabled = false;
+            }
+          });
+
+          entryList.appendChild(fragment);
+        });
+      };
+
+      const loadInvoices = async () => {
+        const statusVal = invoiceFilterStatus.value;
+        const methodVal = invoiceFilterMethod.value;
+        const params = new URLSearchParams({ limit: "200" });
+        if (statusVal) params.set("status", statusVal);
+        if (methodVal) params.set("payment_method", methodVal);
+        try {
+          const invoicesPayload = await fetchJson(`/api/admin/accounting/invoices?${params.toString()}`, {
+            headers: getHeaders()
+          });
+          loadedInvoices = invoicesPayload.invoices || [];
+          renderInvoices(loadedInvoices);
+        } catch (error) {
+          invoiceList.innerHTML = "";
+          setStatus(pageStatus, error.message || "Could not reload invoices.", "error");
+        }
+      };
+
+      const loadFinanceData = async () => {
+        const scope = getActiveScope();
+        setStatus(pageStatus, "Loading finance data...");
+
+        try {
+          const [summaryPayload, entriesPayload, invoiceSummaryPayload, invoicesPayload] = await Promise.all([
+            fetchJson(`/api/admin/finance/summary?scope=${encodeURIComponent(scope)}`, {
+              headers: getHeaders()
+            }),
+            fetchJson(`/api/admin/finance/entries?scope=${encodeURIComponent(scope)}`, {
+              headers: getHeaders()
+            }),
+            fetchJson(`/api/admin/accounting/invoices/summary`, {
+              headers: getHeaders()
+            }),
+            fetchJson(`/api/admin/accounting/invoices?limit=200`, {
+              headers: getHeaders()
+            })
+          ]);
+
+          loadedEntries = entriesPayload.entries || [];
+          loadedSummary = summaryPayload.summary || {};
+          loadedInvoiceSummary = invoiceSummaryPayload.summary || {};
+          loadedInvoices = invoicesPayload.invoices || [];
+          renderSummary(summaryPayload.summary || {});
+          renderEntries(loadedEntries);
+          renderInvoiceSummary(loadedInvoiceSummary);
+          renderInvoices(loadedInvoices);
+          setStatus(pageStatus, "Finance data loaded.", "success");
+        } catch (error) {
+          loadedEntries = [];
+          loadedSummary = {};
+          loadedInvoiceSummary = {};
+          loadedInvoices = [];
+          summaryGrid.innerHTML = "";
+          entryList.innerHTML = "";
+          invoiceSummaryGrid.innerHTML = "";
+          invoiceList.innerHTML = "";
+          setStatus(pageStatus, error.message || "Could not load finance data.", "error");
+        }
+      };
+
+      exportLedgerBtn.addEventListener("click", () => {
+        if (!loadedEntries.length) {
+          setStatus(pageStatus, "No ledger entries available to export.", "error");
+          return;
+        }
+
+        const scope = getActiveScope();
+        const rows = loadedEntries.map((entry) => [
+          entry.id,
+          entry.scope,
+          entry.entryType,
+          entry.category,
+          entry.amount,
+          entry.entryDate,
+          entry.reference || "",
+          entry.description || "",
+          entry.createdAt,
+          entry.updatedAt
+        ]);
+
+        downloadCsv(
+          `finance-ledger-${scope}-${new Date().toISOString().slice(0, 10)}.csv`,
+          [
+            "id",
+            "scope",
+            "entryType",
+            "category",
+            "amount",
+            "entryDate",
+            "reference",
+            "description",
+            "createdAt",
+            "updatedAt"
+          ],
+          rows
+        );
+        setStatus(pageStatus, "Ledger CSV exported.", "success");
+      });
+
+      exportPnlBtn.addEventListener("click", () => {
+        if (!loadedEntries.length) {
+          setStatus(pageStatus, "No entries available for P&L export.", "error");
+          return;
+        }
+
+        const scope = getActiveScope();
+        const rows = buildMonthlyPnlRows(loadedEntries);
+
+        if (!rows.length) {
+          setStatus(pageStatus, "No valid monthly data available for P&L export.", "error");
+          return;
+        }
+
+        downloadCsv(
+          `finance-pnl-monthly-${scope}-${new Date().toISOString().slice(0, 10)}.csv`,
+          ["month", "income", "expense", "net"],
+          rows
+        );
+        setStatus(pageStatus, "Monthly P&L CSV exported.", "success");
+      });
+
+      exportSummaryPdfBtn.addEventListener("click", async () => {
+        if (!loadedSummary || Object.keys(loadedSummary).length === 0) {
+          setStatus(pageStatus, "No summary data available to export.", "error");
+          return;
+        }
+
+        try {
+          const scope = getActiveScope();
+          const lines = [
+            `Scope: ${scope}`,
+            `Total Income: ${formatCurrency(loadedSummary.totalIncome)}`,
+            `Total Expense: ${formatCurrency(loadedSummary.totalExpense)}`,
+            `Net Cashflow: ${formatCurrency(loadedSummary.netCashflow)}`,
+            `Entries Count: ${loadedSummary.entriesCount || 0}`,
+            `Monthly Income: ${formatCurrency(loadedSummary.monthlyIncome)}`,
+            `Monthly Expense: ${formatCurrency(loadedSummary.monthlyExpense)}`,
+            `Monthly Net: ${formatCurrency(loadedSummary.monthlyNet)}`,
+            `Accounting Net: ${formatCurrency(loadedSummary.accountingNet)}`,
+            `Financing Net: ${formatCurrency(loadedSummary.financingNet)}`
+          ];
+
+          await downloadPdfFromLines(
+            `finance-summary-${scope}-${new Date().toISOString().slice(0, 10)}.pdf`,
+            "Finance Summary Report",
+            lines,
+            { scope }
+          );
+          setStatus(pageStatus, "Summary PDF exported.", "success");
+        } catch (error) {
+          setStatus(pageStatus, error.message || "Could not export summary PDF.", "error");
+        }
+      });
+
+      exportPnlPdfBtn.addEventListener("click", async () => {
+        if (!loadedEntries.length) {
+          setStatus(pageStatus, "No entries available for monthly P&L PDF export.", "error");
+          return;
+        }
+
+        try {
+          const scope = getActiveScope();
+          const rows = buildMonthlyPnlRows(loadedEntries);
+
+          if (!rows.length) {
+            setStatus(pageStatus, "No valid monthly data available for monthly P&L PDF export.", "error");
+            return;
+          }
+
+          const lines = ["Month | Income | Expense | Net", "-------------------------------------------"];
+          rows.forEach((row) => {
+            lines.push(`${row[0]} | ${formatCurrency(row[1])} | ${formatCurrency(row[2])} | ${formatCurrency(row[3])}`);
+          });
+
+          await downloadPdfFromLines(
+            `finance-pnl-monthly-${scope}-${new Date().toISOString().slice(0, 10)}.pdf`,
+            "Monthly P&L Report",
+            lines,
+            { scope }
+          );
+          setStatus(pageStatus, "Monthly P&L PDF exported.", "success");
+        } catch (error) {
+          setStatus(pageStatus, error.message || "Could not export monthly P&L PDF.", "error");
+        }
+      });
+
+      loadBtn.addEventListener("click", () => {
+        loadFinanceData();
+      });
+
+      scopeFilter.addEventListener("change", () => {
+        loadFinanceData();
+      });
+
+      invoiceFilterStatus.addEventListener("change", () => {
+        loadInvoices();
+      });
+
+      invoiceFilterMethod.addEventListener("change", () => {
+        loadInvoices();
+      });
+
+      createEntryForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        setStatus(createStatus, "Creating...");
+
+        const submitBtn = createEntryForm.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+
+        try {
+          const payload = buildEntryPayload({
+            scope: document.getElementById("createScope").value,
+            entryType: document.getElementById("createType").value,
+            category: document.getElementById("createCategory").value,
+            amount: document.getElementById("createAmount").value,
+            entryDate: document.getElementById("createDate").value,
+            reference: document.getElementById("createReference").value,
+            description: document.getElementById("createDescription").value
+          });
+
+          await fetchJson("/api/admin/finance/entries", {
+            method: "POST",
+            headers: getHeaders(),
+            body: JSON.stringify(payload)
+          });
+
+          createEntryForm.reset();
+          document.getElementById("createScope").value = "accounting";
+          document.getElementById("createType").value = "income";
+          setStatus(createStatus, "Finance entry created.", "success");
+          setStatus(pageStatus, "Finance entry created.", "success");
+          await loadFinanceData();
+        } catch (error) {
+          setStatus(createStatus, error.message || "Could not create entry.", "error");
+        } finally {
+          submitBtn.disabled = false;
+        }
+      });
+
+      document.getElementById("createDate").value = new Date().toISOString().slice(0, 10);
+      loadFinanceData();
+    </script>
+  </body>
+</html>

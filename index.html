@@ -1,0 +1,2218 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AD Tech - Enterprise Business System Services</title>
+    <meta
+      name="description"
+      content="AD Tech provides comprehensive system services for enterprise businesses. Custom solutions for ERP, CRM, supply chain, and digital transformation."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg-950: #02070a;
+        --bg-900: #061017;
+        --bg-850: #0b1b26;
+        --ink-50: #f4fdff;
+        --ink-300: #9fbcc8;
+        --brand-200: #b7ffed;
+        --brand-400: #4de2cc;
+        --brand-500: #1bc6b0;
+        --brand-700: #0c5f95;
+        --line: rgba(109, 230, 211, 0.2);
+        --surface: rgba(9, 22, 31, 0.72);
+        --surface-soft: rgba(255, 255, 255, 0.06);
+        --max-width: 1140px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "Space Grotesk", sans-serif;
+        color: var(--ink-50);
+        background: radial-gradient(circle at 10% 10%, rgba(27, 198, 176, 0.22), transparent 36%),
+          radial-gradient(circle at 86% 12%, rgba(12, 95, 149, 0.26), transparent 32%),
+          radial-gradient(circle at 74% 82%, rgba(77, 226, 204, 0.15), transparent 32%),
+          linear-gradient(160deg, var(--bg-950), var(--bg-900) 54%, #041018);
+        line-height: 1.7;
+        min-height: 100vh;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        opacity: 0.08;
+        z-index: 0;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220' viewBox='0 0 220 220'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23noise)' opacity='0.48'/%3E%3C/svg%3E");
+      }
+
+      .page-wrap {
+        position: relative;
+        z-index: 1;
+      }
+
+      .container {
+        width: min(100% - 2.2rem, var(--max-width));
+        margin: 0 auto;
+      }
+
+      .top-nav {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(109, 230, 211, 0.12);
+        background: linear-gradient(180deg, rgba(2, 8, 11, 0.9), rgba(2, 8, 11, 0.62));
+      }
+
+      .top-nav-inner {
+        min-height: 76px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+      }
+
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.78rem;
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .brand-logo {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        object-fit: cover;
+        box-shadow: 0 0 0 2px rgba(109, 230, 211, 0.34), 0 12px 30px rgba(27, 198, 176, 0.3);
+      }
+
+      .brand-text {
+        font-family: "Bricolage Grotesque", sans-serif;
+        letter-spacing: 0.01em;
+        font-weight: 700;
+        font-size: 1.1rem;
+      }
+
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 1.3rem;
+      }
+
+      .nav-links a {
+        color: var(--ink-300);
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 220ms ease, transform 220ms ease;
+      }
+
+      .solution-details {
+        position: relative;
+      }
+
+      .service-details {
+        position: relative;
+      }
+
+      .solution-details summary {
+        list-style: none;
+        cursor: pointer;
+        color: var(--ink-300);
+        font-weight: 600;
+        transition: color 220ms ease, transform 220ms ease;
+      }
+
+      .service-details summary {
+        list-style: none;
+        cursor: pointer;
+        color: var(--ink-300);
+        font-weight: 600;
+        transition: color 220ms ease, transform 220ms ease;
+      }
+
+      .solution-details summary::-webkit-details-marker {
+        display: none;
+      }
+
+      .service-details summary::-webkit-details-marker {
+        display: none;
+      }
+
+      .solution-details summary:hover {
+        color: var(--brand-200);
+        transform: translateY(-1px);
+      }
+
+      .service-details summary:hover {
+        color: var(--brand-200);
+        transform: translateY(-1px);
+      }
+
+      .solution-dropdown {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        min-width: 240px;
+        padding: 0.6rem;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: rgba(4, 12, 18, 0.95);
+        display: grid;
+        gap: 0.35rem;
+        box-shadow: 0 14px 34px rgba(3, 12, 19, 0.3);
+      }
+
+      .service-dropdown {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        min-width: 240px;
+        padding: 0.6rem;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: rgba(4, 12, 18, 0.95);
+        display: grid;
+        gap: 0.35rem;
+        box-shadow: 0 14px 34px rgba(3, 12, 19, 0.3);
+      }
+
+      .solution-details:not([open]) .solution-dropdown {
+        display: none;
+      }
+
+      .service-details:not([open]) .service-dropdown {
+        display: none;
+      }
+
+      @media (min-width: 741px) {
+        .service-details:hover .service-dropdown,
+        .service-details:focus-within .service-dropdown,
+        .solution-details:hover .solution-dropdown,
+        .solution-details:focus-within .solution-dropdown {
+          display: grid;
+        }
+      }
+
+      .solution-dropdown a {
+        display: block;
+        padding: 0.35rem 0.45rem;
+        border-radius: 8px;
+      }
+
+      .service-dropdown a {
+        display: block;
+        padding: 0.35rem 0.45rem;
+        border-radius: 8px;
+      }
+
+      .nav-links a:hover {
+        color: var(--brand-200);
+        transform: translateY(-1px);
+      }
+
+      .menu-btn {
+        display: none;
+        border: 1px solid var(--line);
+        background: rgba(9, 21, 30, 0.9);
+        color: var(--ink-50);
+        border-radius: 12px;
+        padding: 0.5rem 0.65rem;
+        cursor: pointer;
+        transition: transform 220ms ease, opacity 220ms ease;
+      }
+
+      .menu-btn:hover {
+        transform: translateY(-1px);
+        opacity: 0.95;
+      }
+
+      .theme-btn {
+        border: 1px solid var(--line);
+        background: rgba(9, 21, 30, 0.8);
+        color: var(--ink-50);
+        border-radius: 12px;
+        padding: 0.52rem 0.72rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: transform 220ms ease, background 220ms ease;
+      }
+
+      .theme-btn:hover {
+        transform: translateY(-1px);
+      }
+
+      .hero {
+        padding: 5rem 0 3rem;
+      }
+
+      .hero-grid {
+        display: grid;
+        grid-template-columns: 1.15fr 0.85fr;
+        gap: 1.5rem;
+        align-items: stretch;
+      }
+
+      .hero-copy {
+        border: 1px solid var(--line);
+        background: linear-gradient(145deg, rgba(8, 21, 30, 0.86), rgba(4, 12, 18, 0.88));
+        border-radius: 28px;
+        padding: clamp(1.2rem, 2vw, 2rem);
+        box-shadow: 0 24px 50px rgba(5, 16, 24, 0.5), 0 12px 26px rgba(27, 198, 176, 0.14);
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.55rem;
+        padding: 0.4rem 0.82rem;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        background: rgba(14, 29, 41, 0.75);
+        color: var(--brand-200);
+        font-size: 0.82rem;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+
+      h1,
+      h2,
+      h3 {
+        font-family: "Bricolage Grotesque", sans-serif;
+      }
+
+      h1 {
+        margin: 0.9rem 0 0.75rem;
+        font-size: clamp(2rem, 4.6vw, 4rem);
+        letter-spacing: -0.03em;
+        line-height: 1.04;
+      }
+
+      .hero-gradient {
+        background: linear-gradient(95deg, #b9fff0, #63f2dd 45%, #8ec5ff);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+
+      .hero-copy p {
+        margin: 0;
+        max-width: 62ch;
+        color: var(--ink-300);
+      }
+
+      .actions {
+        margin-top: 1.4rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+      }
+
+      .btn {
+        border: 1px solid transparent;
+        border-radius: 14px;
+        padding: 0.75rem 1.05rem;
+        font-weight: 700;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 230ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 230ms ease, background 230ms ease;
+      }
+
+      .btn.main {
+        color: #fff;
+        background: linear-gradient(120deg, var(--brand-500), var(--brand-700));
+        box-shadow: 0 22px 42px rgba(27, 198, 176, 0.2), 0 10px 24px rgba(12, 95, 149, 0.24);
+      }
+
+      .btn.alt {
+        color: var(--ink-50);
+        border-color: var(--line);
+        background: rgba(13, 27, 37, 0.8);
+      }
+
+      .btn:hover {
+        transform: translateY(-2px);
+      }
+
+      .btn:active {
+        transform: translateY(0);
+      }
+
+      .hero-media {
+        border-radius: 28px;
+        border: 1px solid var(--line);
+        overflow: hidden;
+        position: relative;
+        background: #02070a;
+        box-shadow: 0 24px 50px rgba(5, 16, 24, 0.55), 0 12px 26px rgba(12, 95, 149, 0.22);
+      }
+
+      .hero-media img {
+        width: 100%;
+        height: 100%;
+        min-height: 300px;
+        object-fit: cover;
+        display: block;
+      }
+
+      .hero-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(8deg, rgba(2, 7, 10, 0.66), rgba(2, 7, 10, 0.08));
+      }
+
+      .hero-tag {
+        position: absolute;
+        left: 1rem;
+        bottom: 1rem;
+        border: 1px solid rgba(109, 230, 211, 0.28);
+        background: rgba(4, 14, 20, 0.82);
+        color: var(--ink-50);
+        border-radius: 12px;
+        padding: 0.55rem 0.72rem;
+        font-size: 0.92rem;
+      }
+
+      .section {
+        padding: 2.4rem 0;
+      }
+
+      .section h2 {
+        margin: 0 0 1rem;
+        font-size: clamp(1.45rem, 3vw, 2.35rem);
+        letter-spacing: -0.02em;
+      }
+
+      .card-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.95rem;
+      }
+
+      .card {
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        background: var(--surface);
+        padding: 1.05rem;
+        box-shadow: 0 14px 34px rgba(3, 12, 19, 0.3);
+        transition: transform 250ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 250ms ease;
+      }
+
+      .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 20px 38px rgba(27, 198, 176, 0.14), 0 10px 24px rgba(12, 95, 149, 0.2);
+      }
+
+      .card h3 {
+        margin: 0;
+        font-size: 1.05rem;
+      }
+
+      .card p {
+        margin: 0.5rem 0 0;
+        color: var(--ink-300);
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 0.8rem;
+      }
+
+      .stat {
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        background: rgba(8, 22, 31, 0.75);
+        text-align: center;
+        padding: 0.95rem;
+      }
+
+      .stat strong {
+        font-family: "Bricolage Grotesque", sans-serif;
+        font-size: clamp(1.45rem, 3vw, 2.05rem);
+        line-height: 1;
+      }
+
+      .stat span {
+        margin-top: 0.35rem;
+        display: block;
+        color: var(--ink-300);
+      }
+
+      .cta {
+        padding: 2.2rem 0 4.7rem;
+      }
+
+      .cta-panel {
+        border-radius: 24px;
+        border: 1px solid var(--line);
+        background: linear-gradient(135deg, rgba(9, 24, 33, 0.9), rgba(5, 15, 22, 0.9));
+        box-shadow: 0 24px 44px rgba(3, 12, 19, 0.42), 0 10px 24px rgba(27, 198, 176, 0.12);
+        display: grid;
+        grid-template-columns: 1fr;
+        align-items: start;
+        gap: 1rem;
+        padding: 1.3rem;
+      }
+
+      .cta-panel h3 {
+        margin: 0;
+        font-size: clamp(1.2rem, 2.3vw, 1.9rem);
+      }
+
+      .cta-panel p {
+        margin: 0.42rem 0 0;
+        color: var(--ink-300);
+      }
+
+      .cta-form {
+        display: grid;
+        gap: 0.85rem;
+      }
+
+      .cta-form-row {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.75rem;
+      }
+
+      .field {
+        display: grid;
+        gap: 0.35rem;
+      }
+
+      .field label,
+      .checkbox-field {
+        font-size: 0.92rem;
+        color: var(--ink-300);
+      }
+
+      .field input,
+      .field select,
+      .field textarea {
+        width: 100%;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: rgba(8, 20, 29, 0.78);
+        color: var(--ink-50);
+        font: inherit;
+        padding: 0.68rem 0.75rem;
+      }
+
+      .field textarea {
+        resize: vertical;
+        min-height: 96px;
+      }
+
+      .field input::placeholder,
+      .field textarea::placeholder {
+        color: rgba(159, 188, 200, 0.85);
+      }
+
+      .field input:focus-visible,
+      .field select:focus-visible,
+      .field textarea:focus-visible {
+        outline: 2px solid var(--brand-400);
+        outline-offset: 1px;
+      }
+
+      .checkbox-field {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .field-error {
+        min-height: 1.1rem;
+        margin: 0;
+        color: #ffb2b8;
+        font-size: 0.82rem;
+      }
+
+      .has-error {
+        border-color: #ff7f90 !important;
+      }
+
+      .form-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        flex-wrap: wrap;
+      }
+
+      .form-status {
+        margin: 0;
+        font-size: 0.92rem;
+        color: var(--ink-300);
+      }
+
+      .price-tag {
+        display: inline-flex;
+        margin-top: 0.7rem;
+        padding: 0.25rem 0.55rem;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        background: rgba(8, 20, 29, 0.76);
+        font-weight: 700;
+        font-size: 0.86rem;
+      }
+
+      .product-list-empty {
+        border: 1px dashed var(--line);
+        border-radius: 20px;
+        padding: 1rem;
+        color: var(--ink-300);
+        background: rgba(8, 20, 29, 0.42);
+      }
+
+      .product-list-shell {
+        display: grid;
+        gap: 0.85rem;
+        align-content: start;
+      }
+
+      .product-list-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 0.8rem;
+        align-items: end;
+        flex-wrap: wrap;
+      }
+
+      .product-list-head p {
+        margin: 0.2rem 0 0;
+        color: var(--ink-300);
+      }
+
+      .catalog-filters {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.55rem;
+      }
+
+      .catalog-filter {
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: rgba(8, 20, 29, 0.6);
+        color: var(--ink-50);
+        font: inherit;
+        font-size: 0.84rem;
+        padding: 0.42rem 0.8rem;
+        cursor: pointer;
+      }
+
+      .catalog-filter.active {
+        background: linear-gradient(135deg, rgba(27, 198, 176, 0.24), rgba(12, 95, 149, 0.44));
+        border-color: rgba(183, 255, 237, 0.35);
+      }
+
+      .product-category {
+        display: inline-flex;
+        align-self: start;
+        margin-top: 0.8rem;
+        padding: 0.2rem 0.55rem;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        color: var(--ink-300);
+        font-size: 0.74rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+
+      .purchase-layout {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 1rem;
+      }
+
+      .cart-panel {
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        background: var(--surface);
+        padding: 1rem;
+        display: grid;
+        gap: 0.8rem;
+        align-content: start;
+      }
+
+      .cart-items {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        gap: 0.55rem;
+      }
+
+      .cart-item {
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 0.62rem;
+        background: rgba(8, 20, 29, 0.58);
+        display: grid;
+        gap: 0.25rem;
+      }
+
+      .cart-item-top {
+        display: flex;
+        justify-content: space-between;
+        gap: 0.5rem;
+      }
+
+      .cart-item-name {
+        font-weight: 700;
+      }
+
+      .cart-item-price {
+        font-size: 0.9rem;
+        color: var(--ink-300);
+      }
+
+      .cart-empty {
+        color: var(--ink-300);
+        font-size: 0.92rem;
+      }
+
+      .cart-summary {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+        font-weight: 700;
+      }
+
+      .checkout-form {
+        display: grid;
+        gap: 0.6rem;
+      }
+
+      .payment-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+
+      .payment-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 86px;
+        padding: 0.42rem 0.72rem;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        color: #fff;
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .payment-badge.visa {
+        background: linear-gradient(135deg, #1a1f71, #2155f5);
+      }
+
+      .payment-badge.mastercard {
+        background: linear-gradient(135deg, #ea001b, #ff8c1a);
+      }
+
+      .payment-note,
+      .payment-hint {
+        margin: 0;
+        color: var(--ink-300);
+        font-size: 0.84rem;
+      }
+
+      .card-element-shell {
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: rgba(8, 20, 29, 0.78);
+        padding: 0.82rem 0.75rem;
+        min-height: 48px;
+      }
+
+      .bank-transfer-details {
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: var(--panel-soft, rgba(255,255,255,0.03));
+        padding: 0.75rem 0.9rem;
+        font-size: 0.84rem;
+      }
+
+      .bank-transfer-title {
+        font-weight: 600;
+        margin: 0 0 0.45rem;
+        color: var(--text);
+      }
+
+      .bank-transfer-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        gap: 0.3rem;
+        color: var(--ink-300);
+      }
+
+      .bank-transfer-list span {
+        font-weight: 500;
+        color: var(--text);
+        margin-right: 0.35rem;
+      }
+
+      .checkout-form input,
+      .checkout-form select {
+        width: 100%;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: rgba(8, 20, 29, 0.78);
+        color: var(--ink-50);
+        font: inherit;
+        padding: 0.62rem 0.72rem;
+      }
+
+      .inline-btn {
+        border: 1px solid var(--line);
+        background: rgba(9, 21, 30, 0.9);
+        color: var(--ink-50);
+        border-radius: 10px;
+        padding: 0.32rem 0.5rem;
+        cursor: pointer;
+        font-size: 0.78rem;
+        font-weight: 700;
+      }
+
+      .inline-btn:hover {
+        color: var(--brand-200);
+      }
+
+      footer {
+        border-top: 1px solid rgba(109, 230, 211, 0.14);
+        color: var(--ink-300);
+        font-size: 0.95rem;
+        padding: 1.2rem 0 2rem;
+      }
+
+      .reveal {
+        opacity: 0;
+        transform: translateY(16px);
+        transition: opacity 620ms ease, transform 620ms cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      .reveal.show {
+        opacity: 1;
+        transform: none;
+      }
+
+      a:focus-visible,
+      button:focus-visible {
+        outline: 2px solid var(--brand-400);
+        outline-offset: 3px;
+      }
+
+      body[data-theme="light"] {
+        color: #0b2230;
+        background: radial-gradient(circle at 5% 10%, rgba(31, 201, 179, 0.24), transparent 34%),
+          radial-gradient(circle at 95% 10%, rgba(26, 111, 177, 0.24), transparent 30%),
+          radial-gradient(circle at 80% 90%, rgba(31, 201, 179, 0.12), transparent 28%),
+          #f3fbfc;
+      }
+
+      body[data-theme="light"] .top-nav {
+        background: rgba(243, 251, 252, 0.76);
+        border-bottom-color: rgba(11, 34, 48, 0.12);
+      }
+
+      body[data-theme="light"] .nav-links a,
+      body[data-theme="light"] footer,
+      body[data-theme="light"] .hero-copy p,
+      body[data-theme="light"] .card p,
+      body[data-theme="light"] .stat span,
+      body[data-theme="light"] .cta-panel p {
+        color: #486676;
+      }
+
+      body[data-theme="light"] .menu-btn,
+      body[data-theme="light"] .theme-btn,
+      body[data-theme="light"] .btn.alt,
+      body[data-theme="light"] .solution-dropdown {
+        background: rgba(255, 255, 255, 0.9);
+        color: #0b2230;
+        border-color: rgba(11, 34, 48, 0.16);
+      }
+
+      body[data-theme="light"] .solution-details summary,
+      body[data-theme="light"] .solution-dropdown a,
+      body[data-theme="light"] .service-details summary,
+      body[data-theme="light"] .service-dropdown a {
+        color: #486676;
+      }
+
+      body[data-theme="light"] .hero-copy,
+      body[data-theme="light"] .card,
+      body[data-theme="light"] .stat,
+      body[data-theme="light"] .cta-panel {
+        background: rgba(255, 255, 255, 0.88);
+        border-color: rgba(11, 34, 48, 0.14);
+        box-shadow: 0 22px 38px rgba(11, 34, 48, 0.08);
+      }
+
+      body[data-theme="light"] .hero-tag {
+        background: rgba(255, 255, 255, 0.86);
+        color: #0b2230;
+        border-color: rgba(11, 34, 48, 0.16);
+      }
+
+      body[data-theme="light"] .field label,
+      body[data-theme="light"] .checkbox-field,
+      body[data-theme="light"] .form-status {
+        color: #486676;
+      }
+
+      body[data-theme="light"] .field input,
+      body[data-theme="light"] .field select,
+      body[data-theme="light"] .field textarea {
+        background: rgba(255, 255, 255, 0.95);
+        color: #0b2230;
+        border-color: rgba(11, 34, 48, 0.2);
+      }
+
+      body[data-theme="light"] .cart-panel,
+      body[data-theme="light"] .cart-item {
+        background: rgba(255, 255, 255, 0.9);
+        border-color: rgba(11, 34, 48, 0.14);
+      }
+
+      body[data-theme="light"] .checkout-form input,
+      body[data-theme="light"] .card-element-shell,
+      body[data-theme="light"] .price-tag,
+      body[data-theme="light"] .inline-btn {
+        background: rgba(255, 255, 255, 0.96);
+        color: #0b2230;
+        border-color: rgba(11, 34, 48, 0.2);
+      }
+
+      body[data-theme="light"] .field input::placeholder,
+      body[data-theme="light"] .field textarea::placeholder {
+        color: rgba(72, 102, 118, 0.8);
+      }
+
+      @media (max-width: 960px) {
+        .hero-grid,
+        .cta-panel {
+          grid-template-columns: 1fr;
+        }
+
+        .purchase-layout {
+          grid-template-columns: 1fr;
+        }
+
+        .card-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .stats {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 740px) {
+        .nav-links {
+          position: fixed;
+          left: 1rem;
+          right: 1rem;
+          top: 76px;
+          display: flex;
+          flex-direction: column;
+          align-items: stretch;
+          gap: 0.72rem;
+          padding: 0.85rem;
+          border: 1px solid var(--line);
+          border-radius: 14px;
+          background: rgba(4, 12, 18, 0.95);
+          transform: scale(0.98) translateY(-8px);
+          opacity: 0;
+          pointer-events: none;
+          transition: opacity 220ms ease, transform 220ms ease;
+        }
+
+        body[data-theme="light"] .nav-links {
+          background: rgba(255, 255, 255, 0.96);
+          border-color: rgba(11, 34, 48, 0.14);
+        }
+
+        .nav-links.open {
+          transform: scale(1) translateY(0);
+          opacity: 1;
+          pointer-events: auto;
+        }
+
+        .menu-btn {
+          display: inline-flex;
+        }
+
+        .nav-links .btn {
+          width: 100%;
+        }
+
+        .solution-details {
+          width: 100%;
+        }
+
+        .service-details {
+          width: 100%;
+        }
+
+        .solution-dropdown {
+          position: static;
+          min-width: 100%;
+          margin-top: 0.5rem;
+        }
+
+        .service-dropdown {
+          position: static;
+          min-width: 100%;
+          margin-top: 0.5rem;
+        }
+
+        .card-grid,
+        .stats {
+          grid-template-columns: 1fr;
+        }
+
+        .cta-form-row {
+          grid-template-columns: 1fr;
+        }
+
+        .hero {
+          padding-top: 3.9rem;
+        }
+      }
+    </style>
+  </head>
+  <body data-theme="dark">
+    <div class="page-wrap">
+      <header class="top-nav">
+        <div class="container top-nav-inner">
+          <a class="brand" href="#home" aria-label="AD Tech home">
+            <img class="brand-logo" src="brand asset/my-project-page-1.png" alt="AD Tech logo" />
+            <span class="brand-text">AD Tech</span>
+          </a>
+
+          <button class="menu-btn" id="menuBtn" aria-label="Toggle menu" aria-expanded="false">Menu</button>
+
+          <nav id="navLinks" class="nav-links" aria-label="Main navigation">
+            <details class="service-details">
+              <summary>Services</summary>
+              <div class="service-dropdown">
+                <a href="index-erp.html">ERP Implementation</a>
+                <a href="index-crm-sales.html">CRM and Sales Systems</a>
+                <a href="index-supply-chain-optimization.html">Supply Chain Optimization</a>
+              </div>
+            </details>
+            <details class="solution-details">
+              <summary>Solutions</summary>
+              <div class="solution-dropdown">
+                <a href="index-manufacturing.html">Manufacturing Solution</a>
+                <a href="index-retail-ecommerce.html">Retail and E-Commerce Solution</a>
+                <a href="index-healthcare.html">Healthcare Solution</a>
+              </div>
+            </details>
+            <a href="#about">About</a>
+            <a class="btn alt" href="#contact">Contact</a>
+            <button class="theme-btn" id="themeBtn" aria-label="Switch page theme">Light Mode</button>
+          </nav>
+        </div>
+      </header>
+
+      <main id="home">
+        <section class="hero">
+          <div class="container hero-grid">
+            <article class="hero-copy reveal">
+              <div class="eyebrow">Enterprise System Solutions</div>
+              <h1>
+                Transform Your Business with
+                <span class="hero-gradient">AD Tech</span>
+              </h1>
+              <p>
+                We deliver comprehensive system services for enterprises of all sizes. From ERP and CRM to supply chain and digital transformation, we drive operational excellence.
+              </p>
+              <div class="actions">
+                <a class="btn main" href="#contact">Request a Demo</a>
+                <a class="btn alt" href="#solutions">Explore Solutions</a>
+              </div>
+            </article>
+
+            <aside class="hero-media reveal" aria-label="AD Tech spotlight">
+              <img src="brand asset/my-project-page-1.png" alt="AD Tech community visual" />
+              <div class="hero-overlay"></div>
+              <div class="hero-tag">Trusted by 500+ enterprises worldwide</div>
+            </aside>
+          </div>
+        </section>
+
+        <section class="section" id="services">
+          <div class="container">
+            <h2 class="reveal">Our Core Services</h2>
+            <div class="card-grid">
+              <article class="card reveal">
+                <h3>ERP Implementation</h3>
+                <p>Complete enterprise resource planning solutions—from planning to deployment—integrated across finance, supply chain, and operations.</p>
+              </article>
+              <article class="card reveal">
+                <h3>CRM & Sales Systems</h3>
+                <p>Customer relationship management platforms that drive revenue growth.</p>
+              </article>
+              <article class="card reveal">
+                <h3>Supply Chain Optimization</h3>
+                <p>Streamline logistics, inventory, and procurement across your organization.</p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="metrics">
+          <div class="container">
+            <h2 class="reveal">AD Tech Impact</h2>
+            <div class="stats">
+              <div class="stat reveal"><strong>500+</strong><span>Enterprise Clients</span></div>
+              <div class="stat reveal"><strong>1200+</strong><span>Systems Deployed</span></div>
+              <div class="stat reveal"><strong>$2.5B+</strong><span>Cost Savings Generated</span></div>
+              <div class="stat reveal"><strong>98%</strong><span>Client Satisfaction</span></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="solutions">
+          <div class="container">
+            <h2 class="reveal">Industry-Specific Solutions</h2>
+            <div class="card-grid">
+              <article class="card reveal">
+                <h3>Manufacturing</h3>
+                <p>Production planning, quality control, and inventory management systems.</p>
+                <a class="btn alt" href="index-manufacturing.html">View details</a>
+              </article>
+              <article class="card reveal">
+                <h3>Retail & E-Commerce</h3>
+                <p>POS, inventory, and customer engagement platforms for modern commerce.</p>
+                <a class="btn alt" href="index-retail-ecommerce.html">View details</a>
+              </article>
+              <article class="card reveal">
+                <h3>Healthcare</h3>
+                <p>HIPAA-compliant systems for patient management and operational efficiency.</p>
+                <a class="btn alt" href="index-healthcare.html">View details</a>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="purchase">
+          <div class="container">
+            <h2 class="reveal">Purchase Service Packages</h2>
+            <div class="purchase-layout">
+              <div class="product-list-shell reveal">
+                <div class="product-list-head">
+                  <div>
+                    <h3>Catalog List</h3>
+                    <p>Browse the current package catalog loaded from the product database.</p>
+                  </div>
+                  <div id="catalogFilters" class="catalog-filters" aria-label="Catalog filters"></div>
+                </div>
+                <div id="productList" class="card-grid">
+                  <div class="product-list-empty">Loading product catalog...</div>
+                </div>
+              </div>
+
+              <aside class="cart-panel reveal" aria-label="Shopping cart">
+                <h3>Your Cart</h3>
+                <ul id="cartItems" class="cart-items">
+                  <li class="cart-empty">Your cart is empty.</li>
+                </ul>
+
+                <div class="cart-summary">
+                  <span>Total</span>
+                  <strong id="cartTotal">$0</strong>
+                </div>
+
+                <form id="checkoutForm" class="checkout-form" novalidate>
+                  <input id="checkoutName" name="checkoutName" type="text" placeholder="Full name" autocomplete="name" required />
+                  <input id="checkoutEmail" name="checkoutEmail" type="email" placeholder="Email address" autocomplete="email" required />
+                  <select id="checkoutPaymentMethod" name="checkoutPaymentMethod" aria-label="Payment term">
+                    <option value="card">Card (Visa / Mastercard)</option>
+                    <option value="cash">Cash</option>
+                    <option value="bank_transfer">Bank Transfer</option>
+                  </select>
+                  <div id="paymentBadges" class="payment-badges" aria-label="Accepted payment cards">
+                    <span class="payment-badge visa">Visa</span>
+                    <span class="payment-badge mastercard">Mastercard</span>
+                  </div>
+                  <p id="paymentNote" class="payment-note">Secure card checkout powered by Stripe. Visa and Mastercard are accepted.</p>
+                  <div id="cardElement" class="card-element-shell" aria-label="Card details"></div>
+                  <p id="paymentHint" class="payment-hint">Use a Visa or Mastercard to complete payment.</p>
+                  <div id="bankTransferDetails" class="bank-transfer-details" hidden>
+                    <p class="bank-transfer-title">Bank Transfer Details</p>
+                    <ul class="bank-transfer-list">
+                      <li><span>Bank:</span> AD Tech Business Bank</li>
+                      <li><span>Account Name:</span> AD Tech Enterprise Ltd</li>
+                      <li><span>Account Number:</span> 0012345678</li>
+                      <li><span>Routing / Sort Code:</span> 021-000-021</li>
+                      <li><span>Reference:</span> Use your invoice number</li>
+                    </ul>
+                  </div>
+                  <button class="btn main" id="placeOrderBtn" type="submit">Pay with Card</button>
+                  <p id="checkoutStatus" class="form-status" aria-live="polite"></p>
+                </form>
+              </aside>
+            </div>
+          </div>
+        </section>
+
+        <section class="cta" id="contact">
+          <div class="container">
+            <div class="cta-panel reveal">
+              <div>
+                <h3>Ready to transform your business?</h3>
+                <p>Schedule a consultation with our experts to discuss your system needs and discover the right solution.</p>
+                <p style="margin-top:0.5rem;"><a href="mailto:johnjew1988@gmail.com" style="color:var(--brand-400);text-decoration:none;">johnjew1988@gmail.com</a> &nbsp;·&nbsp; <a href="tel:+60162608552" style="color:var(--brand-400);text-decoration:none;">+60 16-260 8552</a></p>
+              </div>
+
+              <form id="contactForm" class="cta-form" novalidate>
+                <div class="cta-form-row">
+                  <div class="field">
+                    <label for="contactName">Full name</label>
+                    <input id="contactName" name="contactName" type="text" placeholder="John Smith" autocomplete="name" required />
+                    <p class="field-error" data-error-for="contactName"></p>
+                  </div>
+                  <div class="field">
+                    <label for="contactEmail">Email</label>
+                    <input id="contactEmail" name="contactEmail" type="email" placeholder="john@company.com" autocomplete="email" required />
+                    <p class="field-error" data-error-for="contactEmail"></p>
+                  </div>
+                </div>
+
+                <div class="cta-form-row">
+                  <div class="field">
+                    <label for="company">Company name</label>
+                    <input id="company" name="company" type="text" placeholder="Your Company Inc." required />
+                    <p class="field-error" data-error-for="company"></p>
+                  </div>
+                  <div class="field">
+                    <label for="industry">Industry</label>
+                    <select id="industry" name="industry" required>
+                      <option value="">Select industry</option>
+                      <option value="Manufacturing">Manufacturing</option>
+                      <option value="Retail">Retail & E-Commerce</option>
+                      <option value="Healthcare">Healthcare</option>
+                      <option value="Finance">Finance</option>
+                      <option value="Other">Other</option>
+                    </select>
+                    <p class="field-error" data-error-for="industry"></p>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label for="challenge">What business challenge are you facing?</label>
+                  <textarea id="challenge" name="challenge" maxlength="350" placeholder="Tell us about your current system needs and goals."></textarea>
+                  <p class="field-error" data-error-for="challenge"></p>
+                </div>
+
+                <label class="checkbox-field" for="privacyConsent">
+                  <input id="privacyConsent" name="privacyConsent" type="checkbox" required />
+                  I agree to be contacted about solutions and services.
+                </label>
+                <p class="field-error" data-error-for="privacyConsent"></p>
+
+                <div class="form-actions">
+                  <button class="btn main" id="contactSubmitBtn" type="submit">Schedule Consultation</button>
+                  <p id="contactStatus" class="form-status" aria-live="polite"></p>
+                </div>
+              </form>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer>
+        <div class="container">© <span id="year"></span> AD Tech Solutions. Enterprise System Services. &nbsp;|&nbsp; <a href="mailto:johnjew1988@gmail.com" style="color:inherit;text-decoration:none;">johnjew1988@gmail.com</a> &nbsp;|&nbsp; <a href="tel:+60162608552" style="color:inherit;text-decoration:none;">+60 16-260 8552</a></div>
+      </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+      const menuBtn = document.getElementById("menuBtn");
+      const navLinks = document.getElementById("navLinks");
+      const themeBtn = document.getElementById("themeBtn");
+      const contactForm = document.getElementById("contactForm");
+      const contactStatus = document.getElementById("contactStatus");
+      const submitBtn = document.getElementById("contactSubmitBtn");
+      const cartItemsNode = document.getElementById("cartItems");
+      const cartTotalNode = document.getElementById("cartTotal");
+      const checkoutForm = document.getElementById("checkoutForm");
+      const checkoutStatus = document.getElementById("checkoutStatus");
+      const placeOrderBtn = document.getElementById("placeOrderBtn");
+      const paymentMethodSelect = document.getElementById("checkoutPaymentMethod");
+      const paymentBadgesNode = document.getElementById("paymentBadges");
+      const paymentNoteNode = document.getElementById("paymentNote");
+      const paymentHintNode = document.getElementById("paymentHint");
+      const bankTransferDetailsNode = document.getElementById("bankTransferDetails");
+      const productListNode = document.getElementById("productList");
+      const catalogFiltersNode = document.getElementById("catalogFilters");
+      const cardElementNode = document.getElementById("cardElement");
+      const year = document.getElementById("year");
+      const API_BASE_URL = window.location.protocol === "file:" ? "http://localhost:3000" : "";
+      const apiUrl = (path) => `${API_BASE_URL}${path}`;
+      const INVOICE_COMPANY_NAME = "AD Tech Solutions";
+      const INVOICE_COMPANY_HEADER = "Enterprise Business System Services";
+      let suppressCheckoutStatusError = false;
+
+      year.textContent = new Date().getFullYear();
+
+      menuBtn.addEventListener("click", () => {
+        const isOpen = navLinks.classList.toggle("open");
+        menuBtn.setAttribute("aria-expanded", String(isOpen));
+      });
+
+      const dropdownDetails = document.querySelectorAll(".service-details, .solution-details");
+      const desktopDropdownMedia = window.matchMedia("(min-width: 741px)");
+
+      dropdownDetails.forEach((item) => {
+        item.addEventListener("mouseenter", () => {
+          if (desktopDropdownMedia.matches) {
+            item.setAttribute("open", "");
+          }
+        });
+
+        item.addEventListener("mouseleave", () => {
+          if (desktopDropdownMedia.matches) {
+            item.removeAttribute("open");
+          }
+        });
+      });
+
+      document.querySelectorAll(".service-details > summary, .solution-details > summary").forEach((summary) => {
+        summary.addEventListener("click", (event) => {
+          if (desktopDropdownMedia.matches) {
+            event.preventDefault();
+          }
+        });
+      });
+
+      desktopDropdownMedia.addEventListener("change", (event) => {
+        if (event.matches) {
+          dropdownDetails.forEach((item) => item.removeAttribute("open"));
+        }
+      });
+
+      navLinks.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+          navLinks.classList.remove("open");
+          menuBtn.setAttribute("aria-expanded", "false");
+          document.querySelectorAll(".solution-details, .service-details").forEach((item) => item.removeAttribute("open"));
+        });
+      });
+
+      themeBtn.addEventListener("click", () => {
+        const isLight = document.body.getAttribute("data-theme") === "light";
+        document.body.setAttribute("data-theme", isLight ? "dark" : "light");
+        themeBtn.textContent = isLight ? "Light Mode" : "Dark Mode";
+      });
+
+      const errorNodes = {
+        contactName: contactForm.querySelector('[data-error-for="contactName"]'),
+        contactEmail: contactForm.querySelector('[data-error-for="contactEmail"]'),
+        company: contactForm.querySelector('[data-error-for="company"]'),
+        industry: contactForm.querySelector('[data-error-for="industry"]'),
+        challenge: contactForm.querySelector('[data-error-for="challenge"]'),
+        privacyConsent: contactForm.querySelector('[data-error-for="privacyConsent"]')
+      };
+
+      const showError = (field, message) => {
+        const node = contactForm.elements[field];
+        node.classList.add("has-error");
+        errorNodes[field].textContent = message;
+      };
+
+      const clearError = (field) => {
+        const node = contactForm.elements[field];
+        node.classList.remove("has-error");
+        errorNodes[field].textContent = "";
+      };
+
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const cartEmailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const fallbackCatalog = [
+        {
+          id: "erp-jumpstart",
+          name: "ERP Jumpstart Package",
+          description: "Rapid assessment, process mapping, and implementation blueprint for ERP rollout.",
+          price: 2500,
+          category: "ERP"
+        },
+        {
+          id: "crm-acceleration",
+          name: "CRM Acceleration Package",
+          description: "Lead funnel optimization, automation setup, and dashboard configuration for sales teams.",
+          price: 1800,
+          category: "CRM"
+        },
+        {
+          id: "supply-chain-performance",
+          name: "Supply Chain Performance Package",
+          description: "Inventory and logistics optimization with KPI reporting and improvement roadmap.",
+          price: 2200,
+          category: "Supply Chain"
+        },
+        {
+          id: "data-migration-sprint",
+          name: "Data Migration Sprint",
+          description: "Structured source-to-target mapping, cleansing rules, and cutover planning for legacy system migration.",
+          price: 1600,
+          category: "Data"
+        },
+        {
+          id: "analytics-command-center",
+          name: "Analytics Command Center",
+          description: "Executive KPI dashboards, automated reporting, and decision-ready operational analytics setup.",
+          price: 2100,
+          category: "Analytics"
+        },
+        {
+          id: "retail-omnichannel-stack",
+          name: "Retail Omnichannel Stack",
+          description: "Connected commerce workflows for inventory, promotions, fulfillment, and customer engagement.",
+          price: 2400,
+          category: "Retail"
+        },
+        {
+          id: "healthcare-compliance-core",
+          name: "Healthcare Compliance Core",
+          description: "Compliance-focused workflow design, audit trails, and access control hardening for healthcare teams.",
+          price: 2800,
+          category: "Healthcare"
+        }
+      ];
+      let productCatalog = {};
+      let allProducts = [];
+      let activeCategory = "All";
+      let stripeConfigPromise;
+      let stripeInstance;
+      let stripeElements;
+      let cardElement;
+
+      let cartState = JSON.parse(localStorage.getItem("adtech-cart") || "{}");
+
+      const paymentMethodConfig = {
+        card: {
+          buttonText: "Pay with Card",
+          processingText: "Processing Card Payment...",
+          note: "Secure card checkout powered by Stripe. Visa and Mastercard are accepted.",
+          hint: "Use a Visa or Mastercard to complete payment."
+        },
+        cash: {
+          buttonText: "Place Cash Order",
+          processingText: "Saving Cash Order...",
+          note: "Cash orders are saved as pending until payment is received.",
+          hint: "An invoice is generated now for accounting and cash reconciliation."
+        },
+        bank_transfer: {
+          buttonText: "Place Bank Transfer Order",
+          processingText: "Saving Bank Transfer Order...",
+          note: "Bank transfer orders are saved as pending until funds are received.",
+          hint: "Use the invoice number as your transfer reference."
+        }
+      };
+
+      const currency = (amount) =>
+        new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(amount);
+
+      const buildInvoiceSnapshot = ({ customerName, customerEmail, cartEntries, paymentMethod = "card" }) => {
+        const items = cartEntries
+          .map(([productId, quantity]) => {
+            const product = productCatalog[productId];
+
+            if (!product) {
+              return null;
+            }
+
+            return {
+              id: product.id,
+              name: product.name,
+              quantity,
+              unitPrice: product.price,
+              lineTotal: product.price * quantity
+            };
+          })
+          .filter(Boolean);
+
+        const totalAmount = items.reduce((sum, item) => sum + item.lineTotal, 0);
+
+        return {
+          customerName,
+          customerEmail,
+          items,
+          totalAmount,
+          paymentMethod,
+          createdAtIso: new Date().toISOString()
+        };
+      };
+
+      const normalizeCheckoutPaymentMethod = (value) => {
+        const method = String(value || "card")
+          .trim()
+          .toLowerCase()
+          .replace(/\s+/g, "_");
+
+        return Object.prototype.hasOwnProperty.call(paymentMethodConfig, method) ? method : "card";
+      };
+
+      const getSelectedCheckoutPaymentMethod = () => normalizeCheckoutPaymentMethod(paymentMethodSelect?.value || "card");
+
+      const formatPaymentMethodLabel = (value) => {
+        const method = normalizeCheckoutPaymentMethod(value);
+
+        if (method === "bank_transfer") {
+          return "Bank Transfer";
+        }
+
+        if (method === "cash") {
+          return "Cash";
+        }
+
+        return "Card";
+      };
+
+      const updateCheckoutPaymentUI = () => {
+        const method = getSelectedCheckoutPaymentMethod();
+        const methodConfig = paymentMethodConfig[method] || paymentMethodConfig.card;
+        const isCard = method === "card";
+
+        if (paymentBadgesNode) {
+          paymentBadgesNode.hidden = !isCard;
+        }
+
+        if (cardElementNode) {
+          cardElementNode.hidden = !isCard;
+        }
+
+        if (paymentNoteNode) {
+          paymentNoteNode.textContent = methodConfig.note;
+        }
+
+        if (paymentHintNode) {
+          paymentHintNode.textContent = methodConfig.hint;
+        }
+
+        if (bankTransferDetailsNode) {
+          bankTransferDetailsNode.hidden = method !== "bank_transfer";
+        }
+
+        if (placeOrderBtn) {
+          placeOrderBtn.textContent = methodConfig.buttonText;
+        }
+
+        if (isCard) {
+          ensureStripeReady().catch((error) => {
+            if (getSelectedCheckoutPaymentMethod() === "card" && !suppressCheckoutStatusError) {
+              setCheckoutStatus(error.message || "Card payments are unavailable right now.");
+            }
+          });
+        }
+      };
+
+      const downloadInvoicePdf = async (invoiceData, invoiceMeta = {}) => {
+        const JsPdfCtor = window.jspdf?.jsPDF;
+
+        if (!JsPdfCtor) {
+          throw new Error("Invoice PDF engine is unavailable.");
+        }
+
+        const normalizedMeta =
+          typeof invoiceMeta === "string"
+            ? { paymentIntentId: invoiceMeta }
+            : invoiceMeta && typeof invoiceMeta === "object"
+              ? invoiceMeta
+              : {};
+
+        const doc = new JsPdfCtor({ unit: "pt", format: "a4" });
+        const marginX = 42;
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const pageHeight = doc.internal.pageSize.getHeight();
+        let cursorY = 36;
+
+        const companyTextX = marginX;
+        doc.setFontSize(14);
+        doc.setTextColor(22, 40, 62);
+        doc.text(INVOICE_COMPANY_NAME, companyTextX, cursorY + 14);
+        doc.setFontSize(9);
+        doc.setTextColor(70, 86, 104);
+        doc.text(INVOICE_COMPANY_HEADER, companyTextX, cursorY + 28);
+
+        const headerBottomY = cursorY + 32;
+        cursorY = headerBottomY + 18;
+
+        doc.setFontSize(18);
+        doc.setTextColor(0, 0, 0);
+        doc.text("INVOICE", marginX, cursorY);
+        cursorY += 22;
+
+        const invoiceId = normalizedMeta.invoiceNumber || normalizedMeta.paymentIntentId || `INV-${Date.now()}`;
+        const generatedDate = new Date(invoiceData.createdAtIso || Date.now()).toLocaleString("en-US");
+        const paymentMethodLabel = formatPaymentMethodLabel(normalizedMeta.paymentMethod || invoiceData.paymentMethod || "card");
+        const paymentStatus = String(normalizedMeta.status || "paid").toUpperCase();
+
+        doc.setFontSize(10);
+        doc.setTextColor(80, 80, 80);
+        doc.text(`Invoice Number: ${invoiceId}`, marginX, cursorY);
+        doc.text(`Date: ${generatedDate}`, marginX + 250, cursorY);
+        cursorY += 16;
+
+        doc.text(`Bill To: ${invoiceData.customerName}`, marginX, cursorY);
+        doc.text(`Email: ${invoiceData.customerEmail}`, marginX + 250, cursorY);
+        cursorY += 14;
+
+        doc.text(`Payment Term: ${paymentMethodLabel}`, marginX, cursorY);
+        doc.text(`Status: ${paymentStatus}`, marginX + 250, cursorY);
+        cursorY += 14;
+
+        doc.setDrawColor(214, 218, 224);
+        doc.line(marginX, cursorY, pageWidth - marginX, cursorY);
+        cursorY += 16;
+
+        doc.setFontSize(10);
+        doc.setTextColor(32, 45, 64);
+        doc.text("Item", marginX, cursorY);
+        doc.text("Qty", marginX + 280, cursorY);
+        doc.text("Unit", marginX + 340, cursorY);
+        doc.text("Line Total", marginX + 430, cursorY);
+        cursorY += 10;
+        doc.line(marginX, cursorY, pageWidth - marginX, cursorY);
+        cursorY += 14;
+
+        doc.setTextColor(0, 0, 0);
+        doc.setFontSize(10);
+        invoiceData.items.forEach((item) => {
+          if (cursorY > pageHeight - 90) {
+            doc.addPage();
+            cursorY = 48;
+          }
+
+          doc.text(String(item.name), marginX, cursorY, { maxWidth: 260 });
+          doc.text(String(item.quantity), marginX + 280, cursorY);
+          doc.text(currency(item.unitPrice), marginX + 340, cursorY);
+          doc.text(currency(item.lineTotal), marginX + 430, cursorY);
+          cursorY += 16;
+        });
+
+        cursorY += 4;
+        doc.line(marginX, cursorY, pageWidth - marginX, cursorY);
+        cursorY += 20;
+
+        doc.setFontSize(12);
+        doc.setTextColor(20, 34, 52);
+        doc.text(`Total Amount: ${currency(invoiceData.totalAmount)}`, marginX + 310, cursorY);
+
+        cursorY += 26;
+        doc.setFontSize(9);
+        doc.setTextColor(90, 90, 90);
+        doc.text("Thank you for choosing AD Tech Solutions.", marginX, cursorY);
+
+        doc.save(`invoice-${invoiceId}-${new Date().toISOString().slice(0, 10)}.pdf`);
+      };
+
+      const saveCart = () => {
+        localStorage.setItem("adtech-cart", JSON.stringify(cartState));
+      };
+
+      const setCheckoutStatus = (message, color = "#ffb2b8") => {
+        checkoutStatus.textContent = message;
+        checkoutStatus.style.color = color;
+      };
+
+      const getCartEntries = () => Object.entries(cartState).filter(([, qty]) => qty > 0);
+
+      const buildOrderItems = () =>
+        getCartEntries().map(([productId, qty]) => ({
+          id: productId,
+          quantity: qty
+        }));
+
+      const renderProductListMessage = (message) => {
+        if (!productListNode) {
+          return;
+        }
+
+        productListNode.innerHTML = `<div class="product-list-empty">${message}</div>`;
+      };
+
+      const getVisibleProducts = () => {
+        if (activeCategory === "All") {
+          return allProducts;
+        }
+
+        return allProducts.filter((product) => (product.category || "General") === activeCategory);
+      };
+
+      const renderCatalogFilters = () => {
+        if (!catalogFiltersNode) {
+          return;
+        }
+
+        const categories = ["All", ...new Set(allProducts.map((product) => product.category || "General"))];
+        catalogFiltersNode.innerHTML = categories
+          .map(
+            (category) =>
+              `<button class="catalog-filter${category === activeCategory ? " active" : ""}" type="button" data-category="${category}">${category}</button>`
+          )
+          .join("");
+      };
+
+      const renderProductCards = (products) => {
+        if (!productListNode) {
+          return;
+        }
+
+        allProducts = products;
+        renderCatalogFilters();
+
+        const visibleProducts = getVisibleProducts();
+
+        if (!visibleProducts.length) {
+          renderProductListMessage("No products match this category.");
+          renderCart();
+          return;
+        }
+
+        productListNode.innerHTML = visibleProducts
+          .map(
+            (product) => `
+              <article class="card reveal" data-product-card="${product.id}">
+                <h3>${product.name}</h3>
+                <p>${product.description}</p>
+                <span class="product-category">${product.category || "General"}</span>
+                <span class="price-tag">${currency(product.price)}</span>
+                <div class="actions">
+                  <button class="btn alt" type="button" data-add-to-cart="${product.id}">Add to Cart</button>
+                </div>
+              </article>
+            `
+          )
+          .join("");
+
+        productListNode.querySelectorAll(".reveal").forEach((element) => observer.observe(element));
+        products.forEach((product) => {
+          productCatalog[product.id] = product;
+        });
+
+        renderCart();
+      };
+
+      const loadProducts = async () => {
+        renderProductListMessage("Loading product catalog...");
+
+        const response = await fetch(apiUrl("/api/products"));
+        const payload = await response.json().catch(() => ({}));
+
+        if (!response.ok || !Array.isArray(payload.products)) {
+          throw new Error(payload.error || "Could not load products.");
+        }
+
+        productCatalog = {};
+        activeCategory = "All";
+        renderProductCards(payload.products);
+      };
+
+      const getStripeConfig = async () => {
+        if (!stripeConfigPromise) {
+          stripeConfigPromise = fetch(apiUrl("/api/stripe-config"))
+            .then(async (response) => {
+              if (!response.ok) {
+                throw new Error("Card payments are unavailable right now.");
+              }
+
+              return response.json();
+            })
+            .catch((error) => {
+              stripeConfigPromise = undefined;
+              throw error;
+            });
+        }
+
+        return stripeConfigPromise;
+      };
+
+      const ensureStripeReady = async () => {
+        if (cardElement) {
+          return;
+        }
+
+        if (!cardElementNode) {
+          throw new Error("Card payment form is unavailable.");
+        }
+
+        if (typeof window.Stripe !== "function") {
+          throw new Error("Stripe.js did not load.");
+        }
+
+        const { publishableKey } = await getStripeConfig();
+
+        if (!publishableKey) {
+          throw new Error("Card payments are not configured yet.");
+        }
+
+        stripeInstance = window.Stripe(publishableKey);
+        stripeElements = stripeInstance.elements({
+          appearance: {
+            theme: document.body.getAttribute("data-theme") === "light" ? "stripe" : "night",
+            variables: {
+              colorPrimary: "#1bc6b0",
+              colorText: document.body.getAttribute("data-theme") === "light" ? "#0b2230" : "#f4fdff",
+              colorBackground: "transparent"
+            }
+          }
+        });
+        cardElement = stripeElements.create("card", {
+          hidePostalCode: true
+        });
+        cardElement.mount("#cardElement");
+        cardElement.on("change", (event) => {
+          if (event.error) {
+            setCheckoutStatus(event.error.message, "#ffb2b8");
+            return;
+          }
+
+          if (!event.empty) {
+            setCheckoutStatus("Card details look good.", "#9ef3db");
+          }
+        });
+      };
+
+      const renderCart = () => {
+        const entries = getCartEntries();
+
+        if (!entries.length) {
+          cartItemsNode.innerHTML = '<li class="cart-empty">Your cart is empty.</li>';
+          cartTotalNode.textContent = currency(0);
+          placeOrderBtn.disabled = true;
+          return;
+        }
+
+        let total = 0;
+        const itemsMarkup = entries
+          .map(([productId, qty]) => {
+            const product = productCatalog[productId];
+
+            if (!product) {
+              return "";
+            }
+
+            const lineTotal = product.price * qty;
+            total += lineTotal;
+
+            return `
+              <li class="cart-item">
+                <div class="cart-item-top">
+                  <span class="cart-item-name">${product.name}</span>
+                  <button class="inline-btn" type="button" data-remove-item="${product.id}">Remove</button>
+                </div>
+                <span class="cart-item-price">Qty ${qty} • ${currency(lineTotal)}</span>
+              </li>
+            `;
+          })
+          .join("");
+
+        cartItemsNode.innerHTML = itemsMarkup;
+        cartTotalNode.textContent = currency(total);
+        placeOrderBtn.disabled = false;
+      };
+
+      const addToCart = (productId) => {
+        if (!productCatalog[productId]) {
+          return;
+        }
+
+        cartState[productId] = (cartState[productId] || 0) + 1;
+        saveCart();
+        renderCart();
+      };
+
+      const validateField = (field) => {
+        const value = contactForm.elements[field].value;
+
+        if (field === "contactName") {
+          if (value.trim().length < 2) {
+            showError(field, "Please enter your full name.");
+            return false;
+          }
+          clearError(field);
+          return true;
+        }
+
+        if (field === "contactEmail") {
+          if (!emailPattern.test(value.trim())) {
+            showError(field, "Please enter a valid email address.");
+            return false;
+          }
+          clearError(field);
+          return true;
+        }
+
+        if (field === "company") {
+          if (value.trim().length < 2) {
+            showError(field, "Please enter your company name.");
+            return false;
+          }
+          clearError(field);
+          return true;
+        }
+
+        if (field === "industry") {
+          if (!value) {
+            showError(field, "Please select an industry.");
+            return false;
+          }
+          clearError(field);
+          return true;
+        }
+
+        if (field === "challenge") {
+          if (value.trim().length < 10) {
+            showError(field, "Please describe your business challenge (at least 10 characters).");
+            return false;
+          }
+          if (value.length > 350) {
+            showError(field, "Message must be 350 characters or less.");
+            return false;
+          }
+          clearError(field);
+          return true;
+        }
+
+        if (field === "privacyConsent") {
+          if (!contactForm.elements.privacyConsent.checked) {
+            showError(field, "You need to agree before submitting.");
+            return false;
+          }
+          clearError(field);
+          return true;
+        }
+
+        return true;
+      };
+
+      ["contactName", "contactEmail", "company", "industry", "challenge"].forEach((field) => {
+        contactForm.elements[field].addEventListener("blur", () => validateField(field));
+      });
+
+      productListNode.addEventListener("click", (event) => {
+        const addButton = event.target.closest("[data-add-to-cart]");
+
+        if (!addButton) {
+          return;
+        }
+
+        addToCart(addButton.getAttribute("data-add-to-cart"));
+        setCheckoutStatus("Item added to cart.", "#9ef3db");
+      });
+
+      catalogFiltersNode.addEventListener("click", (event) => {
+        const filterButton = event.target.closest("[data-category]");
+
+        if (!filterButton) {
+          return;
+        }
+
+        activeCategory = filterButton.getAttribute("data-category") || "All";
+        renderProductCards(allProducts);
+      });
+
+      cartItemsNode.addEventListener("click", (event) => {
+        const removeId = event.target.getAttribute("data-remove-item");
+
+        if (!removeId) {
+          return;
+        }
+
+        delete cartState[removeId];
+        saveCart();
+        renderCart();
+      });
+
+      checkoutForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const name = checkoutForm.elements.checkoutName.value.trim();
+        const email = checkoutForm.elements.checkoutEmail.value.trim();
+        const cartEntries = getCartEntries();
+        const paymentMethod = getSelectedCheckoutPaymentMethod();
+        const methodConfig = paymentMethodConfig[paymentMethod] || paymentMethodConfig.card;
+
+        if (!cartEntries.length) {
+          setCheckoutStatus("Your cart is empty.");
+          return;
+        }
+
+        if (name.length < 2) {
+          setCheckoutStatus("Please enter your full name.");
+          return;
+        }
+
+        if (!cartEmailPattern.test(email)) {
+          setCheckoutStatus("Please enter a valid email address.");
+          return;
+        }
+
+        const invoiceSnapshot = buildInvoiceSnapshot({
+          customerName: name,
+          customerEmail: email,
+          cartEntries,
+          paymentMethod
+        });
+
+        placeOrderBtn.disabled = true;
+        placeOrderBtn.textContent = methodConfig.processingText;
+
+        try {
+          if (paymentMethod === "card") {
+            await ensureStripeReady();
+
+            const paymentResponse = await fetch(apiUrl("/api/create-payment-intent"), {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({
+                customerName: name,
+                customerEmail: email,
+                items: buildOrderItems()
+              })
+            });
+
+            const paymentPayload = await paymentResponse.json().catch(() => ({}));
+
+            if (!paymentResponse.ok || !paymentPayload.clientSecret) {
+              throw new Error(paymentPayload.error || "Could not start card payment.");
+            }
+
+            const result = await stripeInstance.confirmCardPayment(paymentPayload.clientSecret, {
+              payment_method: {
+                card: cardElement,
+                billing_details: {
+                  name,
+                  email
+                }
+              }
+            });
+
+            if (result.error) {
+              throw new Error(result.error.message || "Card payment failed.");
+            }
+
+            if (!result.paymentIntent || result.paymentIntent.status !== "succeeded") {
+              throw new Error("Payment was not completed.");
+            }
+
+            const confirmResponse = await fetch(apiUrl("/api/payment-success"), {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({
+                paymentIntentId: result.paymentIntent.id
+              })
+            });
+
+            const confirmPayload = await confirmResponse.json().catch(() => ({}));
+
+            if (!confirmResponse.ok) {
+              throw new Error(confirmPayload.error || "Payment completed but confirmation failed.");
+            }
+
+            try {
+              await downloadInvoicePdf(invoiceSnapshot, {
+                invoiceNumber: confirmPayload.invoice?.invoiceNumber,
+                paymentIntentId: confirmPayload.invoice?.paymentIntentId || result.paymentIntent.id,
+                status: confirmPayload.invoice?.status || "paid",
+                paymentMethod: confirmPayload.invoice?.paymentMethod || "card"
+              });
+            } catch (_error) {
+              setCheckoutStatus("Payment successful, but invoice download failed.", "#f5c97a");
+            }
+
+            cartState = {};
+            saveCart();
+            renderCart();
+            checkoutForm.reset();
+            checkoutForm.elements.checkoutPaymentMethod.value = "card";
+            suppressCheckoutStatusError = true;
+            updateCheckoutPaymentUI();
+            setCheckoutStatus("Card payment successful. Invoice generated.", "#9ef3db");
+            setTimeout(() => { suppressCheckoutStatusError = false; }, 1000);
+          } else {
+            const offlineResponse = await fetch(apiUrl("/api/create-offline-order"), {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({
+                customerName: name,
+                customerEmail: email,
+                items: buildOrderItems(),
+                paymentMethod
+              })
+            });
+
+            const offlinePayload = await offlineResponse.json().catch(() => ({}));
+
+            if (!offlineResponse.ok) {
+              throw new Error(offlinePayload.error || "Could not create offline order.");
+            }
+
+            const savedInvoice = offlinePayload.invoice || {};
+            const invoiceForPdf = {
+              customerName: savedInvoice.customerName || invoiceSnapshot.customerName,
+              customerEmail: savedInvoice.customerEmail || invoiceSnapshot.customerEmail,
+              items: Array.isArray(savedInvoice.items) && savedInvoice.items.length ? savedInvoice.items : invoiceSnapshot.items,
+              totalAmount: Number(savedInvoice.totalAmount || invoiceSnapshot.totalAmount),
+              paymentMethod: savedInvoice.paymentMethod || paymentMethod,
+              createdAtIso: savedInvoice.issuedAt || invoiceSnapshot.createdAtIso
+            };
+
+            try {
+              await downloadInvoicePdf(invoiceForPdf, {
+                invoiceNumber: savedInvoice.invoiceNumber,
+                paymentIntentId: savedInvoice.paymentIntentId,
+                status: savedInvoice.status || "pending",
+                paymentMethod: savedInvoice.paymentMethod || paymentMethod
+              });
+            } catch (_error) {
+              setCheckoutStatus("Order saved, but invoice download failed.", "#f5c97a");
+            }
+
+            cartState = {};
+            saveCart();
+            renderCart();
+            checkoutForm.reset();
+            checkoutForm.elements.checkoutPaymentMethod.value = "card";
+            suppressCheckoutStatusError = true;
+            updateCheckoutPaymentUI();
+            setCheckoutStatus(
+              paymentMethod === "cash"
+                ? "Cash order saved as pending. Invoice generated for accounting."
+                : "Bank transfer order saved as pending. Invoice generated for accounting.",
+              "#9ef3db"
+            );
+            setTimeout(() => { suppressCheckoutStatusError = false; }, 1000);
+          }
+        } catch (error) {
+          setCheckoutStatus(error.message || "Checkout failed. Please try again.");
+        } finally {
+          placeOrderBtn.disabled = !getCartEntries().length;
+        }
+      });
+
+      contactForm.elements.privacyConsent.addEventListener("change", () => validateField("privacyConsent"));
+
+      contactForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        contactStatus.style.color = "";
+
+        const checks = ["contactName", "contactEmail", "company", "industry", "challenge", "privacyConsent"];
+        const valid = checks.every((field) => validateField(field));
+
+        if (!valid) {
+          contactStatus.textContent = "Please fix the highlighted fields and try again.";
+          contactStatus.style.color = "#ffb2b8";
+          return;
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Submitting...";
+
+        const payload = {
+          fullName: contactForm.elements.contactName.value.trim(),
+          email: contactForm.elements.contactEmail.value.trim(),
+          company: contactForm.elements.company.value.trim(),
+          industry: contactForm.elements.industry.value,
+          challenge: contactForm.elements.challenge.value.trim()
+        };
+
+        fetch(apiUrl("/api/register"), {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(payload)
+        })
+          .then(async (response) => {
+            if (!response.ok) {
+              const result = await response.json().catch(() => ({}));
+              throw new Error(result.error || "Could not submit your request.");
+            }
+            return response.json();
+          })
+          .then(() => {
+            contactForm.reset();
+            checks.forEach((field) => clearError(field));
+            contactStatus.textContent = "Thanks! Your registration is saved and our team will contact you within 24 hours.";
+            contactStatus.style.color = "#9ef3db";
+          })
+          .catch((error) => {
+            contactStatus.textContent = error.message || "Something went wrong. Please try again.";
+            contactStatus.style.color = "#ffb2b8";
+          })
+          .finally(() => {
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Schedule Consultation";
+          });
+      });
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("show");
+            }
+          });
+        },
+        { threshold: 0.14 }
+      );
+
+      document.querySelectorAll(".reveal").forEach((element) => observer.observe(element));
+      renderProductCards(fallbackCatalog);
+      renderCart();
+      updateCheckoutPaymentUI();
+
+      if (paymentMethodSelect) {
+        paymentMethodSelect.addEventListener("change", () => {
+          updateCheckoutPaymentUI();
+        });
+      }
+
+      loadProducts().catch((error) => {
+        renderProductCards(fallbackCatalog);
+        setCheckoutStatus(error.message || "Could not load product pricing.");
+      });
+    </script>
+  </body>
+</html>
