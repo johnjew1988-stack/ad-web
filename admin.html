@@ -1,0 +1,773 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AD Tech Admin Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --bg: #07131b;
+        --bg2: #041018;
+        --panel: rgba(10, 25, 36, 0.92);
+        --panel-soft: rgba(12, 31, 44, 0.68);
+        --text: #effcff;
+        --muted: #95b8c7;
+        --line: rgba(104, 228, 209, 0.18);
+        --brand: #1bc6b0;
+        --brand-deep: #0c5f95;
+        --danger: #ffb2b8;
+        --success: #9ef3db;
+        --warn: #f5c97a;
+        --sidebar-w: 220px;
+      }
+
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+
+      body {
+        font-family: "Space Grotesk", system-ui, sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(circle at top left, rgba(27,198,176,0.14), transparent 34%),
+          radial-gradient(circle at bottom right, rgba(12,95,149,0.18), transparent 36%),
+          linear-gradient(160deg, var(--bg2), var(--bg));
+        min-height: 100vh;
+        display: flex;
+      }
+
+      h1, h2, h3, h4 { font-family: "Bricolage Grotesque", sans-serif; }
+
+      /* ── Sidebar ── */
+      .sidebar {
+        width: var(--sidebar-w);
+        min-height: 100vh;
+        background: rgba(4, 16, 24, 0.94);
+        border-right: 1px solid var(--line);
+        display: flex;
+        flex-direction: column;
+        flex-shrink: 0;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        overflow-y: auto;
+      }
+
+      .sidebar-logo {
+        padding: 1.4rem 1.2rem 1rem;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .sidebar-logo a {
+        font-family: "Bricolage Grotesque", sans-serif;
+        font-weight: 800;
+        font-size: 1.1rem;
+        color: var(--brand);
+        text-decoration: none;
+        letter-spacing: -0.01em;
+      }
+
+      .sidebar-logo p {
+        color: var(--muted);
+        font-size: 0.74rem;
+        margin-top: 0.15rem;
+      }
+
+      .sidebar-section-label {
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 0.09em;
+        text-transform: uppercase;
+        color: var(--muted);
+        padding: 1.1rem 1.2rem 0.4rem;
+      }
+
+      .sidebar-nav {
+        list-style: none;
+        padding: 0 0.6rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.18rem;
+      }
+
+      .sidebar-nav a {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 0.58rem 0.75rem;
+        border-radius: 10px;
+        color: var(--muted);
+        text-decoration: none;
+        font-size: 0.88rem;
+        font-weight: 500;
+        transition: background 0.15s, color 0.15s;
+      }
+
+      .sidebar-nav a:hover,
+      .sidebar-nav a.active {
+        background: rgba(27, 198, 176, 0.12);
+        color: var(--text);
+      }
+
+      .sidebar-nav a.active { color: var(--brand); font-weight: 700; }
+
+      .sidebar-nav .nav-icon { font-size: 1rem; flex-shrink: 0; }
+
+      .sidebar-footer {
+        margin-top: auto;
+        padding: 1rem 1.2rem;
+        border-top: 1px solid var(--line);
+      }
+
+      .sidebar-footer a {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--muted);
+        text-decoration: none;
+        font-size: 0.84rem;
+        transition: color 0.15s;
+      }
+      .sidebar-footer a:hover { color: var(--text); }
+
+      /* ── Main area ── */
+      .main {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 1rem 1.75rem;
+        border-bottom: 1px solid var(--line);
+        background: rgba(4, 16, 24, 0.55);
+        backdrop-filter: blur(8px);
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        flex-wrap: wrap;
+      }
+
+      .topbar-title {
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--text);
+      }
+
+      .topbar-right {
+        display: flex;
+        align-items: center;
+        gap: 0.7rem;
+      }
+
+      .token-input-wrap {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .token-input-wrap label {
+        font-size: 0.8rem;
+        color: var(--muted);
+        white-space: nowrap;
+      }
+
+      .token-input-wrap input {
+        background: var(--panel-soft);
+        border: 1px solid var(--line);
+        border-radius: 9px;
+        color: var(--text);
+        font: inherit;
+        font-size: 0.82rem;
+        padding: 0.42rem 0.65rem;
+        width: 180px;
+        outline: none;
+      }
+
+      .token-input-wrap input:focus { border-color: var(--brand); }
+
+      /* ── Content ── */
+      .content {
+        padding: 1.75rem;
+        display: grid;
+        gap: 1.25rem;
+      }
+
+      /* ── Panel ── */
+      .panel {
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        background: var(--panel);
+        padding: 1.3rem;
+      }
+
+      .panel-title {
+        font-size: 1rem;
+        margin-bottom: 0.25rem;
+      }
+
+      .panel-sub {
+        color: var(--muted);
+        font-size: 0.84rem;
+        margin-bottom: 1rem;
+      }
+
+      /* ── Stat cards ── */
+      .stat-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 0.8rem;
+      }
+
+      .stat-card {
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 1rem;
+        background: var(--panel-soft);
+        display: grid;
+        gap: 0.3rem;
+      }
+
+      .stat-label { color: var(--muted); font-size: 0.8rem; font-weight: 600; }
+      .stat-value { font-size: 1.4rem; font-weight: 800; font-family: "Bricolage Grotesque", sans-serif; }
+      .stat-hint  { color: var(--muted); font-size: 0.78rem; }
+      .stat-value.green  { color: var(--success); }
+      .stat-value.yellow { color: var(--warn); }
+      .stat-value.red    { color: var(--danger); }
+      .stat-value.brand  { color: var(--brand); }
+
+      /* ── Quick access cards ── */
+      .module-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 0.9rem;
+      }
+
+      .module-card {
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        background: var(--panel-soft);
+        padding: 1.2rem;
+        text-decoration: none;
+        color: var(--text);
+        display: flex;
+        flex-direction: column;
+        gap: 0.55rem;
+        transition: background 0.18s, border-color 0.18s, transform 0.12s;
+      }
+
+      .module-card:hover {
+        background: rgba(27, 198, 176, 0.1);
+        border-color: rgba(27, 198, 176, 0.35);
+        transform: translateY(-2px);
+      }
+
+      .module-icon {
+        font-size: 1.6rem;
+        line-height: 1;
+      }
+
+      .module-card h3 {
+        font-size: 0.96rem;
+        font-family: "Bricolage Grotesque", sans-serif;
+      }
+
+      .module-card p {
+        color: var(--muted);
+        font-size: 0.82rem;
+        line-height: 1.5;
+      }
+
+      .module-badge {
+        display: inline-flex;
+        align-self: start;
+        padding: 0.18rem 0.55rem;
+        border-radius: 999px;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.03em;
+      }
+
+      .badge-green  { background: rgba(158, 243, 219, 0.14); color: var(--success); border: 1px solid rgba(158,243,219,0.3); }
+      .badge-yellow { background: rgba(245, 201, 122, 0.14); color: var(--warn);    border: 1px solid rgba(245,201,122,0.3); }
+      .badge-blue   { background: rgba(27, 198, 176, 0.14);  color: var(--brand);   border: 1px solid rgba(27,198,176,0.3); }
+      .badge-red    { background: rgba(255, 178, 184, 0.14); color: var(--danger);  border: 1px solid rgba(255,178,184,0.3); }
+
+      /* ── Recent invoices table ── */
+      .table-wrap {
+        overflow-x: auto;
+        margin-top: 0.75rem;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.86rem;
+      }
+
+      thead th {
+        text-align: left;
+        color: var(--muted);
+        font-size: 0.76rem;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        padding: 0.5rem 0.75rem;
+        border-bottom: 1px solid var(--line);
+      }
+
+      tbody tr {
+        border-bottom: 1px solid rgba(104, 228, 209, 0.08);
+        transition: background 0.12s;
+      }
+
+      tbody tr:hover { background: rgba(27, 198, 176, 0.06); }
+
+      tbody td {
+        padding: 0.62rem 0.75rem;
+        vertical-align: middle;
+      }
+
+      .status-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        padding: 0.2rem 0.6rem;
+        border-radius: 999px;
+        font-size: 0.76rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+
+      .pill-paid    { background: rgba(158,243,219,0.14); color: var(--success); }
+      .pill-pending { background: rgba(245,201,122,0.14); color: var(--warn); }
+      .pill-failed  { background: rgba(255,178,184,0.14); color: var(--danger); }
+
+      .table-empty {
+        text-align: center;
+        color: var(--muted);
+        padding: 1.5rem;
+        font-size: 0.88rem;
+      }
+
+      /* ── Buttons ── */
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        border: 1px solid transparent;
+        border-radius: 12px;
+        padding: 0.62rem 1rem;
+        font: inherit;
+        font-size: 0.88rem;
+        font-weight: 700;
+        cursor: pointer;
+        text-decoration: none;
+        transition: opacity 0.15s, transform 0.1s;
+      }
+      .btn:active { transform: scale(0.97); }
+      .btn.main { color: #fff; background: linear-gradient(135deg, var(--brand), var(--brand-deep)); }
+      .btn.alt  { color: var(--text); background: rgba(255,255,255,0.05); border-color: var(--line); }
+      .btn.sm   { padding: 0.38rem 0.7rem; font-size: 0.8rem; border-radius: 9px; }
+
+      /* ── Status line ── */
+      .status-line { font-size: 0.84rem; color: var(--muted); }
+      .status-line.error   { color: var(--danger); }
+      .status-line.success { color: var(--success); }
+
+      /* ── Activity feed ── */
+      .activity-list { display: grid; gap: 0.55rem; }
+
+      .activity-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        padding: 0.7rem;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: var(--panel-soft);
+        font-size: 0.86rem;
+      }
+
+      .activity-dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        flex-shrink: 0;
+        margin-top: 5px;
+      }
+
+      .dot-green  { background: var(--success); box-shadow: 0 0 6px var(--success); }
+      .dot-yellow { background: var(--warn);    box-shadow: 0 0 6px var(--warn); }
+      .dot-blue   { background: var(--brand);   box-shadow: 0 0 6px var(--brand); }
+
+      .activity-text { flex: 1; line-height: 1.5; }
+      .activity-time { color: var(--muted); font-size: 0.78rem; white-space: nowrap; }
+
+      /* ── Responsive ── */
+      @media (max-width: 800px) {
+        .sidebar { display: none; }
+        .topbar { padding: 0.9rem 1rem; }
+        .content { padding: 1rem; }
+      }
+
+      /* ── Scrollbar ── */
+      ::-webkit-scrollbar { width: 6px; }
+      ::-webkit-scrollbar-track { background: transparent; }
+      ::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
+    </style>
+  </head>
+  <body>
+
+    <!-- ═══ Sidebar ═══ -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <a href="index.html">AD Tech</a>
+        <p>Admin Dashboard</p>
+      </div>
+
+      <span class="sidebar-section-label">Overview</span>
+      <ul class="sidebar-nav">
+        <li><a href="admin.html" class="active"><span class="nav-icon">🏠</span> Dashboard</a></li>
+      </ul>
+
+      <span class="sidebar-section-label">Sales</span>
+      <ul class="sidebar-nav">
+        <li><a href="admin-sales.html"><span class="nav-icon">🛒</span> Sales Order</a></li>
+        <li><a href="admin-products.html"><span class="nav-icon">📦</span> Products</a></li>
+      </ul>
+
+      <span class="sidebar-section-label">Finance</span>
+      <ul class="sidebar-nav">
+        <li><a href="admin-finance.html"><span class="nav-icon">💰</span> Finance & Accounting</a></li>
+      </ul>
+
+      <span class="sidebar-section-label">Website</span>
+      <ul class="sidebar-nav">
+        <li><a href="index.html"><span class="nav-icon">🌐</span> View Storefront</a></li>
+      </ul>
+
+      <div class="sidebar-footer">
+        <a href="index.html#contact"><span>📩</span> Contact / RFQ</a>
+      </div>
+    </aside>
+
+    <!-- ═══ Main ═══ -->
+    <div class="main">
+
+      <!-- Topbar -->
+      <div class="topbar">
+        <span class="topbar-title">Dashboard</span>
+        <div class="topbar-right">
+          <div class="token-input-wrap">
+            <label for="adminToken">Admin Token</label>
+            <input id="adminToken" type="password" placeholder="Optional — set in Render" />
+          </div>
+          <button class="btn main" id="loadDashboardBtn" type="button">Refresh</button>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="content">
+
+        <!-- KPI stats row -->
+        <div class="panel">
+          <h2 class="panel-title">Overview</h2>
+          <p class="panel-sub" id="dashboardStatus">Loading dashboard data…</p>
+          <div class="stat-grid" id="statGrid">
+            <div class="stat-card"><span class="stat-label">Total Revenue</span><span class="stat-value brand" id="statRevenue">—</span><span class="stat-hint">Paid invoices</span></div>
+            <div class="stat-card"><span class="stat-label">Pending</span><span class="stat-value yellow" id="statPending">—</span><span class="stat-hint">Awaiting payment</span></div>
+            <div class="stat-card"><span class="stat-label">Total Invoices</span><span class="stat-value" id="statInvoices">—</span><span class="stat-hint">All time</span></div>
+            <div class="stat-card"><span class="stat-label">Net Profit</span><span class="stat-value green" id="statProfit">—</span><span class="stat-hint">Income − Expenses</span></div>
+            <div class="stat-card"><span class="stat-label">Total Income</span><span class="stat-value green" id="statIncome">—</span><span class="stat-hint">Finance entries</span></div>
+            <div class="stat-card"><span class="stat-label">Total Expenses</span><span class="stat-value red" id="statExpenses">—</span><span class="stat-hint">Finance entries</span></div>
+          </div>
+        </div>
+
+        <!-- Quick access modules -->
+        <div class="panel">
+          <h2 class="panel-title">Quick Access</h2>
+          <p class="panel-sub">Jump to any admin module.</p>
+          <div class="module-grid">
+
+            <a class="module-card" href="admin-sales.html">
+              <span class="module-icon">🛒</span>
+              <span class="module-badge badge-blue">Sales</span>
+              <h3>Sales Order</h3>
+              <p>View cart, process new orders, and generate invoices with card, cash, or bank transfer.</p>
+            </a>
+
+            <a class="module-card" href="admin-products.html">
+              <span class="module-icon">📦</span>
+              <span class="module-badge badge-blue">Catalog</span>
+              <h3>Products</h3>
+              <p>Add, edit, or deactivate service packages in the product catalog.</p>
+            </a>
+
+            <a class="module-card" href="admin-finance.html">
+              <span class="module-icon">💰</span>
+              <span class="module-badge badge-green">Finance</span>
+              <h3>Finance & Accounting</h3>
+              <p>Track income, expenses, and financing. View invoice accounting report.</p>
+            </a>
+
+            <a class="module-card" href="index.html">
+              <span class="module-icon">🌐</span>
+              <span class="module-badge badge-yellow">Public</span>
+              <h3>Storefront</h3>
+              <p>View the live public website and service pages.</p>
+            </a>
+
+            <a class="module-card" href="index.html#contact">
+              <span class="module-icon">📩</span>
+              <span class="module-badge badge-yellow">CRM</span>
+              <h3>Inquiries & RFQ</h3>
+              <p>View the Request for Quotation and Schedule Consultation forms.</p>
+            </a>
+
+            <a class="module-card" href="index-sales-purchase.html">
+              <span class="module-icon">📄</span>
+              <span class="module-badge badge-blue">Service</span>
+              <h3>Sales & Purchase Page</h3>
+              <p>Public service detail page for Sales and Purchase Systems.</p>
+            </a>
+
+          </div>
+        </div>
+
+        <!-- Two-column: recent invoices + activity -->
+        <div style="display:grid;grid-template-columns:1.4fr 0.6fr;gap:1.25rem;align-items:start;">
+
+          <!-- Recent invoices -->
+          <div class="panel">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:0.5rem;">
+              <div>
+                <h2 class="panel-title">Recent Invoices</h2>
+                <p class="panel-sub" style="margin-bottom:0;">Latest 10 invoices from all orders.</p>
+              </div>
+              <a class="btn alt sm" href="admin-finance.html">View All →</a>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Invoice</th>
+                    <th>Customer</th>
+                    <th>Amount</th>
+                    <th>Method</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                  </tr>
+                </thead>
+                <tbody id="invoiceTableBody">
+                  <tr><td class="table-empty" colspan="6">Loading…</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Activity feed -->
+          <div class="panel">
+            <h2 class="panel-title" style="margin-bottom:0.25rem;">Activity</h2>
+            <p class="panel-sub">System status and recent actions.</p>
+            <div class="activity-list" id="activityFeed">
+              <div class="activity-item">
+                <span class="activity-dot dot-blue"></span>
+                <span class="activity-text">Dashboard loaded</span>
+                <span class="activity-time" id="activityTime">—</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+    <script>
+      const API_BASE_URL = window.location.protocol === "file:" ? "http://localhost:3000" : "";
+      const apiUrl = (path) => `${API_BASE_URL}${path}`;
+
+      const adminTokenInput  = document.getElementById("adminToken");
+      const dashboardStatus  = document.getElementById("dashboardStatus");
+      const invoiceTableBody = document.getElementById("invoiceTableBody");
+      const activityFeed     = document.getElementById("activityFeed");
+      const activityTime     = document.getElementById("activityTime");
+      const loadDashboardBtn = document.getElementById("loadDashboardBtn");
+
+      const getToken = () => adminTokenInput.value.trim();
+
+      const adminHeaders = () => {
+        const h = { "Content-Type": "application/json" };
+        const t = getToken();
+        if (t) h["x-admin-token"] = t;
+        return h;
+      };
+
+      const currency = (n) =>
+        new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(n || 0);
+
+      const fmtDate = (iso) => {
+        if (!iso) return "—";
+        return new Date(iso).toLocaleString("en-US", { month: "short", day: "numeric", year: "numeric" });
+      };
+
+      const fmtMethod = (m) => {
+        if (m === "bank_transfer") return "Bank Transfer";
+        if (m === "cash") return "Cash";
+        return "Card";
+      };
+
+      const statusPill = (s) => {
+        const cls = s === "paid" ? "pill-paid" : s === "pending" ? "pill-pending" : "pill-failed";
+        return `<span class="status-pill ${cls}">${s}</span>`;
+      };
+
+      const setStatus = (msg, type = "") => {
+        dashboardStatus.textContent = msg;
+        dashboardStatus.className = "panel-sub" + (type ? " status-line " + type : "");
+      };
+
+      const addActivity = (text, type = "blue") => {
+        const item = document.createElement("div");
+        item.className = "activity-item";
+        const now = new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
+        item.innerHTML = `
+          <span class="activity-dot dot-${type}"></span>
+          <span class="activity-text">${text}</span>
+          <span class="activity-time">${now}</span>
+        `;
+        activityFeed.insertBefore(item, activityFeed.firstChild);
+        // Keep max 8 items
+        while (activityFeed.children.length > 8) activityFeed.removeChild(activityFeed.lastChild);
+      };
+
+      // ── Load invoice summary stats ─────────────────────────────────────────
+      const loadInvoiceSummary = async () => {
+        const res = await fetch(apiUrl("/api/admin/accounting/invoices/summary"), {
+          headers: adminHeaders()
+        });
+        if (!res.ok) return null;
+        const data = await res.json();
+        return data.summary || null;
+      };
+
+      // ── Load finance summary ───────────────────────────────────────────────
+      const loadFinanceSummary = async () => {
+        const res = await fetch(apiUrl("/api/admin/finance/summary"), {
+          headers: adminHeaders()
+        });
+        if (!res.ok) return null;
+        const data = await res.json();
+        return data || null;
+      };
+
+      // ── Load recent invoices ───────────────────────────────────────────────
+      const loadRecentInvoices = async () => {
+        const res = await fetch(apiUrl("/api/admin/accounting/invoices"), {
+          headers: adminHeaders()
+        });
+        if (!res.ok) return null;
+        const data = await res.json();
+        return Array.isArray(data.invoices) ? data.invoices.slice(0, 10) : null;
+      };
+
+      const renderInvoiceTable = (invoices) => {
+        if (!invoices || !invoices.length) {
+          invoiceTableBody.innerHTML = '<tr><td class="table-empty" colspan="6">No invoices found. Orders will appear here.</td></tr>';
+          return;
+        }
+        invoiceTableBody.innerHTML = invoices.map((inv) => `
+          <tr>
+            <td style="font-family:monospace;font-size:0.82rem;">${inv.invoiceNumber || "—"}</td>
+            <td>
+              <div style="font-weight:600;">${inv.customerName || "—"}</div>
+              <div style="color:var(--muted);font-size:0.78rem;">${inv.customerEmail || ""}</div>
+            </td>
+            <td style="font-weight:700;">${currency(inv.totalAmount)}</td>
+            <td>${fmtMethod(inv.paymentMethod)}</td>
+            <td>${statusPill(inv.status)}</td>
+            <td style="color:var(--muted);font-size:0.82rem;">${fmtDate(inv.issuedAt)}</td>
+          </tr>
+        `).join("");
+      };
+
+      const renderStats = (invSummary, finSummary) => {
+        const totalRevenue = invSummary?.totalRevenue ?? 0;
+        const pendingAmount = invSummary?.pendingAmount ?? 0;
+        const totalInvoices = (invSummary?.totalCount) ?? 0;
+
+        const income   = finSummary?.accounting?.totalIncome   ?? finSummary?.totalIncome   ?? 0;
+        const expenses = finSummary?.accounting?.totalExpenses ?? finSummary?.totalExpenses ?? 0;
+        const netProfit = income - expenses;
+
+        document.getElementById("statRevenue").textContent  = currency(totalRevenue);
+        document.getElementById("statPending").textContent  = currency(pendingAmount);
+        document.getElementById("statInvoices").textContent = totalInvoices;
+        document.getElementById("statProfit").textContent   = currency(netProfit);
+        document.getElementById("statIncome").textContent   = currency(income);
+        document.getElementById("statExpenses").textContent = currency(expenses);
+
+        if (netProfit < 0) {
+          document.getElementById("statProfit").classList.replace("green", "red");
+        }
+      };
+
+      // ── Main load ──────────────────────────────────────────────────────────
+      const loadDashboard = async () => {
+        setStatus("Loading dashboard data…");
+        loadDashboardBtn.disabled = true;
+        activityTime.textContent = new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
+
+        const [invSummary, finSummary, invoices] = await Promise.allSettled([
+          loadInvoiceSummary(),
+          loadFinanceSummary(),
+          loadRecentInvoices()
+        ]);
+
+        const invData  = invSummary.status  === "fulfilled" ? invSummary.value  : null;
+        const finData  = finSummary.status  === "fulfilled" ? finSummary.value  : null;
+        const invList  = invoices.status    === "fulfilled" ? invoices.value    : null;
+
+        let ok = true;
+
+        if (!invData && !finData) {
+          setStatus("Could not load data — check your Admin Token or server status.", "error");
+          addActivity("Dashboard load failed — check admin token", "yellow");
+          ok = false;
+        }
+
+        if (invData || finData) {
+          renderStats(invData, finData);
+          addActivity("Stats refreshed", "green");
+        }
+
+        renderInvoiceTable(invList);
+
+        if (invList) {
+          const pending = invList.filter(i => i.status === "pending").length;
+          if (pending > 0) {
+            addActivity(`${pending} pending invoice${pending > 1 ? "s" : ""} need attention`, "yellow");
+          }
+        }
+
+        if (ok) setStatus(`Last refreshed: ${new Date().toLocaleString("en-US")}`);
+
+        loadDashboardBtn.disabled = false;
+      };
+
+      loadDashboardBtn.addEventListener("click", loadDashboard);
+      adminTokenInput.addEventListener("keydown", (e) => { if (e.key === "Enter") loadDashboard(); });
+
+      // Auto-load on page open
+      loadDashboard();
+    </script>
+  </body>
+</html>
