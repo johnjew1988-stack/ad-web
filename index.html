@@ -824,6 +824,45 @@
         transform: none;
       }
 
+      .about-intro {
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        background: var(--surface);
+        padding: 1.4rem 1.6rem;
+        margin-bottom: 1.2rem;
+      }
+
+      .about-intro p { margin: 0 0 0.6rem; color: var(--ink-300); }
+      .about-intro p:last-child { margin: 0; }
+      .about-industries { font-size: 0.95rem; }
+
+      .about-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.95rem;
+      }
+
+      .about-block {
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        background: var(--surface);
+        padding: 1.05rem 1.2rem;
+      }
+
+      .about-block h3 { margin: 0 0 0.6rem; font-size: 1.05rem; }
+      .about-block p  { margin: 0; color: var(--ink-300); font-size: 0.95rem; }
+
+      .about-list {
+        margin: 0;
+        padding-left: 1.2rem;
+        color: var(--ink-300);
+        font-size: 0.95rem;
+        line-height: 1.9;
+      }
+
+      @media (max-width: 960px) { .about-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+      @media (max-width: 740px) { .about-grid { grid-template-columns: 1fr; } }
+
       a:focus-visible,
       button:focus-visible {
         outline: 2px solid var(--brand-400);
@@ -1025,10 +1064,10 @@
             <details class="service-details">
               <summary>Services</summary>
               <div class="service-dropdown">
-                <a href="index-erp.html">ERP Implementation</a>
                 <a href="index-sales-purchase.html">Sales and Purchase Systems</a>
                 <a href="index-supply-chain-optimization.html">Supply Chain Optimization</a>
                 <a href="index-finance-accounting.html">Finance &amp; Accounting</a>
+                <a href="index-custom-system.html">Special Customize System</a>
               </div>
             </details>
             <details class="solution-details">
@@ -1077,34 +1116,25 @@
             <h2 class="reveal">Our Core Services</h2>
             <div class="card-grid">
               <article class="card reveal">
-                <h3>ERP Implementation</h3>
-                <p>Complete enterprise resource planning solutions—from planning to deployment—integrated across finance, supply chain, and operations.</p>
-              </article>
-              <article class="card reveal">
                 <h3>Sales &amp; Purchase Systems</h3>
                 <p>Customer relationship management platforms that drive revenue growth.</p>
+                <a class="btn alt" href="index-sales-purchase.html">View details</a>
               </article>
               <article class="card reveal">
                 <h3>Supply Chain Optimization</h3>
                 <p>Streamline logistics, inventory, and procurement across your organization.</p>
+                <a class="btn alt" href="index-supply-chain-optimization.html">View details</a>
               </article>
               <article class="card reveal">
                 <h3>Finance &amp; Accounting System</h3>
                 <p>End-to-end implementation of accounting and finance platforms — general ledger, AP/AR, budgeting, financial reporting, and compliance management.</p>
-                <span style="display:inline-block;margin-top:0.6rem;padding:0.28rem 0.75rem;border-radius:20px;font-size:0.8rem;font-weight:700;background:rgba(109,230,211,0.1);border:1px solid rgba(109,230,211,0.3);color:#4de2cc;letter-spacing:0.04em;">Coming Soon</span>
+                <a class="btn alt" href="index-finance-accounting.html">View details</a>
               </article>
-            </div>
-          </div>
-        </section>
-
-        <section class="section" id="metrics">
-          <div class="container">
-            <h2 class="reveal">AD Tech Impact</h2>
-            <div class="stats">
-              <div class="stat reveal"><strong>500+</strong><span>Enterprise Clients</span></div>
-              <div class="stat reveal"><strong>1200+</strong><span>Systems Deployed</span></div>
-              <div class="stat reveal"><strong>$2.5B+</strong><span>Cost Savings Generated</span></div>
-              <div class="stat reveal"><strong>98%</strong><span>Client Satisfaction</span></div>
+              <article class="card reveal">
+                <h3>Special Customize System</h3>
+                <p>Bespoke system design and development tailored to your unique business workflows, processes, and industry requirements.</p>
+                <a class="btn alt" href="index-custom-system.html">View details</a>
+              </article>
             </div>
           </div>
         </section>
@@ -1128,6 +1158,48 @@
                 <p>HIPAA-compliant systems for patient management and operational efficiency.</p>
                 <a class="btn alt" href="index-healthcare.html">View details</a>
               </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="about">
+          <div class="container">
+            <h2 class="reveal">About Us</h2>
+            <div class="about-intro reveal">
+              <p>Our company builds custom software solutions that help businesses grow faster and operate smarter. We are a software development company specialising in web, mobile, and software applications for all businesses. Our team focuses on building reliable, scalable, and user-friendly systems tailored to each client's needs. We work closely with our clients to turn ideas into practical digital solutions.</p>
+              <p class="about-industries"><strong>Suitable for:</strong> All firms &mdash; Retail, Service, Hardware, Supermarket, Warehouse, MNC, Manufacturing, Construction, Hospitality, Logistics, Shipping</p>
+            </div>
+
+            <div class="about-grid">
+              <div class="about-block reveal">
+                <h3>Our Process</h3>
+                <ol class="about-list">
+                  <li><strong>Consultation</strong> &mdash; Understand your needs</li>
+                  <li><strong>Planning</strong> &mdash; Define scope and timeline</li>
+                  <li><strong>Development</strong> &mdash; Build and test the system</li>
+                  <li><strong>Deployment</strong> &mdash; Launch and support</li>
+                </ol>
+              </div>
+
+              <div class="about-block reveal">
+                <h3>Our Services</h3>
+                <ol class="about-list">
+                  <li>Custom Software Development</li>
+                  <li>Mobile App Development</li>
+                  <li>Web Application Development</li>
+                  <li>System Integration</li>
+                  <li>System Upgrading</li>
+                  <li>Maintenance &amp; Support</li>
+                </ol>
+              </div>
+
+              <div class="about-block reveal">
+                <h3>Why Choose Us</h3>
+                <p>We deliver high-quality, scalable solutions with a focus on long-term support and client satisfaction. Every system we build is designed to grow with your business.</p>
+                <h3 style="margin-top:1rem;">Get in Touch</h3>
+                <p>Contact us to discuss your project and see how we can help your business grow smarter.</p>
+                <a class="btn main" href="#contact" style="margin-top:0.8rem;display:inline-flex;">Contact Us</a>
+              </div>
             </div>
           </div>
         </section>
@@ -1202,7 +1274,59 @@
                 <p style="margin-top:0.5rem;"><a href="mailto:johnjew1988@gmail.com" style="color:var(--brand-400);text-decoration:none;">johnjew1988@gmail.com</a> &nbsp;·&nbsp; <a href="tel:+60162608552" style="color:var(--brand-400);text-decoration:none;">+60 16-260 8552</a></p>
               </div>
 
-              <form id="contactForm" class="cta-form" novalidate>
+              <!-- Request for Quotation Form -->
+              <form id="rfqForm" class="cta-form" novalidate>
+                <h4 style="margin:0 0 0.8rem;font-family:'Bricolage Grotesque',sans-serif;font-size:1rem;color:var(--brand-400);">Request for Quotation</h4>
+                <div class="cta-form-row">
+                  <div class="field">
+                    <label for="rfqName">Full name *</label>
+                    <input id="rfqName" name="rfqName" type="text" placeholder="John Smith" autocomplete="name" required />
+                    <p class="field-error" id="rfqNameError"></p>
+                  </div>
+                  <div class="field">
+                    <label for="rfqEmail">Email *</label>
+                    <input id="rfqEmail" name="rfqEmail" type="email" placeholder="john@company.com" autocomplete="email" required />
+                    <p class="field-error" id="rfqEmailError"></p>
+                  </div>
+                </div>
+                <div class="cta-form-row">
+                  <div class="field">
+                    <label for="rfqCompany">Company name</label>
+                    <input id="rfqCompany" name="rfqCompany" type="text" placeholder="Your Company Inc." autocomplete="organization" />
+                  </div>
+                  <div class="field">
+                    <label for="rfqPhone">Phone number</label>
+                    <input id="rfqPhone" name="rfqPhone" type="tel" placeholder="+60 12-345 6789" autocomplete="tel" />
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="rfqService">Service interested in</label>
+                  <select id="rfqService" name="rfqService">
+                    <option value="">Select a service</option>
+                    <option value="Sales and Purchase Systems">Sales and Purchase Systems</option>
+                    <option value="Supply Chain Optimization">Supply Chain Optimization</option>
+                    <option value="Finance and Accounting System">Finance and Accounting System</option>
+                    <option value="Special Customize System">Special Customize System</option>
+                    <option value="Custom Software Development">Custom Software Development</option>
+                    <option value="Mobile App Development">Mobile App Development</option>
+                    <option value="Web Application Development">Web Application Development</option>
+                    <option value="System Integration">System Integration</option>
+                    <option value="Maintenance and Support">Maintenance and Support</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="rfqMessage">Your requirements</label>
+                  <textarea id="rfqMessage" name="rfqMessage" maxlength="500" placeholder="Describe your project or business needs..."></textarea>
+                </div>
+                <div class="form-actions">
+                  <button class="btn main" id="rfqSubmitBtn" type="submit">Send Request</button>
+                  <p id="rfqStatus" class="form-status" aria-live="polite"></p>
+                </div>
+              </form>
+
+              <form id="contactForm" class="cta-form" novalidate style="margin-top:1.4rem;">
+                <h4 style="margin:0 0 0.8rem;font-family:'Bricolage Grotesque',sans-serif;font-size:1rem;color:var(--ink-300);">Schedule a Consultation</h4>
                 <div class="cta-form-row">
                   <div class="field">
                     <label for="contactName">Full name</label>
@@ -1279,6 +1403,58 @@
       const placeOrderBtn = document.getElementById("placeOrderBtn");
       const paymentMethodSelect = document.getElementById("checkoutPaymentMethod");
       const paymentBadgesNode = document.getElementById("paymentBadges");
+
+      // RFQ form handler
+      const rfqForm = document.getElementById("rfqForm");
+      const rfqStatus = document.getElementById("rfqStatus");
+      const rfqSubmitBtn = document.getElementById("rfqSubmitBtn");
+
+      rfqForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const name = rfqForm.elements.rfqName.value.trim();
+        const email = rfqForm.elements.rfqEmail.value.trim();
+        const nameError = document.getElementById("rfqNameError");
+        const emailError = document.getElementById("rfqEmailError");
+        nameError.textContent = "";
+        emailError.textContent = "";
+
+        if (!name) { nameError.textContent = "Full name is required."; return; }
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { emailError.textContent = "A valid email is required."; return; }
+
+        rfqSubmitBtn.disabled = true;
+        rfqSubmitBtn.textContent = "Sending…";
+        rfqStatus.textContent = "";
+
+        try {
+          const response = await fetch("/api/rfq", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              name,
+              email,
+              company: rfqForm.elements.rfqCompany.value.trim(),
+              phone: rfqForm.elements.rfqPhone.value.trim(),
+              service: rfqForm.elements.rfqService.value,
+              message: rfqForm.elements.rfqMessage.value.trim()
+            })
+          });
+          const data = await response.json();
+          if (response.ok) {
+            rfqStatus.style.color = "var(--brand-400)";
+            rfqStatus.textContent = data.message || "Request sent! We will contact you shortly.";
+            rfqForm.reset();
+          } else {
+            rfqStatus.style.color = "#f87171";
+            rfqStatus.textContent = data.error || "Something went wrong. Please try again.";
+          }
+        } catch (_error) {
+          rfqStatus.style.color = "#f87171";
+          rfqStatus.textContent = "Network error. Please try again.";
+        } finally {
+          rfqSubmitBtn.disabled = false;
+          rfqSubmitBtn.textContent = "Send Request";
+        }
+      });
       const paymentNoteNode = document.getElementById("paymentNote");
       const paymentHintNode = document.getElementById("paymentHint");
       const bankTransferDetailsNode = document.getElementById("bankTransferDetails");
@@ -1367,57 +1543,7 @@
 
       const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       const cartEmailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      const fallbackCatalog = [
-        {
-          id: "erp-jumpstart",
-          name: "ERP Jumpstart Package",
-          description: "Rapid assessment, process mapping, and implementation blueprint for ERP rollout.",
-          price: 2500,
-          category: "ERP"
-        },
-        {
-          id: "crm-acceleration",
-          name: "CRM Acceleration Package",
-          description: "Lead funnel optimization, automation setup, and dashboard configuration for sales teams.",
-          price: 1800,
-          category: "CRM"
-        },
-        {
-          id: "supply-chain-performance",
-          name: "Supply Chain Performance Package",
-          description: "Inventory and logistics optimization with KPI reporting and improvement roadmap.",
-          price: 2200,
-          category: "Supply Chain"
-        },
-        {
-          id: "data-migration-sprint",
-          name: "Data Migration Sprint",
-          description: "Structured source-to-target mapping, cleansing rules, and cutover planning for legacy system migration.",
-          price: 1600,
-          category: "Data"
-        },
-        {
-          id: "analytics-command-center",
-          name: "Analytics Command Center",
-          description: "Executive KPI dashboards, automated reporting, and decision-ready operational analytics setup.",
-          price: 2100,
-          category: "Analytics"
-        },
-        {
-          id: "retail-omnichannel-stack",
-          name: "Retail Omnichannel Stack",
-          description: "Connected commerce workflows for inventory, promotions, fulfillment, and customer engagement.",
-          price: 2400,
-          category: "Retail"
-        },
-        {
-          id: "healthcare-compliance-core",
-          name: "Healthcare Compliance Core",
-          description: "Compliance-focused workflow design, audit trails, and access control hardening for healthcare teams.",
-          price: 2800,
-          category: "Healthcare"
-        }
-      ];
+      const fallbackCatalog = [];
       let productCatalog = {};
       let allProducts = [];
       let activeCategory = "All";
@@ -1716,7 +1842,6 @@
                 <h3>${product.name}</h3>
                 <p>${product.description}</p>
                 <span class="product-category">${product.category || "General"}</span>
-                <span class="price-tag">${currency(product.price)}</span>
                 <div class="actions">
                   <button class="btn alt" type="button" data-add-to-cart="${product.id}">Add to Cart</button>
                 </div>
@@ -2219,6 +2344,344 @@
         renderProductCards(fallbackCatalog);
         setCheckoutStatus(error.message || "Could not load product pricing.");
       });
+    </script>
+
+    <!-- ═══ Floating AI Chat Widget ═══ -->
+    <style>
+      .ai-chat-widget {
+        position: fixed;
+        bottom: 1.5rem;
+        right: 1.5rem;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 0.75rem;
+      }
+      .ai-chat-toggle {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: var(--brand-500);
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 24px rgba(27, 198, 176, 0.5);
+        color: #fff;
+        position: relative;
+        animation: ai-float 3s ease-in-out infinite;
+        transition: box-shadow 0.2s;
+      }
+      .ai-chat-toggle:hover {
+        animation: none;
+        transform: scale(1.08);
+        box-shadow: 0 6px 32px rgba(27, 198, 176, 0.7);
+      }
+      @keyframes ai-float {
+        0%, 100% { transform: translateY(0); }
+        50%       { transform: translateY(-7px); }
+      }
+      .ai-chat-live-badge {
+        position: absolute;
+        top: -3px;
+        right: -3px;
+        background: #ff4d6d;
+        color: #fff;
+        font-size: 0.58rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        padding: 2px 5px;
+        border-radius: 99px;
+        line-height: 1;
+        border: 2px solid var(--bg-950);
+        pointer-events: none;
+      }
+      .ai-chat-panel {
+        width: 340px;
+        max-height: 490px;
+        background: var(--bg-900);
+        border: 1px solid var(--line);
+        border-radius: 1rem;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        box-shadow: 0 8px 48px rgba(0, 0, 0, 0.55);
+        transform-origin: bottom right;
+        animation: ai-panel-in 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+      }
+      .ai-chat-panel[hidden] { display: none; }
+      @keyframes ai-panel-in {
+        from { opacity: 0; transform: scale(0.82) translateY(20px); }
+        to   { opacity: 1; transform: scale(1) translateY(0); }
+      }
+      .ai-chat-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.8rem 1rem;
+        background: var(--bg-850);
+        border-bottom: 1px solid var(--line);
+        flex-shrink: 0;
+      }
+      .ai-chat-header-info {
+        display: flex;
+        align-items: center;
+        gap: 0.55rem;
+        font-family: 'Bricolage Grotesque', sans-serif;
+        font-weight: 600;
+        font-size: 0.9rem;
+        color: var(--ink-50);
+      }
+      .ai-chat-status-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--brand-500);
+        box-shadow: 0 0 7px var(--brand-500);
+        animation: ai-pulse 2s ease-in-out infinite;
+        flex-shrink: 0;
+      }
+      @keyframes ai-pulse {
+        0%, 100% { opacity: 1; }
+        50%       { opacity: 0.35; }
+      }
+      .ai-chat-close-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: var(--ink-300);
+        padding: 4px;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        transition: color 0.15s;
+        line-height: 1;
+      }
+      .ai-chat-close-btn:hover { color: var(--ink-50); }
+      .ai-chat-messages {
+        flex: 1;
+        overflow-y: auto;
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+        scrollbar-width: thin;
+        scrollbar-color: var(--line) transparent;
+      }
+      .ai-msg { display: flex; }
+      .ai-msg.user  { justify-content: flex-end; }
+      .ai-msg.bot   { justify-content: flex-start; }
+      .ai-msg-bubble {
+        max-width: 84%;
+        padding: 0.6rem 0.85rem;
+        border-radius: 1rem;
+        font-size: 0.875rem;
+        line-height: 1.55;
+        word-break: break-word;
+      }
+      .ai-msg.user .ai-msg-bubble {
+        background: var(--brand-500);
+        color: #fff;
+        border-bottom-right-radius: 4px;
+      }
+      .ai-msg.bot .ai-msg-bubble {
+        background: var(--surface-soft);
+        color: var(--ink-50);
+        border: 1px solid var(--line);
+        border-bottom-left-radius: 4px;
+      }
+      .ai-msg-typing .ai-msg-bubble {
+        display: flex;
+        gap: 5px;
+        align-items: center;
+        padding: 0.75rem 1rem;
+      }
+      .ai-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--brand-500);
+        animation: ai-bounce 1.3s ease-in-out infinite;
+      }
+      .ai-dot:nth-child(2) { animation-delay: 0.18s; }
+      .ai-dot:nth-child(3) { animation-delay: 0.36s; }
+      @keyframes ai-bounce {
+        0%, 80%, 100% { transform: translateY(0); opacity: 0.45; }
+        40%           { transform: translateY(-7px); opacity: 1; }
+      }
+      .ai-chat-form {
+        display: flex;
+        gap: 0.5rem;
+        padding: 0.7rem 0.75rem;
+        border-top: 1px solid var(--line);
+        background: var(--bg-850);
+        flex-shrink: 0;
+      }
+      .ai-chat-input {
+        flex: 1;
+        background: var(--surface-soft);
+        border: 1px solid var(--line);
+        border-radius: 0.5rem;
+        color: var(--ink-50);
+        font-size: 0.875rem;
+        padding: 0.52rem 0.75rem;
+        outline: none;
+        font-family: 'Space Grotesk', sans-serif;
+        transition: border-color 0.15s;
+        min-width: 0;
+      }
+      .ai-chat-input:focus { border-color: var(--brand-500); }
+      .ai-chat-input::placeholder { color: var(--ink-300); }
+      .ai-chat-send-btn {
+        width: 38px;
+        height: 38px;
+        border-radius: 0.5rem;
+        background: var(--brand-500);
+        border: none;
+        cursor: pointer;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        transition: background 0.15s, transform 0.1s;
+      }
+      .ai-chat-send-btn:hover   { background: var(--brand-400); }
+      .ai-chat-send-btn:active  { transform: scale(0.92); }
+      .ai-chat-send-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+      @media (max-width: 400px) {
+        .ai-chat-panel { width: calc(100vw - 2rem); }
+        .ai-chat-widget { right: 1rem; bottom: 1rem; }
+      }
+    </style>
+
+    <div id="aiChatWidget" class="ai-chat-widget">
+      <div id="aiChatPanel" class="ai-chat-panel" hidden>
+        <div class="ai-chat-header">
+          <div class="ai-chat-header-info">
+            <span class="ai-chat-status-dot"></span>
+            <span>AD Tech Assistant</span>
+          </div>
+          <button id="aiChatCloseBtn" class="ai-chat-close-btn" aria-label="Close chat">
+            <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M1.5 1.5l12 12M13.5 1.5l-12 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+        <div id="aiChatMessages" class="ai-chat-messages" role="log" aria-live="polite" aria-label="Chat messages">
+          <div class="ai-msg bot">
+            <div class="ai-msg-bubble">Hi! I'm the AD Tech assistant. Ask me about our services, how we work, or how we can help your business.</div>
+          </div>
+        </div>
+        <form id="aiChatForm" class="ai-chat-form" novalidate autocomplete="off">
+          <input id="aiChatInput" class="ai-chat-input" type="text" placeholder="Ask a question…" maxlength="500" aria-label="Chat message" />
+          <button class="ai-chat-send-btn" type="submit" aria-label="Send message">
+            <svg width="17" height="17" viewBox="0 0 17 17" fill="none"><path d="M2 8.5h13M8.5 2l6.5 6.5-6.5 6.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </form>
+      </div>
+      <button id="aiChatToggleBtn" class="ai-chat-toggle" aria-label="Open AI assistant" aria-expanded="false">
+        <svg id="aiChatIconOpen" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg id="aiChatIconClose" width="20" height="20" viewBox="0 0 20 20" fill="none" hidden><path d="M2 2l16 16M18 2L2 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <span class="ai-chat-live-badge">AI</span>
+      </button>
+    </div>
+
+    <script>
+      (function () {
+        var panel       = document.getElementById("aiChatPanel");
+        var toggleBtn   = document.getElementById("aiChatToggleBtn");
+        var closeBtn    = document.getElementById("aiChatCloseBtn");
+        var form        = document.getElementById("aiChatForm");
+        var input       = document.getElementById("aiChatInput");
+        var msgBox      = document.getElementById("aiChatMessages");
+        var iconOpen    = document.getElementById("aiChatIconOpen");
+        var iconClose   = document.getElementById("aiChatIconClose");
+        var sendBtn     = form.querySelector(".ai-chat-send-btn");
+        var isOpen      = false;
+        var isLoading   = false;
+        var chatHistory = [];
+
+        function openPanel() {
+          isOpen = true;
+          panel.hidden = false;
+          toggleBtn.setAttribute("aria-expanded", "true");
+          iconOpen.hidden = true;
+          iconClose.hidden = false;
+          input.focus();
+        }
+
+        function closePanel() {
+          isOpen = false;
+          panel.hidden = true;
+          toggleBtn.setAttribute("aria-expanded", "false");
+          iconOpen.hidden = false;
+          iconClose.hidden = true;
+        }
+
+        toggleBtn.addEventListener("click", function () { isOpen ? closePanel() : openPanel(); });
+        closeBtn.addEventListener("click", closePanel);
+
+        function scrollBottom() { msgBox.scrollTop = msgBox.scrollHeight; }
+
+        function addMessage(role, text) {
+          var div    = document.createElement("div");
+          div.className = "ai-msg " + role;
+          var bubble = document.createElement("div");
+          bubble.className = "ai-msg-bubble";
+          bubble.textContent = text;
+          div.appendChild(bubble);
+          msgBox.appendChild(div);
+          scrollBottom();
+          return div;
+        }
+
+        function showTyping() {
+          var div = document.createElement("div");
+          div.className = "ai-msg bot ai-msg-typing";
+          div.innerHTML = '<div class="ai-msg-bubble"><span class="ai-dot"></span><span class="ai-dot"></span><span class="ai-dot"></span></div>';
+          msgBox.appendChild(div);
+          scrollBottom();
+          return div;
+        }
+
+        form.addEventListener("submit", function (e) {
+          e.preventDefault();
+          var text = input.value.trim();
+          if (!text || isLoading) return;
+          input.value = "";
+          isLoading = true;
+          sendBtn.disabled = true;
+
+          addMessage("user", text);
+          chatHistory.push({ role: "user", content: text });
+
+          var typing = showTyping();
+
+          fetch("/api/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message: text, history: chatHistory.slice(0, -1) })
+          })
+          .then(function (res) { return res.json(); })
+          .then(function (data) {
+            typing.remove();
+            var reply = data.reply || data.error || "Sorry, I couldn't get a response.";
+            addMessage("bot", reply);
+            chatHistory.push({ role: "assistant", content: reply });
+            if (chatHistory.length > 20) chatHistory.splice(0, 2);
+          })
+          .catch(function () {
+            typing.remove();
+            addMessage("bot", "Connection error. Please try again.");
+          })
+          .finally(function () {
+            isLoading = false;
+            sendBtn.disabled = false;
+            input.focus();
+          });
+        });
+      })();
     </script>
   </body>
 </html>

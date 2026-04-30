@@ -3,6 +3,7 @@ const fs = require("fs");
 const express = require("express");
 const sqlite3 = require("sqlite3").verbose();
 const Stripe = require("stripe");
+const nodemailer = require("nodemailer");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -1409,6 +1410,123 @@ app.get("/api/register", (req, res) => {
       return res.json({ users: rows });
     }
   );
+});
+
+// RFQ email endpoint
+app.post("/api/rfq", async (req, res) => {
+  const { name, email, company, phone, service, message } = req.body || {};
+
+  if (!name || name.trim().length < 2) {
+    return res.status(400).json({ error: "Full name must be at least 2 characters." });
+  }
+
+  if (!email || !emailPattern.test(email.trim())) {
+    return res.status(400).json({ error: "Please provide a valid email address." });
+  }
+
+  const smtpUser = process.env.SMTP_USER || "";
+  const smtpPass = process.env.SMTP_PASS || "";
+
+  if (!smtpUser || !smtpPass) {
+    console.warn("SMTP credentials not configured — RFQ email not sent.");
+    return res.status(200).json({ message: "RFQ received. (Email delivery pending SMTP setup.)" });
+  }
+
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: { user: smtpUser, pass: smtpPass }
+  });
+
+  const submittedAt = new Date().toLocaleString("en-MY", { timeZone: "Asia/Kuala_Lumpur" });
+
+  const mailOptions = {
+    from: `"AD Tech RFQ" <${smtpUser}>`,
+    to: "johnjew1988@gmail.com",
+    replyTo: email.trim(),
+    subject: `New Request for Quotation — ${name.trim()}`,
+    html: `
+      <h2 style="color:#1bc6b0;">New Request for Quotation</h2>
+      <table style="font-family:sans-serif;font-size:14px;border-collapse:collapse;width:100%;">
+        <tr><td style="padding:6px 12px;font-weight:bold;">Name</td><td style="padding:6px 12px;">${name.trim()}</td></tr>
+        <tr style="background:#f4f4f4;"><td style="padding:6px 12px;font-weight:bold;">Email</td><td style="padding:6px 12px;">${email.trim()}</td></tr>
+        <tr><td style="padding:6px 12px;font-weight:bold;">Company</td><td style="padding:6px 12px;">${(company || "").trim() || "-"}</td></tr>
+        <tr style="background:#f4f4f4;"><td style="padding:6px 12px;font-weight:bold;">Phone</td><td style="padding:6px 12px;">${(phone || "").trim() || "-"}</td></tr>
+        <tr><td style="padding:6px 12px;font-weight:bold;">Service Interested</td><td style="padding:6px 12px;">${(service || "").trim() || "-"}</td></tr>
+        <tr style="background:#f4f4f4;"><td style="padding:6px 12px;font-weight:bold;">Message</td><td style="padding:6px 12px;">${(message || "").trim() || "-"}</td></tr>
+        <tr><td style="padding:6px 12px;font-weight:bold;">Submitted</td><td style="padding:6px 12px;">${submittedAt} (MYT)</td></tr>
+      </table>
+    `
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    return res.status(200).json({ message: "Your quotation request has been sent. We will contact you shortly." });
+  } catch (error) {
+    console.error("Failed to send RFQ email:", error.message);
+    return res.status(500).json({ error: "Failed to send email. Please try again or contact us directly." });
+  }
+});
+
+// ─── AI Chat ───────────────────────────────────────────────────────────────
+const openaiApiKey = process.env.OPENAI_API_KEY || "";
+
+app.post("/api/chat", async (req, res) => {
+  const { message, history } = req.body || {};
+
+  if (!message || typeof message !== "string" || !message.trim()) {
+    return res.status(400).json({ error: "Message is required." });
+  }
+
+  if (message.trim().length > 1000) {
+    return res.status(400).json({ error: "Message too long." });
+  }
+
+  if (!openaiApiKey) {
+    return res.status(503).json({ error: "AI assistant is not available yet. Please contact us via the form below." });
+  }
+
+  const systemPrompt = `You are the AD Tech assistant, a helpful and professional AI for AD Tech — an enterprise business systems consultancy. AD Tech provides: Sales and Purchase Systems (invoicing, delivery orders, sales orders, costing), Supply Chain Optimization, Finance & Accounting System (GL, AP, AR, budgeting, tax, fixed assets), and Special Customize Systems (custom software, system integration, multi-platform deployment). Be concise, friendly, and professional. For pricing questions, direct users to submit a Request for Quotation via the Contact section. Never fabricate specific prices.`;
+
+  const messages = [{ role: "system", content: systemPrompt }];
+
+  if (Array.isArray(history)) {
+    history.slice(-10).forEach((msg) => {
+      if (msg && (msg.role === "user" || msg.role === "assistant") && typeof msg.content === "string") {
+        messages.push({ role: msg.role, content: msg.content.slice(0, 1000) });
+      }
+    });
+  }
+
+  messages.push({ role: "user", content: message.trim() });
+
+  try {
+    const aiRes = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${openaiApiKey}`
+      },
+      body: JSON.stringify({
+        model: "gpt-4o-mini",
+        messages,
+        max_tokens: 400,
+        temperature: 0.7
+      })
+    });
+
+    if (!aiRes.ok) {
+      const errBody = await aiRes.json().catch(() => ({}));
+      console.error("OpenAI error:", errBody);
+      return res.status(502).json({ error: "AI service error. Please try again shortly." });
+    }
+
+    const aiData = await aiRes.json();
+    const reply = aiData.choices?.[0]?.message?.content?.trim() || "Sorry, I couldn't generate a response.";
+    return res.json({ reply });
+  } catch (err) {
+    console.error("Chat endpoint error:", err.message);
+    return res.status(500).json({ error: "Failed to reach AI service. Please try again." });
+  }
 });
 
 app.listen(PORT, () => {

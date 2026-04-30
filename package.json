@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "express": "^4.21.2",
+    "nodemailer": "^6.9.14",
     "puppeteer": "^24.42.0",
     "sqlite3": "^5.1.7",
     "stripe": "^18.4.0"
