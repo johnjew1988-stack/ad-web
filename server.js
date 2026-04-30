@@ -17,71 +17,7 @@ const dataDir = process.env.DATA_DIR
   : path.join(__dirname, "data");
 const dbPath = path.join(dataDir, "adtech_users.db");
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const seededProducts = [
-  {
-    id: "erp-jumpstart",
-    name: "ERP Jumpstart Package",
-    description: "Rapid assessment, process mapping, and implementation blueprint for ERP rollout.",
-    price: 2500,
-    currency: "USD",
-    category: "ERP",
-    sortOrder: 1
-  },
-  {
-    id: "crm-acceleration",
-    name: "CRM Acceleration Package",
-    description: "Lead funnel optimization, automation setup, and dashboard configuration for sales teams.",
-    price: 1800,
-    currency: "USD",
-    category: "CRM",
-    sortOrder: 2
-  },
-  {
-    id: "supply-chain-performance",
-    name: "Supply Chain Performance Package",
-    description: "Inventory and logistics optimization with KPI reporting and improvement roadmap.",
-    price: 2200,
-    currency: "USD",
-    category: "Supply Chain",
-    sortOrder: 3
-  },
-  {
-    id: "data-migration-sprint",
-    name: "Data Migration Sprint",
-    description: "Structured source-to-target mapping, cleansing rules, and cutover planning for legacy system migration.",
-    price: 1600,
-    currency: "USD",
-    category: "Data",
-    sortOrder: 4
-  },
-  {
-    id: "analytics-command-center",
-    name: "Analytics Command Center",
-    description: "Executive KPI dashboards, automated reporting, and decision-ready operational analytics setup.",
-    price: 2100,
-    currency: "USD",
-    category: "Analytics",
-    sortOrder: 5
-  },
-  {
-    id: "retail-omnichannel-stack",
-    name: "Retail Omnichannel Stack",
-    description: "Connected commerce workflows for inventory, promotions, fulfillment, and customer engagement.",
-    price: 2400,
-    currency: "USD",
-    category: "Retail",
-    sortOrder: 6
-  },
-  {
-    id: "healthcare-compliance-core",
-    name: "Healthcare Compliance Core",
-    description: "Compliance-focused workflow design, audit trails, and access control hardening for healthcare teams.",
-    price: 2800,
-    currency: "USD",
-    category: "Healthcare",
-    sortOrder: 7
-  }
-];
+const seededProducts = [];
 
 if (!fs.existsSync(dataDir)) {
   fs.mkdirSync(dataDir, { recursive: true });

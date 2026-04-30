@@ -1217,7 +1217,7 @@
                   <div id="catalogFilters" class="catalog-filters" aria-label="Catalog filters"></div>
                 </div>
                 <div id="productList" class="card-grid">
-                  <div class="product-list-empty">Loading product catalog...</div>
+                  <div class="product-list-empty">No packages available at the moment. Please contact us for a custom quote.</div>
                 </div>
               </div>
 
@@ -1859,13 +1859,18 @@
       };
 
       const loadProducts = async () => {
-        renderProductListMessage("Loading product catalog...");
+        renderProductListMessage("Loading...");
 
         const response = await fetch(apiUrl("/api/products"));
         const payload = await response.json().catch(() => ({}));
 
         if (!response.ok || !Array.isArray(payload.products)) {
           throw new Error(payload.error || "Could not load products.");
+        }
+
+        if (!payload.products.length) {
+          renderProductListMessage("No packages available at the moment. Please contact us for a custom quote.");
+          return;
         }
 
         productCatalog = {};
@@ -2340,9 +2345,8 @@
         });
       }
 
-      loadProducts().catch((error) => {
-        renderProductCards(fallbackCatalog);
-        setCheckoutStatus(error.message || "Could not load product pricing.");
+      loadProducts().catch(() => {
+        renderProductListMessage("No packages available at the moment. Please contact us for a custom quote.");
       });
     </script>
 
