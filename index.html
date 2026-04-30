@@ -1207,60 +1207,21 @@
         <section class="section" id="purchase">
           <div class="container">
             <h2 class="reveal">Purchase Service Packages</h2>
-            <div class="purchase-layout">
-              <div class="product-list-shell reveal">
-                <div class="product-list-head">
-                  <div>
-                    <h3>Catalog List</h3>
-                    <p>Browse the current package catalog loaded from the product database.</p>
-                  </div>
-                  <div id="catalogFilters" class="catalog-filters" aria-label="Catalog filters"></div>
+            <div class="product-list-shell reveal">
+              <div class="product-list-head">
+                <div>
+                  <h3>Catalog List</h3>
+                  <p>Browse the current package catalog.</p>
                 </div>
-                <div id="productList" class="card-grid">
-                  <div class="product-list-empty">No packages available at the moment. Please contact us for a custom quote.</div>
-                </div>
+                <div id="catalogFilters" class="catalog-filters" aria-label="Catalog filters"></div>
               </div>
-
-              <aside class="cart-panel reveal" aria-label="Shopping cart">
-                <h3>Your Cart</h3>
-                <ul id="cartItems" class="cart-items">
-                  <li class="cart-empty">Your cart is empty.</li>
-                </ul>
-
-                <div class="cart-summary">
-                  <span>Total</span>
-                  <strong id="cartTotal">$0</strong>
-                </div>
-
-                <form id="checkoutForm" class="checkout-form" novalidate>
-                  <input id="checkoutName" name="checkoutName" type="text" placeholder="Full name" autocomplete="name" required />
-                  <input id="checkoutEmail" name="checkoutEmail" type="email" placeholder="Email address" autocomplete="email" required />
-                  <select id="checkoutPaymentMethod" name="checkoutPaymentMethod" aria-label="Payment term">
-                    <option value="card">Card (Visa / Mastercard)</option>
-                    <option value="cash">Cash</option>
-                    <option value="bank_transfer">Bank Transfer</option>
-                  </select>
-                  <div id="paymentBadges" class="payment-badges" aria-label="Accepted payment cards">
-                    <span class="payment-badge visa">Visa</span>
-                    <span class="payment-badge mastercard">Mastercard</span>
-                  </div>
-                  <p id="paymentNote" class="payment-note">Secure card checkout powered by Stripe. Visa and Mastercard are accepted.</p>
-                  <div id="cardElement" class="card-element-shell" aria-label="Card details"></div>
-                  <p id="paymentHint" class="payment-hint">Use a Visa or Mastercard to complete payment.</p>
-                  <div id="bankTransferDetails" class="bank-transfer-details" hidden>
-                    <p class="bank-transfer-title">Bank Transfer Details</p>
-                    <ul class="bank-transfer-list">
-                      <li><span>Bank:</span> AD Tech Business Bank</li>
-                      <li><span>Account Name:</span> AD Tech Enterprise Ltd</li>
-                      <li><span>Account Number:</span> 0012345678</li>
-                      <li><span>Routing / Sort Code:</span> 021-000-021</li>
-                      <li><span>Reference:</span> Use your invoice number</li>
-                    </ul>
-                  </div>
-                  <button class="btn main" id="placeOrderBtn" type="submit">Pay with Card</button>
-                  <p id="checkoutStatus" class="form-status" aria-live="polite"></p>
-                </form>
-              </aside>
+              <div id="productList" class="card-grid">
+                <div class="product-list-empty">No packages available at the moment. Please contact us for a custom quote.</div>
+              </div>
+              <div style="margin-top:1.5rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
+                <a href="admin-sales.html" class="btn main" style="display:inline-flex;align-items:center;gap:0.5rem;">View Cart &amp; Checkout <span id="cartCountBadge"></span> &rarr;</a>
+                <span id="cartCountMsg" style="color:var(--ink-300);font-size:0.88rem;"></span>
+              </div>
             </div>
           </div>
         </section>
@@ -1397,12 +1358,12 @@
       const contactStatus = document.getElementById("contactStatus");
       const submitBtn = document.getElementById("contactSubmitBtn");
       const cartItemsNode = document.getElementById("cartItems");
-      const cartTotalNode = document.getElementById("cartTotal");
-      const checkoutForm = document.getElementById("checkoutForm");
-      const checkoutStatus = document.getElementById("checkoutStatus");
-      const placeOrderBtn = document.getElementById("placeOrderBtn");
-      const paymentMethodSelect = document.getElementById("checkoutPaymentMethod");
-      const paymentBadgesNode = document.getElementById("paymentBadges");
+      const cartTotalNode = null;
+      const checkoutForm = null;
+      const checkoutStatus = null;
+      const placeOrderBtn = null;
+      const paymentMethodSelect = null;
+      const paymentBadgesNode = null;
 
       // RFQ form handler
       const rfqForm = document.getElementById("rfqForm");
@@ -1776,10 +1737,7 @@
         localStorage.setItem("adtech-cart", JSON.stringify(cartState));
       };
 
-      const setCheckoutStatus = (message, color = "#ffb2b8") => {
-        checkoutStatus.textContent = message;
-        checkoutStatus.style.color = color;
-      };
+      const setCheckoutStatus = (_message, _color) => {};
 
       const getCartEntries = () => Object.entries(cartState).filter(([, qty]) => qty > 0);
 
@@ -1943,13 +1901,23 @@
         });
       };
 
+      const updateCartBadge = () => {
+        const entries = getCartEntries();
+        const badge = document.getElementById("cartCountBadge");
+        const msg = document.getElementById("cartCountMsg");
+        if (badge) badge.textContent = entries.length ? `(${entries.reduce((s, [,q]) => s + q, 0)} item${entries.reduce((s, [,q]) => s + q, 0) === 1 ? "" : "s"})` : "";
+        if (msg) msg.textContent = entries.length ? `${entries.reduce((s, [,q]) => s + q, 0)} item(s) in cart` : "Cart is empty";
+      };
+
       const renderCart = () => {
+        updateCartBadge();
+        return;
+      };
+
+      const _renderCartFull = () => {
         const entries = getCartEntries();
 
         if (!entries.length) {
-          cartItemsNode.innerHTML = '<li class="cart-empty">Your cart is empty.</li>';
-          cartTotalNode.textContent = currency(0);
-          placeOrderBtn.disabled = true;
           return;
         }
 
@@ -1989,7 +1957,7 @@
 
         cartState[productId] = (cartState[productId] || 0) + 1;
         saveCart();
-        renderCart();
+        updateCartBadge();
       };
 
       const validateField = (field) => {
@@ -2068,7 +2036,6 @@
         }
 
         addToCart(addButton.getAttribute("data-add-to-cart"));
-        setCheckoutStatus("Item added to cart.", "#9ef3db");
       });
 
       catalogFiltersNode.addEventListener("click", (event) => {
@@ -2082,190 +2049,7 @@
         renderProductCards(allProducts);
       });
 
-      cartItemsNode.addEventListener("click", (event) => {
-        const removeId = event.target.getAttribute("data-remove-item");
-
-        if (!removeId) {
-          return;
-        }
-
-        delete cartState[removeId];
-        saveCart();
-        renderCart();
-      });
-
-      checkoutForm.addEventListener("submit", async (event) => {
-        event.preventDefault();
-
-        const name = checkoutForm.elements.checkoutName.value.trim();
-        const email = checkoutForm.elements.checkoutEmail.value.trim();
-        const cartEntries = getCartEntries();
-        const paymentMethod = getSelectedCheckoutPaymentMethod();
-        const methodConfig = paymentMethodConfig[paymentMethod] || paymentMethodConfig.card;
-
-        if (!cartEntries.length) {
-          setCheckoutStatus("Your cart is empty.");
-          return;
-        }
-
-        if (name.length < 2) {
-          setCheckoutStatus("Please enter your full name.");
-          return;
-        }
-
-        if (!cartEmailPattern.test(email)) {
-          setCheckoutStatus("Please enter a valid email address.");
-          return;
-        }
-
-        const invoiceSnapshot = buildInvoiceSnapshot({
-          customerName: name,
-          customerEmail: email,
-          cartEntries,
-          paymentMethod
-        });
-
-        placeOrderBtn.disabled = true;
-        placeOrderBtn.textContent = methodConfig.processingText;
-
-        try {
-          if (paymentMethod === "card") {
-            await ensureStripeReady();
-
-            const paymentResponse = await fetch(apiUrl("/api/create-payment-intent"), {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json"
-              },
-              body: JSON.stringify({
-                customerName: name,
-                customerEmail: email,
-                items: buildOrderItems()
-              })
-            });
-
-            const paymentPayload = await paymentResponse.json().catch(() => ({}));
-
-            if (!paymentResponse.ok || !paymentPayload.clientSecret) {
-              throw new Error(paymentPayload.error || "Could not start card payment.");
-            }
-
-            const result = await stripeInstance.confirmCardPayment(paymentPayload.clientSecret, {
-              payment_method: {
-                card: cardElement,
-                billing_details: {
-                  name,
-                  email
-                }
-              }
-            });
-
-            if (result.error) {
-              throw new Error(result.error.message || "Card payment failed.");
-            }
-
-            if (!result.paymentIntent || result.paymentIntent.status !== "succeeded") {
-              throw new Error("Payment was not completed.");
-            }
-
-            const confirmResponse = await fetch(apiUrl("/api/payment-success"), {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json"
-              },
-              body: JSON.stringify({
-                paymentIntentId: result.paymentIntent.id
-              })
-            });
-
-            const confirmPayload = await confirmResponse.json().catch(() => ({}));
-
-            if (!confirmResponse.ok) {
-              throw new Error(confirmPayload.error || "Payment completed but confirmation failed.");
-            }
-
-            try {
-              await downloadInvoicePdf(invoiceSnapshot, {
-                invoiceNumber: confirmPayload.invoice?.invoiceNumber,
-                paymentIntentId: confirmPayload.invoice?.paymentIntentId || result.paymentIntent.id,
-                status: confirmPayload.invoice?.status || "paid",
-                paymentMethod: confirmPayload.invoice?.paymentMethod || "card"
-              });
-            } catch (_error) {
-              setCheckoutStatus("Payment successful, but invoice download failed.", "#f5c97a");
-            }
-
-            cartState = {};
-            saveCart();
-            renderCart();
-            checkoutForm.reset();
-            checkoutForm.elements.checkoutPaymentMethod.value = "card";
-            suppressCheckoutStatusError = true;
-            updateCheckoutPaymentUI();
-            setCheckoutStatus("Card payment successful. Invoice generated.", "#9ef3db");
-            setTimeout(() => { suppressCheckoutStatusError = false; }, 1000);
-          } else {
-            const offlineResponse = await fetch(apiUrl("/api/create-offline-order"), {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json"
-              },
-              body: JSON.stringify({
-                customerName: name,
-                customerEmail: email,
-                items: buildOrderItems(),
-                paymentMethod
-              })
-            });
-
-            const offlinePayload = await offlineResponse.json().catch(() => ({}));
-
-            if (!offlineResponse.ok) {
-              throw new Error(offlinePayload.error || "Could not create offline order.");
-            }
-
-            const savedInvoice = offlinePayload.invoice || {};
-            const invoiceForPdf = {
-              customerName: savedInvoice.customerName || invoiceSnapshot.customerName,
-              customerEmail: savedInvoice.customerEmail || invoiceSnapshot.customerEmail,
-              items: Array.isArray(savedInvoice.items) && savedInvoice.items.length ? savedInvoice.items : invoiceSnapshot.items,
-              totalAmount: Number(savedInvoice.totalAmount || invoiceSnapshot.totalAmount),
-              paymentMethod: savedInvoice.paymentMethod || paymentMethod,
-              createdAtIso: savedInvoice.issuedAt || invoiceSnapshot.createdAtIso
-            };
-
-            try {
-              await downloadInvoicePdf(invoiceForPdf, {
-                invoiceNumber: savedInvoice.invoiceNumber,
-                paymentIntentId: savedInvoice.paymentIntentId,
-                status: savedInvoice.status || "pending",
-                paymentMethod: savedInvoice.paymentMethod || paymentMethod
-              });
-            } catch (_error) {
-              setCheckoutStatus("Order saved, but invoice download failed.", "#f5c97a");
-            }
-
-            cartState = {};
-            saveCart();
-            renderCart();
-            checkoutForm.reset();
-            checkoutForm.elements.checkoutPaymentMethod.value = "card";
-            suppressCheckoutStatusError = true;
-            updateCheckoutPaymentUI();
-            setCheckoutStatus(
-              paymentMethod === "cash"
-                ? "Cash order saved as pending. Invoice generated for accounting."
-                : "Bank transfer order saved as pending. Invoice generated for accounting.",
-              "#9ef3db"
-            );
-            setTimeout(() => { suppressCheckoutStatusError = false; }, 1000);
-          }
-        } catch (error) {
-          setCheckoutStatus(error.message || "Checkout failed. Please try again.");
-        } finally {
-          placeOrderBtn.disabled = !getCartEntries().length;
-        }
-      });
+      // Cart item removal handled in admin-sales.html\n\n      // Checkout form handled in admin-sales.html
 
       contactForm.elements.privacyConsent.addEventListener("change", () => validateField("privacyConsent"));
 
@@ -2335,15 +2119,7 @@
       );
 
       document.querySelectorAll(".reveal").forEach((element) => observer.observe(element));
-      renderProductCards(fallbackCatalog);
-      renderCart();
-      updateCheckoutPaymentUI();
-
-      if (paymentMethodSelect) {
-        paymentMethodSelect.addEventListener("change", () => {
-          updateCheckoutPaymentUI();
-        });
-      }
+      updateCartBadge();
 
       loadProducts().catch(() => {
         renderProductListMessage("No packages available at the moment. Please contact us for a custom quote.");

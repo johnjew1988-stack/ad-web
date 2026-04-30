@@ -1,0 +1,940 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AD Tech - Sales Order</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <script src="https://js.stripe.com/v3/" async></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+      :root {
+        --bg: #07131b;
+        --bg2: #041018;
+        --panel: rgba(10, 25, 36, 0.92);
+        --panel-soft: rgba(12, 31, 44, 0.68);
+        --text: #effcff;
+        --muted: #95b8c7;
+        --line: rgba(104, 228, 209, 0.18);
+        --brand: #1bc6b0;
+        --brand-deep: #0c5f95;
+        --danger: #ffb2b8;
+        --success: #9ef3db;
+        --warn: #f5c97a;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Space Grotesk", system-ui, sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(circle at top left, rgba(27, 198, 176, 0.18), transparent 34%),
+          radial-gradient(circle at top right, rgba(12, 95, 149, 0.24), transparent 30%),
+          linear-gradient(180deg, #041018, var(--bg));
+      }
+
+      h1, h2, h3, h4, p { margin: 0; }
+
+      .shell {
+        width: min(1100px, calc(100% - 2rem));
+        margin: 0 auto;
+        padding: 2rem 0 4rem;
+        display: grid;
+        gap: 1rem;
+      }
+
+      .panel {
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        background: var(--panel);
+        padding: 1.35rem;
+        box-shadow: 0 24px 48px rgba(0, 0, 0, 0.22);
+      }
+
+      .panel-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin-bottom: 1.25rem;
+      }
+
+      .muted { color: var(--muted); }
+
+      .layout {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 1rem;
+        align-items: start;
+      }
+
+      @media (max-width: 780px) {
+        .layout { grid-template-columns: 1fr; }
+      }
+
+      /* ── Buttons ── */
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.4rem;
+        border: 1px solid transparent;
+        border-radius: 14px;
+        padding: 0.72rem 1rem;
+        font: inherit;
+        font-size: 0.9rem;
+        font-weight: 700;
+        cursor: pointer;
+        text-decoration: none;
+        transition: opacity 0.15s, transform 0.1s;
+      }
+      .btn:active { transform: scale(0.97); }
+      .btn.main {
+        color: #fff;
+        background: linear-gradient(135deg, var(--brand), var(--brand-deep));
+      }
+      .btn.alt {
+        color: var(--text);
+        background: rgba(255, 255, 255, 0.05);
+        border-color: var(--line);
+      }
+      .btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+
+      /* ── Cart ── */
+      .cart-section { display: grid; gap: 0.9rem; }
+
+      .cart-items {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        gap: 0.55rem;
+        min-height: 60px;
+      }
+
+      .cart-item {
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 0.7rem 0.85rem;
+        background: var(--panel-soft);
+        display: grid;
+        gap: 0.2rem;
+      }
+
+      .cart-item-top {
+        display: flex;
+        justify-content: space-between;
+        gap: 0.5rem;
+        align-items: flex-start;
+      }
+
+      .cart-item-name { font-weight: 700; }
+
+      .cart-item-meta { color: var(--muted); font-size: 0.86rem; }
+
+      .cart-item-controls {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        margin-top: 0.35rem;
+      }
+
+      .qty-btn {
+        width: 26px;
+        height: 26px;
+        border-radius: 8px;
+        border: 1px solid var(--line);
+        background: rgba(255,255,255,0.06);
+        color: var(--text);
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.15s;
+      }
+      .qty-btn:hover { background: rgba(27,198,176,0.18); }
+
+      .qty-value { font-weight: 700; min-width: 24px; text-align: center; font-size: 0.9rem; }
+
+      .remove-btn {
+        border: none;
+        background: none;
+        color: var(--muted);
+        cursor: pointer;
+        font-size: 0.8rem;
+        padding: 2px 6px;
+        border-radius: 6px;
+        transition: color 0.15s;
+        margin-left: auto;
+      }
+      .remove-btn:hover { color: var(--danger); }
+
+      .cart-empty { color: var(--muted); font-size: 0.92rem; padding: 1rem 0; }
+
+      .cart-summary {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.75rem;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: var(--panel-soft);
+        font-weight: 700;
+      }
+
+      .cart-total-amount { font-size: 1.1rem; color: var(--brand); }
+
+      /* ── Checkout form ── */
+      .checkout-section { display: grid; gap: 0.9rem; }
+
+      .field {
+        display: grid;
+        gap: 0.32rem;
+      }
+
+      .field label {
+        color: var(--muted);
+        font-size: 0.85rem;
+        font-weight: 600;
+      }
+
+      .field input,
+      .field select,
+      .field textarea {
+        width: 100%;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: var(--panel-soft);
+        color: var(--text);
+        font: inherit;
+        font-size: 0.93rem;
+        padding: 0.68rem 0.8rem;
+        outline: none;
+        transition: border-color 0.15s;
+      }
+      .field input:focus,
+      .field select:focus { border-color: var(--brand); }
+
+      .payment-badges {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+      }
+
+      .payment-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 80px;
+        padding: 0.38rem 0.7rem;
+        border-radius: 999px;
+        border: 1px solid rgba(255,255,255,0.08);
+        color: #fff;
+        font-size: 0.76rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .payment-badge.visa { background: linear-gradient(135deg, #1a1f71, #2155f5); }
+      .payment-badge.mastercard { background: linear-gradient(135deg, #ea001b, #ff8c1a); }
+
+      .payment-note,
+      .payment-hint { color: var(--muted); font-size: 0.84rem; }
+
+      .card-element-shell {
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: rgba(8, 20, 29, 0.78);
+        padding: 0.82rem 0.75rem;
+        min-height: 48px;
+      }
+
+      .bank-transfer-details {
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: var(--panel-soft);
+        padding: 0.75rem 0.9rem;
+        font-size: 0.84rem;
+      }
+
+      .bank-transfer-title { font-weight: 700; margin-bottom: 0.5rem; }
+
+      .bank-transfer-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        gap: 0.3rem;
+      }
+
+      .bank-transfer-list li { display: flex; gap: 0.5rem; }
+      .bank-transfer-list span { color: var(--muted); min-width: 130px; }
+
+      .checkout-actions {
+        display: flex;
+        gap: 0.7rem;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
+      .status {
+        font-size: 0.88rem;
+        color: var(--muted);
+      }
+      .status.error { color: var(--danger); }
+      .status.success { color: var(--success); }
+      .status.warn { color: var(--warn); }
+
+      /* ── Product mini catalog ── */
+      .product-mini-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 0.65rem;
+        margin-top: 0.9rem;
+      }
+
+      .product-mini-card {
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 0.85rem;
+        background: var(--panel-soft);
+        display: grid;
+        gap: 0.4rem;
+        align-content: start;
+      }
+
+      .product-mini-card h4 { font-size: 0.9rem; }
+      .product-mini-card p { font-size: 0.8rem; color: var(--muted); }
+
+      .product-category-tag {
+        display: inline-flex;
+        align-self: start;
+        padding: 0.18rem 0.5rem;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+
+      .product-empty {
+        border: 1px dashed var(--line);
+        border-radius: 14px;
+        padding: 1.2rem;
+        color: var(--muted);
+        font-size: 0.9rem;
+        margin-top: 0.9rem;
+      }
+
+      /* ── Nav bar ── */
+      .top-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin-bottom: 0.25rem;
+      }
+
+      .top-bar-brand {
+        font-family: "Bricolage Grotesque", sans-serif;
+        font-weight: 800;
+        font-size: 1.15rem;
+        color: var(--brand);
+        text-decoration: none;
+      }
+
+      .top-bar-nav {
+        display: flex;
+        gap: 0.6rem;
+        flex-wrap: wrap;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+
+      <!-- Top bar -->
+      <div class="top-bar">
+        <a class="top-bar-brand" href="index.html">AD Tech</a>
+        <nav class="top-bar-nav">
+          <a class="btn alt" href="index.html#purchase">← Back to Catalog</a>
+          <a class="btn alt" href="admin-finance.html">Finance Admin</a>
+          <a class="btn alt" href="admin-products.html">Product Admin</a>
+        </nav>
+      </div>
+
+      <!-- Page header -->
+      <div class="panel">
+        <h1 style="font-family:'Bricolage Grotesque',sans-serif;">Sales Order</h1>
+        <p class="muted" style="margin-top:0.3rem;">Review your cart and complete checkout with card, cash, or bank transfer.</p>
+        <p id="pageStatus" class="status" style="margin-top:0.6rem;" aria-live="polite"></p>
+      </div>
+
+      <!-- Main layout: catalog + cart+checkout -->
+      <div class="layout">
+
+        <!-- Left: Product Catalog (add more items) -->
+        <div class="panel">
+          <h2 style="font-family:'Bricolage Grotesque',sans-serif;font-size:1.1rem;">Available Packages</h2>
+          <p class="muted" style="margin-top:0.25rem;font-size:0.88rem;">Add items to your cart from the current product catalog.</p>
+          <div id="productMiniGrid" class="product-mini-grid"></div>
+        </div>
+
+        <!-- Right: Cart + Checkout -->
+        <div style="display:grid;gap:1rem;">
+
+          <!-- Cart -->
+          <div class="panel cart-section">
+            <div class="panel-header" style="margin-bottom:0.5rem;">
+              <div>
+                <h2 style="font-family:'Bricolage Grotesque',sans-serif;font-size:1.1rem;">Your Cart</h2>
+                <p class="muted" style="font-size:0.86rem;margin-top:0.2rem;" id="cartCount"></p>
+              </div>
+              <button class="btn alt" id="clearCartBtn" type="button" style="font-size:0.82rem;padding:0.4rem 0.8rem;">Clear Cart</button>
+            </div>
+            <ul id="cartItems" class="cart-items">
+              <li class="cart-empty">Your cart is empty.</li>
+            </ul>
+            <div class="cart-summary">
+              <span>Total</span>
+              <span class="cart-total-amount" id="cartTotal">$0</span>
+            </div>
+          </div>
+
+          <!-- Checkout -->
+          <div class="panel checkout-section">
+            <h2 style="font-family:'Bricolage Grotesque',sans-serif;font-size:1.1rem;margin-bottom:0.9rem;">Checkout</h2>
+
+            <form id="checkoutForm" novalidate>
+              <div style="display:grid;gap:0.7rem;">
+                <div class="field">
+                  <label for="checkoutName">Full name *</label>
+                  <input id="checkoutName" name="checkoutName" type="text" placeholder="John Smith" autocomplete="name" required />
+                </div>
+                <div class="field">
+                  <label for="checkoutEmail">Email address *</label>
+                  <input id="checkoutEmail" name="checkoutEmail" type="email" placeholder="john@company.com" autocomplete="email" required />
+                </div>
+                <div class="field">
+                  <label for="checkoutPaymentMethod">Payment method</label>
+                  <select id="checkoutPaymentMethod" name="checkoutPaymentMethod">
+                    <option value="card">Card (Visa / Mastercard)</option>
+                    <option value="cash">Cash</option>
+                    <option value="bank_transfer">Bank Transfer</option>
+                  </select>
+                </div>
+
+                <div id="paymentBadges" class="payment-badges">
+                  <span class="payment-badge visa">Visa</span>
+                  <span class="payment-badge mastercard">Mastercard</span>
+                </div>
+
+                <p id="paymentNote" class="payment-note">Secure card checkout powered by Stripe. Visa and Mastercard are accepted.</p>
+                <div id="cardElement" class="card-element-shell" aria-label="Card details"></div>
+                <p id="paymentHint" class="payment-hint">Use a Visa or Mastercard to complete payment.</p>
+
+                <div id="bankTransferDetails" class="bank-transfer-details" hidden>
+                  <p class="bank-transfer-title">Bank Transfer Details</p>
+                  <ul class="bank-transfer-list">
+                    <li><span>Bank:</span> AD Tech Business Bank</li>
+                    <li><span>Account Name:</span> AD Tech Enterprise Ltd</li>
+                    <li><span>Account Number:</span> 0012345678</li>
+                    <li><span>Routing / Sort Code:</span> 021-000-021</li>
+                    <li><span>Reference:</span> Use your invoice number</li>
+                  </ul>
+                </div>
+
+                <div class="checkout-actions">
+                  <button class="btn main" id="placeOrderBtn" type="submit" disabled>Pay with Card</button>
+                  <p id="checkoutStatus" class="status" aria-live="polite"></p>
+                </div>
+              </div>
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const API_BASE_URL = window.location.protocol === "file:" ? "http://localhost:3000" : "";
+      const apiUrl = (path) => `${API_BASE_URL}${path}`;
+      const INVOICE_COMPANY_NAME = "AD Tech Solutions";
+      const INVOICE_COMPANY_HEADER = "Enterprise Business System Services";
+
+      // ── State ──────────────────────────────────────────────────────────────
+      let cartState = JSON.parse(localStorage.getItem("adtech-cart") || "{}");
+      let productCatalog = {};
+      let stripeConfigPromise;
+      let stripeInstance;
+      let stripeElements;
+      let cardElement;
+      let suppressCheckoutStatusError = false;
+
+      const cartEmailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      // ── DOM refs ───────────────────────────────────────────────────────────
+      const cartItemsNode        = document.getElementById("cartItems");
+      const cartTotalNode        = document.getElementById("cartTotal");
+      const cartCountNode        = document.getElementById("cartCount");
+      const checkoutForm         = document.getElementById("checkoutForm");
+      const checkoutStatus       = document.getElementById("checkoutStatus");
+      const placeOrderBtn        = document.getElementById("placeOrderBtn");
+      const paymentMethodSelect  = document.getElementById("checkoutPaymentMethod");
+      const paymentBadgesNode    = document.getElementById("paymentBadges");
+      const paymentNoteNode      = document.getElementById("paymentNote");
+      const paymentHintNode      = document.getElementById("paymentHint");
+      const bankTransferDetailsNode = document.getElementById("bankTransferDetails");
+      const cardElementNode      = document.getElementById("cardElement");
+      const productMiniGrid      = document.getElementById("productMiniGrid");
+      const pageStatus           = document.getElementById("pageStatus");
+      const clearCartBtn         = document.getElementById("clearCartBtn");
+
+      // ── Helpers ────────────────────────────────────────────────────────────
+      const currency = (amount) =>
+        new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(amount);
+
+      const saveCart = () => localStorage.setItem("adtech-cart", JSON.stringify(cartState));
+
+      const getCartEntries = () => Object.entries(cartState).filter(([, qty]) => qty > 0);
+
+      const buildOrderItems = () =>
+        getCartEntries().map(([productId, qty]) => ({ id: productId, quantity: qty }));
+
+      const setCheckoutStatus = (message, color = "#ffb2b8") => {
+        checkoutStatus.textContent = message;
+        checkoutStatus.style.color = color;
+      };
+
+      const setPageStatus = (message, type = "") => {
+        pageStatus.textContent = message;
+        pageStatus.className = "status" + (type ? " " + type : "");
+      };
+
+      // ── Payment method config ──────────────────────────────────────────────
+      const paymentMethodConfig = {
+        card: {
+          buttonText: "Pay with Card",
+          processingText: "Processing Card Payment…",
+          note: "Secure card checkout powered by Stripe. Visa and Mastercard are accepted.",
+          hint: "Use a Visa or Mastercard to complete payment."
+        },
+        cash: {
+          buttonText: "Place Cash Order",
+          processingText: "Saving Cash Order…",
+          note: "Cash orders are saved as pending until payment is received.",
+          hint: "An invoice is generated now for accounting and cash reconciliation."
+        },
+        bank_transfer: {
+          buttonText: "Place Bank Transfer Order",
+          processingText: "Saving Bank Transfer Order…",
+          note: "Bank transfer orders are saved as pending until funds are received.",
+          hint: "Use the invoice number as your transfer reference."
+        }
+      };
+
+      const normalizePaymentMethod = (value) => {
+        const method = String(value || "card").trim().toLowerCase().replace(/\s+/g, "_");
+        return Object.prototype.hasOwnProperty.call(paymentMethodConfig, method) ? method : "card";
+      };
+
+      const getSelectedPaymentMethod = () => normalizePaymentMethod(paymentMethodSelect.value);
+
+      const formatPaymentMethodLabel = (value) => {
+        const m = normalizePaymentMethod(value);
+        if (m === "bank_transfer") return "Bank Transfer";
+        if (m === "cash") return "Cash";
+        return "Card";
+      };
+
+      const updatePaymentUI = () => {
+        const method = getSelectedPaymentMethod();
+        const cfg = paymentMethodConfig[method];
+        const isCard = method === "card";
+
+        paymentBadgesNode.hidden = !isCard;
+        cardElementNode.hidden = !isCard;
+        paymentNoteNode.textContent = cfg.note;
+        paymentHintNode.textContent = cfg.hint;
+        bankTransferDetailsNode.hidden = method !== "bank_transfer";
+        placeOrderBtn.textContent = cfg.buttonText;
+
+        if (isCard) {
+          ensureStripeReady().catch((err) => {
+            if (getSelectedPaymentMethod() === "card" && !suppressCheckoutStatusError) {
+              setCheckoutStatus(err.message || "Card payments are unavailable right now.");
+            }
+          });
+        }
+      };
+
+      // ── Stripe ─────────────────────────────────────────────────────────────
+      const getStripeConfig = async () => {
+        if (!stripeConfigPromise) {
+          stripeConfigPromise = fetch(apiUrl("/api/stripe-config"))
+            .then(async (res) => {
+              if (!res.ok) throw new Error("Card payments are unavailable right now.");
+              return res.json();
+            })
+            .catch((err) => { stripeConfigPromise = undefined; throw err; });
+        }
+        return stripeConfigPromise;
+      };
+
+      const ensureStripeReady = async () => {
+        if (cardElement) return;
+        if (typeof window.Stripe !== "function") throw new Error("Stripe.js did not load.");
+        const { publishableKey } = await getStripeConfig();
+        if (!publishableKey) throw new Error("Card payments are not configured yet.");
+        stripeInstance = window.Stripe(publishableKey);
+        stripeElements = stripeInstance.elements({
+          appearance: {
+            theme: "night",
+            variables: { colorPrimary: "#1bc6b0", colorText: "#f4fdff", colorBackground: "transparent" }
+          }
+        });
+        cardElement = stripeElements.create("card", { hidePostalCode: true });
+        cardElement.mount("#cardElement");
+        cardElement.on("change", (event) => {
+          if (event.error) { setCheckoutStatus(event.error.message, "#ffb2b8"); return; }
+          if (!event.empty) setCheckoutStatus("Card details look good.", "#9ef3db");
+        });
+      };
+
+      // ── Invoice PDF ────────────────────────────────────────────────────────
+      const buildInvoiceSnapshot = ({ customerName, customerEmail, cartEntries, paymentMethod = "card" }) => {
+        const items = cartEntries.map(([productId, quantity]) => {
+          const product = productCatalog[productId];
+          if (!product) return null;
+          return { id: product.id, name: product.name, quantity, unitPrice: product.price, lineTotal: product.price * quantity };
+        }).filter(Boolean);
+        const totalAmount = items.reduce((sum, item) => sum + item.lineTotal, 0);
+        return { customerName, customerEmail, items, totalAmount, paymentMethod, createdAtIso: new Date().toISOString() };
+      };
+
+      const downloadInvoicePdf = async (invoiceData, invoiceMeta = {}) => {
+        const JsPdfCtor = window.jspdf?.jsPDF;
+        if (!JsPdfCtor) throw new Error("Invoice PDF engine is unavailable.");
+
+        const meta = typeof invoiceMeta === "string" ? { paymentIntentId: invoiceMeta } : invoiceMeta || {};
+        const doc = new JsPdfCtor({ unit: "pt", format: "a4" });
+        const marginX = 42;
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const pageHeight = doc.internal.pageSize.getHeight();
+        let y = 36;
+
+        doc.setFontSize(14); doc.setTextColor(22, 40, 62);
+        doc.text(INVOICE_COMPANY_NAME, marginX, y + 14);
+        doc.setFontSize(9); doc.setTextColor(70, 86, 104);
+        doc.text(INVOICE_COMPANY_HEADER, marginX, y + 28);
+        y += 50;
+
+        doc.setFontSize(18); doc.setTextColor(0, 0, 0);
+        doc.text("INVOICE", marginX, y); y += 22;
+
+        const invoiceId = meta.invoiceNumber || meta.paymentIntentId || `INV-${Date.now()}`;
+        const genDate = new Date(invoiceData.createdAtIso || Date.now()).toLocaleString("en-US");
+        const pmLabel = formatPaymentMethodLabel(meta.paymentMethod || invoiceData.paymentMethod || "card");
+        const pmStatus = String(meta.status || "paid").toUpperCase();
+
+        doc.setFontSize(10); doc.setTextColor(80, 80, 80);
+        doc.text(`Invoice Number: ${invoiceId}`, marginX, y);
+        doc.text(`Date: ${genDate}`, marginX + 250, y); y += 16;
+        doc.text(`Bill To: ${invoiceData.customerName}`, marginX, y);
+        doc.text(`Email: ${invoiceData.customerEmail}`, marginX + 250, y); y += 14;
+        doc.text(`Payment Term: ${pmLabel}`, marginX, y);
+        doc.text(`Status: ${pmStatus}`, marginX + 250, y); y += 14;
+
+        doc.setDrawColor(214, 218, 224);
+        doc.line(marginX, y, pageWidth - marginX, y); y += 16;
+
+        doc.setFontSize(10); doc.setTextColor(32, 45, 64);
+        doc.text("Item", marginX, y);
+        doc.text("Qty", marginX + 280, y);
+        doc.text("Unit", marginX + 340, y);
+        doc.text("Line Total", marginX + 430, y); y += 10;
+        doc.line(marginX, y, pageWidth - marginX, y); y += 14;
+
+        doc.setTextColor(0, 0, 0);
+        invoiceData.items.forEach((item) => {
+          if (y > pageHeight - 90) { doc.addPage(); y = 48; }
+          doc.text(String(item.name), marginX, y, { maxWidth: 260 });
+          doc.text(String(item.quantity), marginX + 280, y);
+          doc.text(currency(item.unitPrice), marginX + 340, y);
+          doc.text(currency(item.lineTotal), marginX + 430, y);
+          y += 16;
+        });
+
+        y += 4;
+        doc.line(marginX, y, pageWidth - marginX, y); y += 20;
+        doc.setFontSize(12); doc.setTextColor(20, 34, 52);
+        doc.text(`Total Amount: ${currency(invoiceData.totalAmount)}`, marginX + 310, y);
+        y += 26;
+        doc.setFontSize(9); doc.setTextColor(90, 90, 90);
+        doc.text("Thank you for choosing AD Tech Solutions.", marginX, y);
+        doc.save(`invoice-${invoiceId}-${new Date().toISOString().slice(0, 10)}.pdf`);
+      };
+
+      // ── Cart rendering ─────────────────────────────────────────────────────
+      const renderCart = () => {
+        const entries = getCartEntries();
+
+        if (!entries.length) {
+          cartItemsNode.innerHTML = '<li class="cart-empty">Your cart is empty.</li>';
+          cartTotalNode.textContent = currency(0);
+          cartCountNode.textContent = "";
+          placeOrderBtn.disabled = true;
+          return;
+        }
+
+        let total = 0;
+        const markup = entries.map(([productId, qty]) => {
+          const product = productCatalog[productId];
+          const name = product ? product.name : productId;
+          const lineTotal = product ? product.price * qty : 0;
+          total += lineTotal;
+          return `
+            <li class="cart-item">
+              <div class="cart-item-top">
+                <span class="cart-item-name">${name}</span>
+                <button class="remove-btn" type="button" data-remove-item="${productId}">Remove</button>
+              </div>
+              <div class="cart-item-controls">
+                <button class="qty-btn" type="button" data-dec="${productId}">−</button>
+                <span class="qty-value">${qty}</span>
+                <button class="qty-btn" type="button" data-inc="${productId}">+</button>
+                ${product ? `<span class="cart-item-meta" style="margin-left:0.5rem;">${currency(lineTotal)}</span>` : ""}
+              </div>
+            </li>
+          `;
+        }).join("");
+
+        cartItemsNode.innerHTML = markup;
+        cartTotalNode.textContent = currency(total);
+        const totalQty = entries.reduce((s, [, q]) => s + q, 0);
+        cartCountNode.textContent = `${totalQty} item${totalQty === 1 ? "" : "s"}`;
+        placeOrderBtn.disabled = false;
+      };
+
+      const addToCart = (productId) => {
+        cartState[productId] = (cartState[productId] || 0) + 1;
+        saveCart();
+        renderCart();
+      };
+
+      // ── Product mini catalog ────────────────────────────────────────────────
+      const renderProductMiniGrid = (products) => {
+        if (!products.length) {
+          productMiniGrid.innerHTML = '<div class="product-empty">No packages available yet. Contact us for a custom quote.</div>';
+          return;
+        }
+        productMiniGrid.innerHTML = products.map((product) => `
+          <div class="product-mini-card">
+            <span class="product-category-tag">${product.category || "General"}</span>
+            <h4>${product.name}</h4>
+            <p>${product.description}</p>
+            <button class="btn alt" type="button" style="margin-top:0.5rem;font-size:0.82rem;padding:0.45rem 0.8rem;" data-add-to-cart="${product.id}">+ Add to Cart</button>
+          </div>
+        `).join("");
+      };
+
+      const loadProducts = async () => {
+        setPageStatus("Loading catalog…");
+        try {
+          const res = await fetch(apiUrl("/api/products"));
+          const payload = await res.json().catch(() => ({}));
+          if (!res.ok || !Array.isArray(payload.products)) {
+            setPageStatus("Could not load product catalog.", "error");
+            renderProductMiniGrid([]);
+            return;
+          }
+          payload.products.forEach((p) => { productCatalog[p.id] = p; });
+          renderProductMiniGrid(payload.products);
+          renderCart(); // Re-render cart now product names/prices are known
+          setPageStatus("");
+        } catch (_err) {
+          setPageStatus("Could not reach server.", "error");
+          renderProductMiniGrid([]);
+        }
+      };
+
+      // ── Cart events ────────────────────────────────────────────────────────
+      cartItemsNode.addEventListener("click", (event) => {
+        const removeId = event.target.getAttribute("data-remove-item");
+        const incId    = event.target.getAttribute("data-inc");
+        const decId    = event.target.getAttribute("data-dec");
+
+        if (removeId) {
+          delete cartState[removeId];
+          saveCart();
+          renderCart();
+          return;
+        }
+        if (incId) {
+          cartState[incId] = (cartState[incId] || 0) + 1;
+          saveCart();
+          renderCart();
+          return;
+        }
+        if (decId) {
+          if ((cartState[decId] || 0) > 1) {
+            cartState[decId]--;
+          } else {
+            delete cartState[decId];
+          }
+          saveCart();
+          renderCart();
+          return;
+        }
+      });
+
+      clearCartBtn.addEventListener("click", () => {
+        cartState = {};
+        saveCart();
+        renderCart();
+      });
+
+      productMiniGrid.addEventListener("click", (event) => {
+        const addBtn = event.target.closest("[data-add-to-cart]");
+        if (!addBtn) return;
+        const productId = addBtn.getAttribute("data-add-to-cart");
+        if (!productCatalog[productId]) return;
+        addToCart(productId);
+        setCheckoutStatus(`"${productCatalog[productId].name}" added to cart.`, "#9ef3db");
+      });
+
+      paymentMethodSelect.addEventListener("change", () => updatePaymentUI());
+
+      // ── Checkout submission ────────────────────────────────────────────────
+      checkoutForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const name    = checkoutForm.elements.checkoutName.value.trim();
+        const email   = checkoutForm.elements.checkoutEmail.value.trim();
+        const entries = getCartEntries();
+        const method  = getSelectedPaymentMethod();
+        const cfg     = paymentMethodConfig[method];
+
+        if (!entries.length) { setCheckoutStatus("Your cart is empty."); return; }
+        if (name.length < 2)  { setCheckoutStatus("Please enter your full name."); return; }
+        if (!cartEmailPattern.test(email)) { setCheckoutStatus("Please enter a valid email address."); return; }
+
+        const invoiceSnapshot = buildInvoiceSnapshot({ customerName: name, customerEmail: email, cartEntries: entries, paymentMethod: method });
+
+        placeOrderBtn.disabled = true;
+        placeOrderBtn.textContent = cfg.processingText;
+
+        try {
+          if (method === "card") {
+            await ensureStripeReady();
+
+            const paymentRes = await fetch(apiUrl("/api/create-payment-intent"), {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ customerName: name, customerEmail: email, items: buildOrderItems() })
+            });
+            const paymentPayload = await paymentRes.json().catch(() => ({}));
+            if (!paymentRes.ok || !paymentPayload.clientSecret) throw new Error(paymentPayload.error || "Could not start card payment.");
+
+            const result = await stripeInstance.confirmCardPayment(paymentPayload.clientSecret, {
+              payment_method: { card: cardElement, billing_details: { name, email } }
+            });
+            if (result.error) throw new Error(result.error.message || "Card payment failed.");
+            if (!result.paymentIntent || result.paymentIntent.status !== "succeeded") throw new Error("Payment was not completed.");
+
+            const confirmRes = await fetch(apiUrl("/api/payment-success"), {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ paymentIntentId: result.paymentIntent.id })
+            });
+            const confirmPayload = await confirmRes.json().catch(() => ({}));
+            if (!confirmRes.ok) throw new Error(confirmPayload.error || "Payment completed but confirmation failed.");
+
+            try {
+              await downloadInvoicePdf(invoiceSnapshot, {
+                invoiceNumber: confirmPayload.invoice?.invoiceNumber,
+                paymentIntentId: confirmPayload.invoice?.paymentIntentId || result.paymentIntent.id,
+                status: confirmPayload.invoice?.status || "paid",
+                paymentMethod: confirmPayload.invoice?.paymentMethod || "card"
+              });
+            } catch (_err) { setCheckoutStatus("Payment successful, but invoice download failed.", "#f5c97a"); }
+
+            cartState = {};
+            saveCart();
+            renderCart();
+            checkoutForm.reset();
+            paymentMethodSelect.value = "card";
+            suppressCheckoutStatusError = true;
+            updatePaymentUI();
+            setCheckoutStatus("Card payment successful. Invoice generated.", "#9ef3db");
+            setTimeout(() => { suppressCheckoutStatusError = false; }, 1000);
+
+          } else {
+            const offlineRes = await fetch(apiUrl("/api/create-offline-order"), {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ customerName: name, customerEmail: email, items: buildOrderItems(), paymentMethod: method })
+            });
+            const offlinePayload = await offlineRes.json().catch(() => ({}));
+            if (!offlineRes.ok) throw new Error(offlinePayload.error || "Could not create offline order.");
+
+            const savedInvoice = offlinePayload.invoice || {};
+            const invoiceForPdf = {
+              customerName: savedInvoice.customerName || invoiceSnapshot.customerName,
+              customerEmail: savedInvoice.customerEmail || invoiceSnapshot.customerEmail,
+              items: Array.isArray(savedInvoice.items) && savedInvoice.items.length ? savedInvoice.items : invoiceSnapshot.items,
+              totalAmount: Number(savedInvoice.totalAmount || invoiceSnapshot.totalAmount),
+              paymentMethod: savedInvoice.paymentMethod || method,
+              createdAtIso: savedInvoice.issuedAt || invoiceSnapshot.createdAtIso
+            };
+
+            try {
+              await downloadInvoicePdf(invoiceForPdf, {
+                invoiceNumber: savedInvoice.invoiceNumber,
+                paymentIntentId: savedInvoice.paymentIntentId,
+                status: savedInvoice.status || "pending",
+                paymentMethod: savedInvoice.paymentMethod || method
+              });
+            } catch (_err) { setCheckoutStatus("Order saved, but invoice download failed.", "#f5c97a"); }
+
+            cartState = {};
+            saveCart();
+            renderCart();
+            checkoutForm.reset();
+            paymentMethodSelect.value = "card";
+            suppressCheckoutStatusError = true;
+            updatePaymentUI();
+            setCheckoutStatus(
+              method === "cash"
+                ? "Cash order saved as pending. Invoice generated."
+                : "Bank transfer order saved as pending. Invoice generated.",
+              "#9ef3db"
+            );
+            setTimeout(() => { suppressCheckoutStatusError = false; }, 1000);
+          }
+        } catch (err) {
+          setCheckoutStatus(err.message || "Checkout failed. Please try again.");
+        } finally {
+          placeOrderBtn.disabled = !getCartEntries().length;
+        }
+      });
+
+      // ── Init ───────────────────────────────────────────────────────────────
+      renderCart();
+      updatePaymentUI();
+      loadProducts();
+    </script>
+  </body>
+</html>
