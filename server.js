@@ -123,6 +123,23 @@ db.serialize(() => {
     )`
   );
 
+  db.run(
+    `CREATE TABLE IF NOT EXISTS quotations (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      quote_number TEXT NOT NULL UNIQUE,
+      customer_name TEXT NOT NULL,
+      customer_email TEXT NOT NULL,
+      items_json TEXT NOT NULL,
+      total_amount INTEGER NOT NULL,
+      currency TEXT NOT NULL DEFAULT 'USD',
+      status TEXT NOT NULL DEFAULT 'draft',
+      notes TEXT,
+      valid_until TEXT,
+      created_at TEXT NOT NULL,
+      updated_at TEXT NOT NULL
+    )`
+  );
+
   db.run(`ALTER TABLE products ADD COLUMN category TEXT NOT NULL DEFAULT 'General'`, (error) => {
     if (error && !error.message.includes("duplicate column name")) {
       console.error("Failed to ensure product category column:", error.message);
@@ -934,6 +951,133 @@ app.delete("/api/admin/finance/entries/:id", requireAdminAccess, async (req, res
   } catch (error) {
     console.error("Failed to delete finance entry:", error?.message || error);
     return res.status(500).json({ error: "Could not delete finance entry." });
+  }
+});
+
+// ── Quotation helpers ──────────────────────────────────────────────────────
+
+const createQuoteNumber = ({ id, createdAt }) => {
+  const date = new Date(createdAt || Date.now());
+  const day = date.toISOString().slice(0, 10).replace(/-/g, "");
+  const seq = String(Number.parseInt(id, 10) || 0).padStart(5, "0");
+  return `QT-${day}-${seq}`;
+};
+
+const validQuoteStatuses = new Set(["draft", "sent", "accepted", "declined", "expired"]);
+
+const mapQuotationRow = (row) => ({
+  id: row.id,
+  quoteNumber: row.quote_number,
+  customerName: row.customer_name,
+  customerEmail: row.customer_email,
+  items: parseJsonArray(row.items_json),
+  totalAmount: row.total_amount,
+  currency: row.currency,
+  status: row.status,
+  notes: row.notes || "",
+  validUntil: row.valid_until || null,
+  createdAt: row.created_at,
+  updatedAt: row.updated_at
+});
+
+// ── Quotation endpoints ────────────────────────────────────────────────────
+
+app.get("/api/admin/quotations", requireAdminAccess, async (req, res) => {
+  try {
+    const statusFilter = typeof req.query.status === "string" ? req.query.status.trim().toLowerCase() : "";
+    const params = [];
+    let sql = `SELECT id, quote_number, customer_name, customer_email, items_json, total_amount, currency, status, notes, valid_until, created_at, updated_at
+               FROM quotations`;
+    if (statusFilter && validQuoteStatuses.has(statusFilter)) {
+      sql += " WHERE status = ?";
+      params.push(statusFilter);
+    }
+    sql += " ORDER BY created_at DESC, id DESC";
+    const rows = await allQuery(sql, params);
+    return res.json({ quotations: rows.map(mapQuotationRow) });
+  } catch (error) {
+    console.error("Failed to fetch quotations:", error?.message || error);
+    return res.status(500).json({ error: "Could not fetch quotations." });
+  }
+});
+
+app.post("/api/admin/quotations", requireAdminAccess, async (req, res) => {
+  try {
+    const { customerName, customerEmail, items, notes, validUntil } = req.body || {};
+
+    const trimmedName = typeof customerName === "string" ? customerName.trim() : "";
+    const trimmedEmail = typeof customerEmail === "string" ? customerEmail.trim().toLowerCase() : "";
+    const trimmedNotes = typeof notes === "string" ? notes.trim() : "";
+    const trimmedValidUntil = typeof validUntil === "string" && /^\d{4}-\d{2}-\d{2}$/.test(validUntil.trim()) ? validUntil.trim() : null;
+
+    if (trimmedName.length < 2) return res.status(400).json({ error: "Customer name must be at least 2 characters." });
+    if (!emailPattern.test(trimmedEmail)) return res.status(400).json({ error: "Invalid customer email address." });
+    if (!Array.isArray(items) || !items.length) return res.status(400).json({ error: "Quotation must have at least one line item." });
+
+    const lineItems = items.map((item) => {
+      const name = typeof item.name === "string" ? item.name.trim() : "";
+      const qty = Number.parseInt(item.quantity, 10);
+      const unitPrice = Number.parseInt(item.unitPrice, 10);
+      if (!name) throw new Error("Each line item must have a name.");
+      if (!Number.isInteger(qty) || qty < 1) throw new Error(`Invalid quantity for "${name}".`);
+      if (!Number.isInteger(unitPrice) || unitPrice < 0) throw new Error(`Invalid unit price for "${name}".`);
+      return { id: item.id || null, name, quantity: qty, unitPrice, lineTotal: unitPrice * qty };
+    });
+
+    const totalAmount = lineItems.reduce((s, i) => s + i.lineTotal, 0);
+    const now = new Date().toISOString();
+
+    const result = await runQuery(
+      `INSERT INTO quotations (quote_number, customer_name, customer_email, items_json, total_amount, currency, status, notes, valid_until, created_at, updated_at)
+       VALUES (?, ?, ?, ?, ?, 'USD', 'draft', ?, ?, ?, ?)`,
+      ["QT-TEMP", trimmedName, trimmedEmail, JSON.stringify(lineItems), totalAmount, trimmedNotes, trimmedValidUntil, now, now]
+    );
+
+    const quoteNumber = createQuoteNumber({ id: result.lastID, createdAt: now });
+    await runQuery(`UPDATE quotations SET quote_number = ? WHERE id = ?`, [quoteNumber, result.lastID]);
+
+    const created = await getQuery(`SELECT * FROM quotations WHERE id = ?`, [result.lastID]);
+    return res.status(201).json({ quotation: mapQuotationRow(created) });
+  } catch (error) {
+    console.error("Failed to create quotation:", error?.message || error);
+    return res.status(error.message?.includes("must") ? 400 : 500).json({ error: error.message || "Could not create quotation." });
+  }
+});
+
+app.put("/api/admin/quotations/:id/status", requireAdminAccess, async (req, res) => {
+  try {
+    const id = Number.parseInt(req.params.id, 10);
+    if (!Number.isInteger(id) || id < 1) return res.status(400).json({ error: "Invalid quotation ID." });
+
+    const newStatus = typeof req.body?.status === "string" ? req.body.status.trim().toLowerCase() : "";
+    if (!validQuoteStatuses.has(newStatus)) return res.status(400).json({ error: "Invalid status. Use: draft, sent, accepted, declined, expired." });
+
+    const existing = await getQuery("SELECT id FROM quotations WHERE id = ?", [id]);
+    if (!existing) return res.status(404).json({ error: "Quotation not found." });
+
+    const now = new Date().toISOString();
+    await runQuery("UPDATE quotations SET status = ?, updated_at = ? WHERE id = ?", [newStatus, now, id]);
+    const updated = await getQuery("SELECT * FROM quotations WHERE id = ?", [id]);
+    return res.json({ quotation: mapQuotationRow(updated) });
+  } catch (error) {
+    console.error("Failed to update quotation status:", error?.message || error);
+    return res.status(500).json({ error: "Could not update quotation." });
+  }
+});
+
+app.delete("/api/admin/quotations/:id", requireAdminAccess, async (req, res) => {
+  try {
+    const id = Number.parseInt(req.params.id, 10);
+    if (!Number.isInteger(id) || id < 1) return res.status(400).json({ error: "Invalid quotation ID." });
+
+    const existing = await getQuery("SELECT id FROM quotations WHERE id = ?", [id]);
+    if (!existing) return res.status(404).json({ error: "Quotation not found." });
+
+    await runQuery("DELETE FROM quotations WHERE id = ?", [id]);
+    return res.json({ message: "Quotation deleted." });
+  } catch (error) {
+    console.error("Failed to delete quotation:", error?.message || error);
+    return res.status(500).json({ error: "Could not delete quotation." });
   }
 });
 

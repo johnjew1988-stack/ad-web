@@ -360,7 +360,208 @@
         gap: 0.6rem;
         flex-wrap: wrap;
       }
-    </style>
+
+      /* ── Tabs ── */
+      .tab-bar {
+        display: flex;
+        gap: 0.5rem;
+        padding: 0.25rem;
+        background: var(--panel-soft);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        width: fit-content;
+      }
+
+      .tab-btn {
+        border: none;
+        background: none;
+        color: var(--muted);
+        font: inherit;
+        font-size: 0.88rem;
+        font-weight: 700;
+        padding: 0.5rem 1.1rem;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: background 0.15s, color 0.15s;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+      }
+      .tab-btn:hover { color: var(--text); background: rgba(27,198,176,0.08); }
+      .tab-btn.active { background: rgba(27,198,176,0.18); color: var(--brand); }
+
+      /* ── Quotation table ── */
+      .quote-table-wrap { overflow-x: auto; }
+
+      .quote-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.86rem;
+      }
+
+      .quote-table thead th {
+        text-align: left;
+        color: var(--muted);
+        font-size: 0.76rem;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        padding: 0.5rem 0.75rem;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .quote-table tbody tr {
+        border-bottom: 1px solid rgba(104,228,209,0.08);
+        transition: background 0.12s;
+      }
+      .quote-table tbody tr:hover { background: rgba(27,198,176,0.06); }
+
+      .quote-table tbody td { padding: 0.62rem 0.75rem; vertical-align: middle; }
+
+      .quote-status-pill {
+        display: inline-flex;
+        padding: 0.2rem 0.6rem;
+        border-radius: 999px;
+        font-size: 0.74rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+
+      .qs-draft    { background: rgba(149,184,199,0.15); color: var(--muted); }
+      .qs-sent     { background: rgba(27,198,176,0.14);  color: var(--brand); }
+      .qs-accepted { background: rgba(158,243,219,0.14); color: var(--success); }
+      .qs-declined { background: rgba(255,178,184,0.14); color: var(--danger); }
+      .qs-expired  { background: rgba(245,201,122,0.14); color: var(--warn); }
+
+      .quote-action-btn {
+        border: 1px solid var(--line);
+        background: rgba(255,255,255,0.04);
+        color: var(--text);
+        font: inherit;
+        font-size: 0.78rem;
+        font-weight: 700;
+        padding: 0.28rem 0.6rem;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.15s, color 0.15s;
+        white-space: nowrap;
+      }
+      .quote-action-btn:hover { background: rgba(27,198,176,0.14); color: var(--brand); border-color: rgba(27,198,176,0.4); }
+      .quote-action-btn.danger:hover { background: rgba(255,178,184,0.14); color: var(--danger); border-color: rgba(255,178,184,0.4); }
+
+      .quote-empty {
+        text-align: center;
+        color: var(--muted);
+        padding: 2rem;
+        font-size: 0.9rem;
+      }
+
+      /* ── New Quote Modal ── */
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(4, 16, 24, 0.82);
+        backdrop-filter: blur(4px);
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        padding: 2rem 1rem 2rem;
+        z-index: 100;
+        overflow-y: auto;
+      }
+
+      .modal-overlay[hidden] { display: none; }
+
+      .modal-box {
+        background: #061926;
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        padding: 1.75rem;
+        width: min(680px, 100%);
+        display: grid;
+        gap: 1rem;
+      }
+
+      .modal-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+      }
+
+      .modal-close {
+        border: none;
+        background: rgba(255,255,255,0.06);
+        color: var(--muted);
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.15s;
+      }
+      .modal-close:hover { background: rgba(255,178,184,0.18); color: var(--danger); }
+
+      /* ── Line items builder ── */
+      .line-items-list { display: grid; gap: 0.5rem; }
+
+      .line-item-row {
+        display: grid;
+        grid-template-columns: 1fr 80px 110px 32px;
+        gap: 0.4rem;
+        align-items: center;
+      }
+
+      @media (max-width: 560px) {
+        .line-item-row { grid-template-columns: 1fr 1fr; }
+        .line-item-row > :last-child { grid-column: span 2; }
+      }
+
+      .line-item-row input {
+        width: 100%;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: var(--panel-soft);
+        color: var(--text);
+        font: inherit;
+        font-size: 0.86rem;
+        padding: 0.5rem 0.6rem;
+        outline: none;
+      }
+      .line-item-row input:focus { border-color: var(--brand); }
+
+      .line-item-remove {
+        border: 1px solid var(--line);
+        background: none;
+        color: var(--muted);
+        width: 30px;
+        height: 30px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.15s, color 0.15s;
+      }
+      .line-item-remove:hover { background: rgba(255,178,184,0.14); color: var(--danger); }
+
+      .quote-total-row {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 0.75rem;
+        font-weight: 700;
+        font-size: 1rem;
+        padding-top: 0.5rem;
+        border-top: 1px solid var(--line);
+      }
+
+      .quote-total-value { color: var(--brand); font-size: 1.1rem; }
   </head>
   <body>
     <div class="shell">
@@ -369,21 +570,76 @@
       <div class="top-bar">
         <a class="top-bar-brand" href="index.html">AD Tech</a>
         <nav class="top-bar-nav">
-          <a class="btn alt" href="index.html#purchase">← Back to Catalog</a>
-          <a class="btn alt" href="admin-finance.html">Finance Admin</a>
-          <a class="btn alt" href="admin-products.html">Product Admin</a>
+          <a class="btn alt" href="admin.html">← Admin</a>
+          <a class="btn alt" href="index.html#purchase">Storefront</a>
+          <a class="btn alt" href="admin-finance.html">Finance</a>
+          <a class="btn alt" href="admin-products.html">Products</a>
         </nav>
       </div>
 
       <!-- Page header -->
       <div class="panel">
-        <h1 style="font-family:'Bricolage Grotesque',sans-serif;">Sales Order</h1>
-        <p class="muted" style="margin-top:0.3rem;">Review your cart and complete checkout with card, cash, or bank transfer.</p>
+        <h1 style="font-family:'Bricolage Grotesque',sans-serif;">Sales</h1>
+        <p class="muted" style="margin-top:0.3rem;">Manage quotations and process sales orders.</p>
         <p id="pageStatus" class="status" style="margin-top:0.6rem;" aria-live="polite"></p>
       </div>
 
-      <!-- Main layout: catalog + cart+checkout -->
-      <div class="layout">
+      <!-- Tab bar -->
+      <div class="tab-bar">
+        <button class="tab-btn active" id="tabQuotations" type="button">📋 Quotations</button>
+        <button class="tab-btn" id="tabSalesOrder" type="button">🛒 Sales Order</button>
+      </div>
+
+      <!-- ═══ QUOTATION SECTION ═══ -->
+      <div id="quotationSection">
+
+        <div class="panel">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:1rem;">
+            <div>
+              <h2 style="font-family:'Bricolage Grotesque',sans-serif;font-size:1.1rem;">Quotation List</h2>
+              <p class="muted" style="font-size:0.86rem;margin-top:0.2rem;">Create, track, and convert quotes into sales orders.</p>
+            </div>
+            <div style="display:flex;gap:0.6rem;flex-wrap:wrap;align-items:center;">
+              <select id="quoteStatusFilter" style="background:var(--panel-soft);border:1px solid var(--line);border-radius:10px;color:var(--text);font:inherit;font-size:0.84rem;padding:0.45rem 0.65rem;outline:none;">
+                <option value="">All Statuses</option>
+                <option value="draft">Draft</option>
+                <option value="sent">Sent</option>
+                <option value="accepted">Accepted</option>
+                <option value="declined">Declined</option>
+                <option value="expired">Expired</option>
+              </select>
+              <button class="btn alt" id="refreshQuotesBtn" type="button" style="font-size:0.82rem;padding:0.45rem 0.8rem;">↻ Refresh</button>
+              <button class="btn main" id="newQuoteBtn" type="button">+ New Quotation</button>
+            </div>
+          </div>
+
+          <p id="quotationStatus" class="status" style="margin-bottom:0.5rem;" aria-live="polite"></p>
+
+          <div class="quote-table-wrap">
+            <table class="quote-table">
+              <thead>
+                <tr>
+                  <th>Quote #</th>
+                  <th>Customer</th>
+                  <th>Items</th>
+                  <th>Total</th>
+                  <th>Status</th>
+                  <th>Valid Until</th>
+                  <th>Created</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="quotationTableBody">
+                <tr><td class="quote-empty" colspan="8">Loading quotations…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ═══ SALES ORDER SECTION ═══ -->
+      <div id="salesOrderSection" hidden>
 
         <!-- Left: Product Catalog (add more items) -->
         <div class="panel">
@@ -466,6 +722,80 @@
 
         </div>
       </div>
+
+      </div><!-- end salesOrderSection -->
+    </div>
+
+    <!-- ═══ New Quotation Modal ═══ -->
+    <div class="modal-overlay" id="quoteModal" hidden>
+      <div class="modal-box">
+        <div class="modal-header">
+          <h2 style="font-family:'Bricolage Grotesque',sans-serif;font-size:1.1rem;" id="quoteModalTitle">New Quotation</h2>
+          <button class="modal-close" id="quoteModalClose" type="button" aria-label="Close">✕</button>
+        </div>
+
+        <form id="quoteForm" novalidate>
+          <div style="display:grid;gap:0.8rem;">
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.7rem;">
+              <div class="field">
+                <label for="qCustomerName">Customer Name *</label>
+                <input id="qCustomerName" type="text" placeholder="John Smith" required />
+              </div>
+              <div class="field">
+                <label for="qCustomerEmail">Email Address *</label>
+                <input id="qCustomerEmail" type="email" placeholder="john@company.com" required />
+              </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.7rem;">
+              <div class="field">
+                <label for="qValidUntil">Valid Until</label>
+                <input id="qValidUntil" type="date" />
+              </div>
+              <div class="field">
+                <label for="qNotes">Notes</label>
+                <input id="qNotes" type="text" placeholder="Optional internal notes" />
+              </div>
+            </div>
+
+            <!-- Line items -->
+            <div>
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.55rem;">
+                <label style="color:var(--muted);font-size:0.85rem;font-weight:600;">Line Items *</label>
+                <div style="display:flex;gap:0.5rem;align-items:center;">
+                  <select id="qProductSelect" style="background:var(--panel-soft);border:1px solid var(--line);border-radius:9px;color:var(--text);font:inherit;font-size:0.82rem;padding:0.38rem 0.6rem;outline:none;max-width:200px;">
+                    <option value="">+ Add from catalog…</option>
+                  </select>
+                  <button class="quote-action-btn" id="qAddBlankRow" type="button">+ Custom row</button>
+                </div>
+              </div>
+
+              <div style="display:grid;grid-template-columns:1fr 80px 110px 32px;gap:0.35rem;margin-bottom:0.35rem;padding:0 0.1rem;">
+                <span style="color:var(--muted);font-size:0.76rem;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;">Item</span>
+                <span style="color:var(--muted);font-size:0.76rem;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;">Qty</span>
+                <span style="color:var(--muted);font-size:0.76rem;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;">Unit Price $</span>
+                <span></span>
+              </div>
+
+              <div class="line-items-list" id="lineItemsList"></div>
+            </div>
+
+            <div class="quote-total-row">
+              <span>Total</span>
+              <span class="quote-total-value" id="quoteTotalDisplay">$0</span>
+            </div>
+
+            <p id="quoteFormStatus" class="status" aria-live="polite"></p>
+
+            <div style="display:flex;gap:0.7rem;justify-content:flex-end;flex-wrap:wrap;">
+              <button class="btn alt" id="quoteModalCancelBtn" type="button">Cancel</button>
+              <button class="btn main" id="quoteSubmitBtn" type="submit">Save Quotation</button>
+            </div>
+
+          </div>
+        </form>
+      </div>
     </div>
 
     <script>
@@ -473,6 +803,315 @@
       const apiUrl = (path) => `${API_BASE_URL}${path}`;
       const INVOICE_COMPANY_NAME = "AD Tech Solutions";
       const INVOICE_COMPANY_HEADER = "Enterprise Business System Services";
+
+      // ── Tab switching ──────────────────────────────────────────────────────
+      const tabQuotations  = document.getElementById("tabQuotations");
+      const tabSalesOrder  = document.getElementById("tabSalesOrder");
+      const quotationSection  = document.getElementById("quotationSection");
+      const salesOrderSection = document.getElementById("salesOrderSection");
+
+      const showTab = (tab) => {
+        const isQ = tab === "quotations";
+        tabQuotations.classList.toggle("active", isQ);
+        tabSalesOrder.classList.toggle("active", !isQ);
+        quotationSection.hidden  = !isQ;
+        salesOrderSection.hidden = isQ;
+        if (isQ) loadQuotations();
+      };
+
+      tabQuotations.addEventListener("click", () => showTab("quotations"));
+      tabSalesOrder.addEventListener("click", () => showTab("sales"));
+
+      // ── Admin token (shared from URL or sessionStorage) ────────────────────
+      const getAdminToken = () => sessionStorage.getItem("adtech-admin-token") || "";
+
+      const adminFetch = (url, opts = {}) => {
+        const token = getAdminToken();
+        const headers = { "Content-Type": "application/json", ...(opts.headers || {}) };
+        if (token) headers["x-admin-token"] = token;
+        return fetch(apiUrl(url), { ...opts, headers });
+      };
+
+      // ── Quotation helpers ──────────────────────────────────────────────────
+      const qCurrency = (n) =>
+        new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(n || 0);
+
+      const fmtDateShort = (iso) => {
+        if (!iso) return "—";
+        return new Date(iso).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+      };
+
+      const statusPillClass = { draft: "qs-draft", sent: "qs-sent", accepted: "qs-accepted", declined: "qs-declined", expired: "qs-expired" };
+
+      const quotationStatusNode = document.getElementById("quotationStatus");
+      const quotationTableBody  = document.getElementById("quotationTableBody");
+      const quoteStatusFilter   = document.getElementById("quoteStatusFilter");
+      const refreshQuotesBtn    = document.getElementById("refreshQuotesBtn");
+      const newQuoteBtn         = document.getElementById("newQuoteBtn");
+
+      const setQuoteStatus = (msg, type = "") => {
+        quotationStatusNode.textContent = msg;
+        quotationStatusNode.className = "status" + (type ? " " + type : "");
+      };
+
+      const renderQuotationTable = (quotations) => {
+        if (!quotations.length) {
+          quotationTableBody.innerHTML = '<tr><td class="quote-empty" colspan="8">No quotations yet. Click "+ New Quotation" to get started.</td></tr>';
+          return;
+        }
+
+        quotationTableBody.innerHTML = quotations.map((q) => {
+          const itemCount = q.items?.length || 0;
+          const itemSummary = q.items?.slice(0, 2).map(i => i.name).join(", ") + (itemCount > 2 ? ` +${itemCount - 2} more` : "");
+          const cls = statusPillClass[q.status] || "qs-draft";
+
+          return `<tr>
+            <td style="font-family:monospace;font-size:0.82rem;white-space:nowrap;">${q.quoteNumber}</td>
+            <td>
+              <div style="font-weight:600;">${q.customerName}</div>
+              <div style="color:var(--muted);font-size:0.78rem;">${q.customerEmail}</div>
+            </td>
+            <td style="color:var(--muted);font-size:0.82rem;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${itemSummary || "—"}</td>
+            <td style="font-weight:700;">${qCurrency(q.totalAmount)}</td>
+            <td><span class="quote-status-pill ${cls}">${q.status}</span></td>
+            <td style="color:var(--muted);font-size:0.82rem;">${q.validUntil ? fmtDateShort(q.validUntil) : "—"}</td>
+            <td style="color:var(--muted);font-size:0.82rem;">${fmtDateShort(q.createdAt)}</td>
+            <td>
+              <div style="display:flex;gap:0.35rem;flex-wrap:wrap;">
+                <button class="quote-action-btn" data-convert="${q.id}" title="Load this quote into Sales Order">→ Convert</button>
+                ${q.status === "draft" ? `<button class="quote-action-btn" data-set-status="${q.id}" data-new-status="sent">Send</button>` : ""}
+                ${(q.status === "sent") ? `<button class="quote-action-btn" data-set-status="${q.id}" data-new-status="accepted">Accept</button><button class="quote-action-btn danger" data-set-status="${q.id}" data-new-status="declined">Decline</button>` : ""}
+                <button class="quote-action-btn danger" data-delete-quote="${q.id}" title="Delete this quotation">✕</button>
+              </div>
+            </td>
+          </tr>`;
+        }).join("");
+      };
+
+      const loadQuotations = async () => {
+        setQuoteStatus("Loading…");
+        const filter = quoteStatusFilter.value;
+        const url = "/api/admin/quotations" + (filter ? `?status=${encodeURIComponent(filter)}` : "");
+        try {
+          const res = await adminFetch(url);
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok) { setQuoteStatus(data.error || "Failed to load quotations.", "error"); return; }
+          renderQuotationTable(data.quotations || []);
+          setQuoteStatus(data.quotations?.length ? `${data.quotations.length} quotation${data.quotations.length === 1 ? "" : "s"}` : "");
+        } catch (_) {
+          setQuoteStatus("Could not reach server.", "error");
+        }
+      };
+
+      quotationTableBody.addEventListener("click", async (e) => {
+        const convertId = e.target.getAttribute("data-convert");
+        const deleteId  = e.target.getAttribute("data-delete-quote");
+        const setStatusId  = e.target.getAttribute("data-set-status");
+        const newStatus    = e.target.getAttribute("data-new-status");
+
+        if (convertId) {
+          // Find the quotation data
+          const row = e.target.closest("tr");
+          const qNumber = row?.cells[0]?.textContent?.trim();
+          const qName   = row?.cells[1]?.querySelector("div")?.textContent?.trim();
+          const qEmail  = row?.cells[1]?.querySelectorAll("div")[1]?.textContent?.trim();
+          // Re-fetch the quotation to get items
+          try {
+            const res = await adminFetch("/api/admin/quotations");
+            const data = await res.json().catch(() => ({}));
+            const q = (data.quotations || []).find(x => String(x.id) === String(convertId));
+            if (!q) { setQuoteStatus("Could not find quotation data.", "error"); return; }
+            convertQuoteToOrder(q);
+          } catch (_) {
+            setQuoteStatus("Could not load quotation items.", "error");
+          }
+          return;
+        }
+
+        if (setStatusId && newStatus) {
+          try {
+            const res = await adminFetch(`/api/admin/quotations/${setStatusId}/status`, {
+              method: "PUT",
+              body: JSON.stringify({ status: newStatus })
+            });
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok) { setQuoteStatus(data.error || "Failed to update status.", "error"); return; }
+            setQuoteStatus(`Quote marked as ${newStatus}.`, "success");
+            loadQuotations();
+          } catch (_) { setQuoteStatus("Could not update status.", "error"); }
+          return;
+        }
+
+        if (deleteId) {
+          if (!confirm("Delete this quotation? This cannot be undone.")) return;
+          try {
+            const res = await adminFetch(`/api/admin/quotations/${deleteId}`, { method: "DELETE" });
+            if (!res.ok) { const d = await res.json().catch(() => ({})); setQuoteStatus(d.error || "Failed to delete.", "error"); return; }
+            setQuoteStatus("Quotation deleted.", "success");
+            loadQuotations();
+          } catch (_) { setQuoteStatus("Could not delete quotation.", "error"); }
+        }
+      });
+
+      const convertQuoteToOrder = (q) => {
+        // Load items into cart
+        cartState = {};
+        q.items.forEach((item) => {
+          if (item.id && productCatalog[item.id]) {
+            cartState[item.id] = (cartState[item.id] || 0) + item.quantity;
+          }
+        });
+        saveCart();
+        renderCart();
+
+        // Pre-fill checkout form
+        const nameEl  = document.getElementById("checkoutName");
+        const emailEl = document.getElementById("checkoutEmail");
+        if (nameEl)  nameEl.value  = q.customerName;
+        if (emailEl) emailEl.value = q.customerEmail;
+
+        // Switch to Sales Order tab
+        showTab("sales");
+        setCheckoutStatus(`Loaded from quotation ${q.quoteNumber}. Items not in current catalog were skipped.`, "#9ef3db");
+        document.getElementById("pageStatus").textContent = "";
+      };
+
+      quoteStatusFilter.addEventListener("change", loadQuotations);
+      refreshQuotesBtn.addEventListener("click", loadQuotations);
+
+      // ── New Quote Modal ────────────────────────────────────────────────────
+      const quoteModal         = document.getElementById("quoteModal");
+      const quoteForm          = document.getElementById("quoteForm");
+      const quoteModalClose    = document.getElementById("quoteModalClose");
+      const quoteModalCancelBtn = document.getElementById("quoteModalCancelBtn");
+      const quoteSubmitBtn     = document.getElementById("quoteSubmitBtn");
+      const lineItemsList      = document.getElementById("lineItemsList");
+      const quoteTotalDisplay  = document.getElementById("quoteTotalDisplay");
+      const qProductSelect     = document.getElementById("qProductSelect");
+      const qAddBlankRow       = document.getElementById("qAddBlankRow");
+      const quoteFormStatus    = document.getElementById("quoteFormStatus");
+
+      let lineItemsData = []; // { id, name, qty, unitPrice }
+
+      const updateQuoteTotal = () => {
+        const total = lineItemsData.reduce((s, row) => s + (row.qty * row.unitPrice), 0);
+        quoteTotalDisplay.textContent = qCurrency(total);
+      };
+
+      const renderLineItems = () => {
+        if (!lineItemsData.length) {
+          lineItemsList.innerHTML = '<p style="color:var(--muted);font-size:0.86rem;padding:0.5rem 0;">No items yet. Add from catalog or add a custom row.</p>';
+          updateQuoteTotal();
+          return;
+        }
+        lineItemsList.innerHTML = lineItemsData.map((item, idx) => `
+          <div class="line-item-row" data-row="${idx}">
+            <input type="text" value="${item.name}" placeholder="Item name" data-field="name" data-row="${idx}" />
+            <input type="number" value="${item.qty}" min="1" placeholder="Qty" data-field="qty" data-row="${idx}" />
+            <input type="number" value="${item.unitPrice}" min="0" placeholder="Unit price" data-field="unitPrice" data-row="${idx}" />
+            <button class="line-item-remove" type="button" data-remove-row="${idx}" title="Remove">✕</button>
+          </div>
+        `).join("");
+        updateQuoteTotal();
+      };
+
+      lineItemsList.addEventListener("input", (e) => {
+        const idx   = parseInt(e.target.getAttribute("data-row"), 10);
+        const field = e.target.getAttribute("data-field");
+        if (!field || isNaN(idx)) return;
+        if (field === "name") lineItemsData[idx].name = e.target.value;
+        if (field === "qty") lineItemsData[idx].qty = Math.max(1, parseInt(e.target.value, 10) || 1);
+        if (field === "unitPrice") lineItemsData[idx].unitPrice = Math.max(0, parseInt(e.target.value, 10) || 0);
+        updateQuoteTotal();
+      });
+
+      lineItemsList.addEventListener("click", (e) => {
+        const removeIdx = e.target.getAttribute("data-remove-row");
+        if (removeIdx !== null) {
+          lineItemsData.splice(parseInt(removeIdx, 10), 1);
+          renderLineItems();
+        }
+      });
+
+      qAddBlankRow.addEventListener("click", () => {
+        lineItemsData.push({ id: null, name: "", qty: 1, unitPrice: 0 });
+        renderLineItems();
+        // Focus the last name input
+        const inputs = lineItemsList.querySelectorAll("input[data-field='name']");
+        if (inputs.length) inputs[inputs.length - 1].focus();
+      });
+
+      qProductSelect.addEventListener("change", () => {
+        const selected = qProductSelect.value;
+        if (!selected || !productCatalog[selected]) { qProductSelect.value = ""; return; }
+        const p = productCatalog[selected];
+        lineItemsData.push({ id: p.id, name: p.name, qty: 1, unitPrice: p.price });
+        renderLineItems();
+        qProductSelect.value = "";
+      });
+
+      const openNewQuoteModal = () => {
+        lineItemsData = [];
+        quoteForm.reset();
+        quoteFormStatus.textContent = "";
+        renderLineItems();
+
+        // Populate product select
+        qProductSelect.innerHTML = '<option value="">+ Add from catalog…</option>' +
+          Object.values(productCatalog).map(p => `<option value="${p.id}">${p.name} (${qCurrency(p.price)})</option>`).join("");
+
+        quoteModal.hidden = false;
+        document.getElementById("qCustomerName").focus();
+      };
+
+      const closeQuoteModal = () => { quoteModal.hidden = true; };
+
+      newQuoteBtn.addEventListener("click", openNewQuoteModal);
+      quoteModalClose.addEventListener("click", closeQuoteModal);
+      quoteModalCancelBtn.addEventListener("click", closeQuoteModal);
+      quoteModal.addEventListener("click", (e) => { if (e.target === quoteModal) closeQuoteModal(); });
+
+      quoteForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const name  = document.getElementById("qCustomerName").value.trim();
+        const email = document.getElementById("qCustomerEmail").value.trim();
+        const validUntil = document.getElementById("qValidUntil").value.trim();
+        const notes = document.getElementById("qNotes").value.trim();
+
+        if (name.length < 2) { quoteFormStatus.textContent = "Enter a customer name."; quoteFormStatus.className = "status error"; return; }
+        if (!name.match(/^[^\s@]+/) || !email.includes("@")) { quoteFormStatus.textContent = "Enter a valid email address."; quoteFormStatus.className = "status error"; return; }
+        if (!lineItemsData.length) { quoteFormStatus.textContent = "Add at least one line item."; quoteFormStatus.className = "status error"; return; }
+
+        const badItem = lineItemsData.find(i => !i.name.trim());
+        if (badItem) { quoteFormStatus.textContent = "All line items must have a name."; quoteFormStatus.className = "status error"; return; }
+
+        quoteSubmitBtn.disabled = true;
+        quoteSubmitBtn.textContent = "Saving…";
+        quoteFormStatus.textContent = "";
+
+        const payload = {
+          customerName: name,
+          customerEmail: email,
+          items: lineItemsData.map(i => ({ id: i.id || null, name: i.name.trim(), quantity: i.qty, unitPrice: i.unitPrice })),
+          notes,
+          validUntil: validUntil || undefined
+        };
+
+        try {
+          const res = await adminFetch("/api/admin/quotations", { method: "POST", body: JSON.stringify(payload) });
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok) { quoteFormStatus.textContent = data.error || "Failed to save quotation."; quoteFormStatus.className = "status error"; return; }
+          closeQuoteModal();
+          setQuoteStatus(`Quotation ${data.quotation.quoteNumber} created.`, "success");
+          loadQuotations();
+        } catch (_) {
+          quoteFormStatus.textContent = "Could not reach server.";
+          quoteFormStatus.className = "status error";
+        } finally {
+          quoteSubmitBtn.disabled = false;
+          quoteSubmitBtn.textContent = "Save Quotation";
+        }
+      });
 
       // ── State ──────────────────────────────────────────────────────────────
       let cartState = JSON.parse(localStorage.getItem("adtech-cart") || "{}");
@@ -935,6 +1574,7 @@
       renderCart();
       updatePaymentUI();
       loadProducts();
+      loadQuotations();
     </script>
   </body>
 </html>
