@@ -1516,8 +1516,23 @@ app.post("/api/chat", async (req, res) => {
 
     if (!aiRes.ok) {
       const errBody = await aiRes.json().catch(() => ({}));
-      console.error("OpenAI error:", errBody);
-      return res.status(502).json({ error: "AI service error. Please try again shortly." });
+      const errCode = errBody?.error?.code || "";
+      const errMsg  = errBody?.error?.message || "";
+      console.error("OpenAI error:", aiRes.status, errCode, errMsg);
+
+      if (aiRes.status === 401 || errCode === "invalid_api_key") {
+        return res.status(502).json({ error: "AI API key is invalid. Please check the OPENAI_API_KEY in Render." });
+      }
+      if (aiRes.status === 429 || errCode === "insufficient_quota") {
+        return res.status(502).json({ error: "OpenAI quota exceeded. Please check your billing at platform.openai.com." });
+      }
+      if (aiRes.status === 429) {
+        return res.status(429).json({ error: "Too many requests. Please wait a moment and try again." });
+      }
+      if (aiRes.status === 404 || errCode === "model_not_found") {
+        return res.status(502).json({ error: "AI model unavailable. Please contact support." });
+      }
+      return res.status(502).json({ error: `AI service error (${aiRes.status}): ${errMsg || "Please try again shortly."}` });
     }
 
     const aiData = await aiRes.json();
