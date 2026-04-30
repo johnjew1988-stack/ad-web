@@ -359,7 +359,34 @@
         display: flex;
         gap: 0.6rem;
         flex-wrap: wrap;
+        align-items: center;
       }
+
+      .token-wrap {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+      }
+
+      .token-wrap label {
+        color: var(--muted);
+        font-size: 0.8rem;
+        white-space: nowrap;
+      }
+
+      .token-wrap input {
+        background: var(--panel-soft);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        color: var(--text);
+        font: inherit;
+        font-size: 0.82rem;
+        padding: 0.42rem 0.65rem;
+        width: 170px;
+        outline: none;
+        transition: border-color 0.15s;
+      }
+      .token-wrap input:focus { border-color: var(--brand); }
 
       /* ── Tabs ── */
       .tab-bar {
@@ -570,6 +597,10 @@
       <div class="top-bar">
         <a class="top-bar-brand" href="index.html">AD Tech</a>
         <nav class="top-bar-nav">
+          <div class="token-wrap">
+            <label for="adminTokenField">Admin Token</label>
+            <input id="adminTokenField" type="password" placeholder="Enter if required" autocomplete="current-password" />
+          </div>
           <a class="btn alt" href="admin.html">← Admin</a>
           <a class="btn alt" href="index.html#purchase">Storefront</a>
           <a class="btn alt" href="admin-finance.html">Finance</a>
@@ -823,7 +854,21 @@
       tabSalesOrder.addEventListener("click", () => showTab("sales"));
 
       // ── Admin token (shared from URL or sessionStorage) ────────────────────
-      const getAdminToken = () => sessionStorage.getItem("adtech-admin-token") || "";
+      const adminTokenField = document.getElementById("adminTokenField");
+
+      // Restore saved token from sessionStorage
+      const _savedToken = sessionStorage.getItem("adtech-admin-token");
+      if (_savedToken) adminTokenField.value = _savedToken;
+
+      const getAdminToken = () => adminTokenField.value.trim();
+
+      adminTokenField.addEventListener("input", () => {
+        const val = adminTokenField.value.trim();
+        if (val) sessionStorage.setItem("adtech-admin-token", val);
+        else sessionStorage.removeItem("adtech-admin-token");
+      });
+
+      adminTokenField.addEventListener("keydown", (e) => { if (e.key === "Enter") loadQuotations(); });
 
       const adminFetch = (url, opts = {}) => {
         const token = getAdminToken();

@@ -603,6 +603,16 @@
       const activityTime     = document.getElementById("activityTime");
       const loadDashboardBtn = document.getElementById("loadDashboardBtn");
 
+      // Restore saved token from sessionStorage (shared with other admin pages)
+      const _savedToken = sessionStorage.getItem("adtech-admin-token");
+      if (_savedToken) adminTokenInput.value = _savedToken;
+
+      adminTokenInput.addEventListener("input", () => {
+        const val = adminTokenInput.value.trim();
+        if (val) sessionStorage.setItem("adtech-admin-token", val);
+        else sessionStorage.removeItem("adtech-admin-token");
+      });
+
       const getToken = () => adminTokenInput.value.trim();
 
       const adminHeaders = () => {
