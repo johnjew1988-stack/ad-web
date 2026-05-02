@@ -1353,8 +1353,6 @@
       const contactForm = document.getElementById("contactForm");
       const contactStatus = document.getElementById("contactStatus");
       const submitBtn = document.getElementById("contactSubmitBtn");
-      const cartItemsNode = document.getElementById("cartItems");
-      const cartTotalNode = null;
       const checkoutForm = null;
       const checkoutStatus = null;
       const placeOrderBtn = null;
@@ -1508,8 +1506,6 @@
       let stripeInstance;
       let stripeElements;
       let cardElement;
-
-      let cartState = JSON.parse(localStorage.getItem("adtech-cart") || "{}");
 
       const paymentMethodConfig = {
         card: {
@@ -1729,19 +1725,7 @@
         doc.save(`invoice-${invoiceId}-${new Date().toISOString().slice(0, 10)}.pdf`);
       };
 
-      const saveCart = () => {
-        localStorage.setItem("adtech-cart", JSON.stringify(cartState));
-      };
-
       const setCheckoutStatus = (_message, _color) => {};
-
-      const getCartEntries = () => Object.entries(cartState).filter(([, qty]) => qty > 0);
-
-      const buildOrderItems = () =>
-        getCartEntries().map(([productId, qty]) => ({
-          id: productId,
-          quantity: qty
-        }));
 
       const renderProductListMessage = (message) => {
         if (!productListNode) {
@@ -1785,7 +1769,6 @@
 
         if (!visibleProducts.length) {
           renderProductListMessage("No products match this category.");
-          renderCart();
           return;
         }
 
@@ -1796,9 +1779,6 @@
                 <h3>${product.name}</h3>
                 <p>${product.description}</p>
                 <span class="product-category">${product.category || "General"}</span>
-                <div class="actions">
-                  <button class="btn alt" type="button" data-add-to-cart="${product.id}">Add to Cart</button>
-                </div>
               </article>
             `
           )
@@ -1808,8 +1788,6 @@
         products.forEach((product) => {
           productCatalog[product.id] = product;
         });
-
-        renderCart();
       };
 
       const loadProducts = async () => {
@@ -1897,65 +1875,6 @@
         });
       };
 
-      const updateCartBadge = () => {
-        const entries = getCartEntries();
-        const badge = document.getElementById("cartCountBadge");
-        const msg = document.getElementById("cartCountMsg");
-        if (badge) badge.textContent = entries.length ? `(${entries.reduce((s, [,q]) => s + q, 0)} item${entries.reduce((s, [,q]) => s + q, 0) === 1 ? "" : "s"})` : "";
-        if (msg) msg.textContent = entries.length ? `${entries.reduce((s, [,q]) => s + q, 0)} item(s) in cart` : "Cart is empty";
-      };
-
-      const renderCart = () => {
-        updateCartBadge();
-        return;
-      };
-
-      const _renderCartFull = () => {
-        const entries = getCartEntries();
-
-        if (!entries.length) {
-          return;
-        }
-
-        let total = 0;
-        const itemsMarkup = entries
-          .map(([productId, qty]) => {
-            const product = productCatalog[productId];
-
-            if (!product) {
-              return "";
-            }
-
-            const lineTotal = product.price * qty;
-            total += lineTotal;
-
-            return `
-              <li class="cart-item">
-                <div class="cart-item-top">
-                  <span class="cart-item-name">${product.name}</span>
-                  <button class="inline-btn" type="button" data-remove-item="${product.id}">Remove</button>
-                </div>
-                <span class="cart-item-price">Qty ${qty} • ${currency(lineTotal)}</span>
-              </li>
-            `;
-          })
-          .join("");
-
-        cartItemsNode.innerHTML = itemsMarkup;
-        cartTotalNode.textContent = currency(total);
-        placeOrderBtn.disabled = false;
-      };
-
-      const addToCart = (productId) => {
-        if (!productCatalog[productId]) {
-          return;
-        }
-
-        cartState[productId] = (cartState[productId] || 0) + 1;
-        saveCart();
-        updateCartBadge();
-      };
-
       const validateField = (field) => {
         const value = contactForm.elements[field].value;
 
@@ -2022,16 +1941,6 @@
 
       ["contactName", "contactEmail", "company", "industry", "challenge"].forEach((field) => {
         contactForm.elements[field].addEventListener("blur", () => validateField(field));
-      });
-
-      productListNode.addEventListener("click", (event) => {
-        const addButton = event.target.closest("[data-add-to-cart]");
-
-        if (!addButton) {
-          return;
-        }
-
-        addToCart(addButton.getAttribute("data-add-to-cart"));
       });
 
       catalogFiltersNode.addEventListener("click", (event) => {
@@ -2117,7 +2026,6 @@
       );
 
       document.querySelectorAll(".reveal").forEach((element) => observer.observe(element));
-      updateCartBadge();
 
       loadProducts().catch(() => {
         renderProductListMessage("No packages available at the moment. Please contact us for a custom quote.");
