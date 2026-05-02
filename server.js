@@ -17,7 +17,35 @@ const dataDir = process.env.DATA_DIR
   : path.join(__dirname, "data");
 const dbPath = path.join(dataDir, "adtech_users.db");
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const seededProducts = [];
+const seededProducts = [
+  {
+    id: "pkg-basic",
+    name: "Basic Package",
+    description: "Essential system setup for small businesses. Includes core module implementation, basic integrations, and 3 months support.",
+    price: 1500,
+    currency: "USD",
+    category: "Service Packages",
+    sortOrder: 1
+  },
+  {
+    id: "pkg-advance",
+    name: "Advance Package",
+    description: "Full-featured solution for growing businesses. Includes multi-module setup, custom workflows, API integrations, and 6 months support.",
+    price: 4500,
+    currency: "USD",
+    category: "Service Packages",
+    sortOrder: 2
+  },
+  {
+    id: "pkg-premium",
+    name: "Premium Package",
+    description: "Enterprise-grade end-to-end system. Includes full customization, unlimited integrations, dedicated support team, and 12 months SLA.",
+    price: 9500,
+    currency: "USD",
+    category: "Service Packages",
+    sortOrder: 3
+  }
+];
 
 if (!fs.existsSync(dataDir)) {
   fs.mkdirSync(dataDir, { recursive: true });
