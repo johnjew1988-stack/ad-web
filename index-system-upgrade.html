@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AD Tech - System Upgrading</title>
+    <meta
+      name="description"
+      content="AD Tech system upgrading services for modernizing existing systems, technology stack updates, and feature enhancements with minimal downtime."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg-950: #02070a;
+        --bg-900: #061017;
+        --ink-50: #f4fdff;
+        --ink-300: #9fbcc8;
+        --brand-500: #1bc6b0;
+        --brand-700: #0c5f95;
+        --line: rgba(109, 230, 211, 0.2);
+        --surface: rgba(9, 22, 31, 0.72);
+        --max-width: 1140px;
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+      body {
+        font-family: "Space Grotesk", sans-serif;
+        color: var(--ink-50);
+        background: radial-gradient(circle at 10% 10%, rgba(27, 198, 176, 0.22), transparent 36%),
+          radial-gradient(circle at 86% 12%, rgba(12, 95, 149, 0.26), transparent 32%),
+          linear-gradient(160deg, var(--bg-950), var(--bg-900) 54%, #041018);
+        line-height: 1.7;
+      }
+      .container { width: min(100% - 2.2rem, var(--max-width)); margin: 0 auto; }
+      .top-nav {
+        position: sticky; top: 0; z-index: 50;
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(109, 230, 211, 0.12);
+        background: linear-gradient(180deg, rgba(2, 8, 11, 0.9), rgba(2, 8, 11, 0.62));
+      }
+      .top-nav-inner { min-height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+      .brand { display: inline-flex; align-items: center; gap: 0.78rem; color: inherit; text-decoration: none; }
+      .brand-logo { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; }
+      .brand-text, h1, h2, h3 { font-family: "Bricolage Grotesque", sans-serif; }
+      .brand-text { font-size: 1.1rem; font-weight: 700; }
+      .nav-links { display: flex; gap: 0.8rem; }
+      .btn {
+        border: 1px solid transparent;
+        border-radius: 14px;
+        padding: 0.7rem 1rem;
+        font-weight: 700;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .btn.main { color: #fff; background: linear-gradient(120deg, var(--brand-500), var(--brand-700)); }
+      .btn.alt { color: var(--ink-50); border-color: var(--line); background: rgba(13, 27, 37, 0.8); }
+      main { padding: 3rem 0 4rem; }
+      .hero-copy {
+        border: 1px solid var(--line);
+        background: linear-gradient(145deg, rgba(8, 21, 30, 0.86), rgba(4, 12, 18, 0.88));
+        border-radius: 28px;
+        padding: clamp(1.2rem, 2vw, 2rem);
+        margin-bottom: 1.3rem;
+      }
+      .hero-copy h1 { margin: 0; font-size: clamp(1.8rem, 4vw, 3rem); }
+      .hero-copy p { color: var(--ink-300); margin: 0.75rem 0 0; }
+      .card-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.95rem; }
+      .card { border: 1px solid var(--line); border-radius: 20px; background: var(--surface); padding: 1.05rem; }
+      .card h3 { margin: 0; font-size: 1.05rem; }
+      .card p { margin: 0.5rem 0 0; color: var(--ink-300); }
+      footer { border-top: 1px solid rgba(109, 230, 211, 0.14); color: var(--ink-300); font-size: 0.95rem; padding: 1.2rem 0 2rem; }
+      @media (max-width: 960px) { .card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+      @media (max-width: 740px) { .card-grid { grid-template-columns: 1fr; } .top-nav-inner { flex-wrap: wrap; padding: 0.8rem 0; } }
+    </style>
+  </head>
+  <body>
+    <header class="top-nav">
+      <div class="container top-nav-inner">
+        <a class="brand" href="index.html" aria-label="AD Tech home">
+          <img class="brand-logo" src="brand asset/my-project-page-1.png" alt="AD Tech logo" />
+          <span class="brand-text">AD Tech</span>
+        </a>
+        <nav class="nav-links" aria-label="System Upgrade page navigation">
+          <a class="btn alt" href="index.html">Back to Home</a>
+          <a class="btn main" href="index.html#contact">Contact Team</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <div class="container">
+        <section class="hero-copy">
+          <h1>System Upgrading</h1>
+          <p>Modernize your existing systems with technology stack updates, new features, performance improvements, and future-ready enhancements.</p>
+        </section>
+        <section>
+          <div class="card-grid">
+            <article class="card"><h3>Framework &amp; Stack Upgrades</h3><p>Update to latest technology versions, frameworks, and dependencies with backward compatibility testing.</p></article>
+            <article class="card"><h3>Database Migration</h3><p>Upgrade database systems, schema optimization, and data migration with zero downtime strategies.</p></article>
+            <article class="card"><h3>Infrastructure Modernization</h3><p>Move to cloud platforms, containerization with Docker/Kubernetes, and infrastructure-as-code implementation.</p></article>
+            <article class="card"><h3>Feature Enhancements</h3><p>Add new capabilities, improve existing features, and implement user feedback-driven improvements.</p></article>
+            <article class="card"><h3>Performance Optimization</h3><p>Code refactoring, caching strategies, query optimization, and load distribution for improved speed.</p></article>
+            <article class="card"><h3>Security Updates</h3><p>Apply security patches, vulnerability assessments, compliance upgrades, and encryption enhancements.</p></article>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer>
+      <div class="container">© <span id="year"></span> AD Tech Solutions. System Upgrading Services.</div>
+    </footer>
+
+    <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+  </body>
+</html>
