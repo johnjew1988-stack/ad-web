@@ -1218,10 +1218,6 @@
               <div id="productList" class="card-grid">
                 <div class="product-list-empty">No packages available at the moment. Please contact us for a custom quote.</div>
               </div>
-              <div style="margin-top:1.5rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
-                <a href="admin-sales.html" class="btn main" style="display:inline-flex;align-items:center;gap:0.5rem;">View Cart &amp; Checkout <span id="cartCountBadge"></span> &rarr;</a>
-                <span id="cartCountMsg" style="color:var(--ink-300);font-size:0.88rem;"></span>
-              </div>
             </div>
           </div>
         </section>
@@ -2049,7 +2045,9 @@
         renderProductCards(allProducts);
       });
 
-      // Cart item removal handled in admin-sales.html\n\n      // Checkout form handled in admin-sales.html
+      // Cart item removal handled in admin-sales.html
+
+      // Checkout form handled in admin-sales.html
 
       contactForm.elements.privacyConsent.addEventListener("change", () => validateField("privacyConsent"));
 
