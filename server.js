@@ -1549,7 +1549,7 @@ app.post("/api/rfq", async (req, res) => {
 
   const mailOptions = {
     from: `"AD Tech RFQ" <${smtpUser}>`,
-    to: "johnjew1988@gmail.com",
+    to: "admin@adtech-biz.com",
     replyTo: email.trim(),
     subject: `New Request for Quotation — ${name.trim()}`,
     html: `
