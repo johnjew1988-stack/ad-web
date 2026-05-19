@@ -394,6 +394,37 @@
         font-size: 0.92rem;
       }
 
+      .video-section {
+        padding: 2.4rem 0 3rem;
+      }
+
+      .video-section h2 {
+        margin: 0 0 0.4rem;
+        font-size: clamp(1.45rem, 3vw, 2.35rem);
+        letter-spacing: -0.02em;
+      }
+
+      .video-section .sub {
+        margin: 0 0 1.4rem;
+        color: var(--ink-300);
+      }
+
+      .video-wrap {
+        border-radius: 24px;
+        border: 1px solid var(--line);
+        overflow: hidden;
+        background: #000;
+        box-shadow: 0 24px 50px rgba(5, 16, 24, 0.55), 0 12px 26px rgba(12, 95, 149, 0.22);
+        position: relative;
+      }
+
+      .video-wrap video {
+        width: 100%;
+        display: block;
+        max-height: 560px;
+        object-fit: cover;
+      }
+
       .section {
         padding: 2.4rem 0;
       }
@@ -1200,6 +1231,19 @@
               <img src="brand asset/my-project-page-1.png" alt="AD Tech community visual" />
               <div class="hero-overlay"></div>
             </aside>
+          </div>
+        </section>
+
+        <section class="video-section" id="showcase">
+          <div class="container">
+            <h2 class="reveal">See AD Tech in Action</h2>
+            <p class="sub reveal">A quick look at what we build and how we work.</p>
+            <div class="video-wrap reveal">
+              <video controls preload="metadata" poster="">
+                <source src="brand asset/demo-video.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
           </div>
         </section>
 
