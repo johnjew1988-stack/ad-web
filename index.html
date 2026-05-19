@@ -410,9 +410,15 @@
         color: var(--ink-300);
       }
 
+      .video-row {
+        display: flex;
+        gap: 1.2rem;
+        align-items: flex-start;
+      }
+
       .video-portrait-frame {
-        display: inline-block;
-        width: min(100%, 220px);
+        width: 220px;
+        flex-shrink: 0;
       }
 
       .video-wrap {
@@ -1245,12 +1251,22 @@
           <div class="container">
             <h2 class="reveal">See AD Tech in Action</h2>
             <p class="sub reveal">A quick look at what we build and how we work.</p>
-            <div class="video-portrait-frame reveal">
-              <div class="video-wrap">
-                <video controls preload="metadata">
-                  <source src="brand asset/demo-video.mp4" type="video/mp4" />
-                  Your browser does not support the video tag.
-                </video>
+            <div class="video-row">
+              <div class="video-portrait-frame reveal">
+                <div class="video-wrap">
+                  <video controls preload="metadata">
+                    <source src="brand asset/demo-video.mp4" type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+              </div>
+              <div class="video-portrait-frame reveal">
+                <div class="video-wrap">
+                  <video controls preload="metadata">
+                    <source src="brand asset/demo-video-2.mp4" type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
               </div>
             </div>
           </div>
