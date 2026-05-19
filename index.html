@@ -1190,9 +1190,18 @@
           padding-top: 3.9rem;
         }
       }
+      #bgCanvas {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        pointer-events: none;
+      }
     </style>
   </head>
   <body data-theme="dark">
+    <canvas id="bgCanvas"></canvas>
     <div class="page-wrap">
       <header class="top-nav">
         <div class="container top-nav-inner">
@@ -1496,6 +1505,82 @@
     <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
     <script src="https://js.stripe.com/v3/"></script>
     <script>
+      (function () {
+        const canvas = document.getElementById("bgCanvas");
+        if (!canvas) return;
+        const ctx = canvas.getContext("2d");
+        const dpr = window.devicePixelRatio || 1;
+        const PARTICLE_COUNT = 72;
+        const MAX_DIST = 180;
+        let W, H, particles;
+
+        function resize() {
+          W = window.innerWidth;
+          H = window.innerHeight;
+          canvas.width = W * dpr;
+          canvas.height = H * dpr;
+          canvas.style.width = W + "px";
+          canvas.style.height = H + "px";
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        }
+
+        function makeParticle() {
+          return {
+            x: Math.random() * W,
+            y: Math.random() * H,
+            vx: (Math.random() - 0.5) * 0.4,
+            vy: (Math.random() - 0.5) * 0.4,
+            r: 1.5 + Math.random() * 1.5,
+          };
+        }
+
+        function init() {
+          resize();
+          particles = Array.from({ length: PARTICLE_COUNT }, makeParticle);
+        }
+
+        window.addEventListener("resize", () => { resize(); });
+
+        function draw() {
+          ctx.clearRect(0, 0, W, H);
+
+          for (let i = 0; i < particles.length; i++) {
+            const p = particles[i];
+            p.x += p.vx;
+            p.y += p.vy;
+            if (p.x < 0) p.x = W;
+            if (p.x > W) p.x = 0;
+            if (p.y < 0) p.y = H;
+            if (p.y > H) p.y = 0;
+
+            for (let j = i + 1; j < particles.length; j++) {
+              const q = particles[j];
+              const dx = p.x - q.x, dy = p.y - q.y;
+              const dist = Math.sqrt(dx * dx + dy * dy);
+              if (dist < MAX_DIST) {
+                const alpha = (1 - dist / MAX_DIST) * 0.18;
+                ctx.beginPath();
+                ctx.moveTo(p.x, p.y);
+                ctx.lineTo(q.x, q.y);
+                ctx.strokeStyle = `rgba(77,226,204,${alpha})`;
+                ctx.lineWidth = 0.8;
+                ctx.stroke();
+              }
+            }
+
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+            ctx.fillStyle = "rgba(27,198,176,0.55)";
+            ctx.fill();
+          }
+
+          requestAnimationFrame(draw);
+        }
+
+        init();
+        draw();
+      })();
+
       (function () {
         const canvas = document.getElementById("heroCanvas");
         if (!canvas) return;
